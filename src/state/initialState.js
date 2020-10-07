@@ -12,7 +12,14 @@ export const getInitialState = (rows=20, cols=10) => ({
   style: {
     matrix: 0
   },
-  mode: 'idle',
+  tick: {
+    mode: null,
+    idle: true,
+    next: null,
+    prevT0: null,
+    skewDiagnostic: null,
+    interval: 100
+  },
   diagnostic: null,
   timer: {
     t0: null,
