@@ -35,16 +35,6 @@ const styles = StyleSheet.create({
 export default props => {
   const dispatch = useDispatch()
 
-  useEffect(
-    (interval =>
-      () =>
-        () => clearInterval(interval)
-    )(
-      setInterval(
-        () => { dispatch(thunks.tick()) },
-        100)
-    ), [])
-
   const handleNextClick = () => dispatch({
     type: 'nextPiece',
     payload: { }

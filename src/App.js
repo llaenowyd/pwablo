@@ -45,7 +45,7 @@ const Debug = () => {
   //   },
   //   []
   // )
-  const diagnostic = useSelector(R.prop('diagnostic'))
+  const diagnostic = useSelector(R.path(['tick', 'skewDiagnostic']))
 
   return (
     <Text style={styles.debug}>{diagnostic ?? ''}</Text>

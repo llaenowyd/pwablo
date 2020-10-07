@@ -37,8 +37,8 @@ export const reducer =
             )
         ],
         [
-          matchAction('setMode'),
-          (state, { payload: mode}) => R.over(R.lensProp('mode'), R.always(mode))(state)
+          matchAction('setTick'),
+          (state, {payload: tick}) => R.over(R.lensProp('tick'), R.always(tick))(state)
         ],
         [
           matchAction('toggleMatrixStyle'),

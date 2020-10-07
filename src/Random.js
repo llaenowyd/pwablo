@@ -11,39 +11,24 @@ const rand1 =
       rand(1)
     )
 
-const scramble = a => {
-  const swap = (offset, pick, aa) => R.reduce(
-    R.concat,
-    [],
-    R.juxt([
-      R.compose(
-        a => [a],
-        R.nth(offset+pick)
-      ),
-      R.take(offset+pick),
-      R.drop(offset+pick+1)
-    ])(aa)
-  )
+const scramble = a =>
+  (len =>
+    rand(len).then(
+      rx => {
+        const result = R.map(R.identity)(a)
 
-  function shuff(rx, offset, aa) {
-    const remainingLength = aa.length - offset
+        for (let offset = 0; offset < len-1; offset++) {
+          const remaining = len - offset
+          const pick = Math.floor(rx[offset] * remaining)
+          const tmp = result[offset+pick]
+          result[offset+pick] = result[offset]
+          result[offset] = tmp
+        }
 
-    if (remainingLength < 2) {
-      return Promise.resolve(aa)
-    }
-
-    const pick = Math.floor(rx * remainingLength)
-    const aa2 = swap(offset, pick, aa)
-
-    return rand1().then(
-      rx => shuff(rx, offset+1, aa2)
+        return result
+      }
     )
-  }
-
-  return rand1().then(
-    rx => shuff(rx, 0, a)
-  )
-}
+  )(a.length)
 
 const maybeReplenishBag =
   bag =>

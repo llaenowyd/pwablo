@@ -1,9 +1,10 @@
 import * as R from 'ramda'
 
-import makeRange from '../fun/makeRange'
 import { getNextPiece, rand } from '../Random'
 
-const makeRandomFill = (dispatch, getState) =>
+import tickThunk from './tickThunk'
+
+const makeRandomFillThunk = () => (dispatch, getState) =>
   (({bag, size}) =>
       (cells => {
         function gnp(result, bag) {
@@ -29,63 +30,55 @@ const makeRandomFill = (dispatch, getState) =>
     R.prop('game', getState())
   )
 
-export default {
-  randomFill: () => makeRandomFill,
-  doTestPattern: () => (dispatch, getState) =>
-    makeRandomFill(dispatch, getState).then(
-      () => dispatch({type: 'setMode', payload: 'testPattern'})
-    ),
-  tick: () => (dispatch, getState) => {
-    const { game, mode } = getState()
-    const { bucket, size } = game
-    const [rows, cols] = size
-    const n = 20
+const makeStartTickThunk = nextMode => (dispatch, getState) => {
+  const {tick} = getState()
+  const {mode, next, interval} = tick
 
-    if (mode === 'testPattern')
-      return Promise.resolve(
-        dispatch({type: 'startTimer', payload: Date.now()})
-      ).then(
-        () => rand(3 * n)
-      ).then(
-        rx =>
-          R.map(
-            i =>
-              R.applySpec({
-                rowIndex: R.compose(
-                  Math.floor,
-                  R.multiply(rows),
-                  R.nth(3 * i)
-                ),
-                colIndex: R.compose(
-                  Math.floor,
-                  R.multiply(cols),
-                  R.nth(3 * i + 1)
-                ),
-                tet: R.compose(
-                  R.flip(R.nth)(['I', 'J', 'L', 'O', 'S', 'T', 'Z']),
-                  Math.floor,
-                  R.multiply(7),
-                  R.nth(3 * i + 2)
-                )
-              })(rx),
-            makeRange(n)
-          )
-      ).then(
-        adjs =>
-          R.reduce(
-            (bucket, {rowIndex, colIndex, tet}) =>
-              R.over(
-                R.lensIndex(colIndex),
-                R.set(R.lensIndex(rowIndex), tet)
-              )(bucket),
-            bucket,
-            adjs
-          )
-      ).then(
-        bucket => dispatch({type: 'setBucket', payload: bucket})
-      ).then(
-        () => dispatch({type: 'stopTimer', payload: Date.now() })
+  if (next) clearTimeout(next)
+
+  dispatch({
+    type: 'setTick',
+    payload: R.mergeLeft(
+      {
+        mode: nextMode ?? mode,
+        idle: false,
+        next: setTimeout(() => dispatch(tickThunk), interval),
+        prevT0: Date.now()
+      },
+      tick
+    )
+  })
+
+  return Promise.resolve()
+}
+
+const makeStopTickThunk = () =>
+  (dispatch, getState) => {
+    const {tick} = getState()
+    const {next} = tick
+    if (next) clearTimeout(next)
+
+    dispatch({
+      type: 'setTick',
+      payload: R.mergeLeft(
+        {
+          next: null,
+          idle: true
+        },
+        tick
       )
-    else return Promise.resolve()
+    })
+
+    return Promise.resolve()
   }
+
+export default {
+  doTestPattern: () => (dispatch, getState) =>
+    makeStopTickThunk()(dispatch, getState).then(
+      () => makeRandomFillThunk()(dispatch, getState)
+    ).then(
+      () => makeStartTickThunk('testPattern')(dispatch, getState)
+    ),
+  startTick: makeStartTickThunk,
+  stopTick: makeStopTickThunk
 }
