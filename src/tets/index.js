@@ -1,35 +1,70 @@
 import * as R from 'ramda'
 
+const tetset = ['I','J','L','O','S','T','Z']
+
 const initialOffsets = {
-  I: [[0,2],[1,2],[2,2],[3,2]],
-  J: [[0,3],[1,3],[2,3],[2,2]],
-  L: [[0,2],[1,2],[2,2],[2,3]],
-  O: [[1,2],[2,2],[2,1],[1,1]],
-  S: [[0,2],[1,2],[1,3],[2,3]],
-  T: [[0,2],[1,2],[2,2],[1,3]],
-  Z: [[0,3],[1,3],[1,2],[2,2]]
+  I: [[1,2],[2,2],[3,2],[4,2]],
+  J: [[0,2],[0,1],[1,1],[2,1]],
+  L: [[0,1],[1,1],[2,1],[2,2]],
+  O: [[1,1],[1,2],[2,2],[2,1]],
+  S: [[0,1],[1,1],[1,2],[2,2]],
+  T: [[0,1],[1,1],[2,1],[1,2]],
+  Z: [[0,2],[1,2],[1,1],[2,1]]
 }
+
+const commonKicks = [
+  [[0,0], [0,0], [0,0], [0,0], [0,0]],
+  [[0,0], [1,0], [1,-1], [0,2], [1,2]],
+  [[0,0], [0,0], [0,0], [0,0], [0,0]],
+  [[0,0], [-1,0], [-1,-1], [0,2], [-1,2]]
+]
+
+const kicks = {
+  I: [
+    [[0, 0], [-1, 0], [2, 0], [-1, 0], [2, 0]],
+    [[-1, 0], [0, 0], [0, 0], [0,1], [0,-2]],
+    [[-1,1], [1,1], [-2,1], [1, 0], [-2, 0]],
+    [[0,1], [0,1], [0,1], [0,-1], [0,2]]
+  ],
+  J: commonKicks,
+  L: commonKicks,
+  O: [
+    [[0, 0]],
+    [[0,-1]],
+    [[-1,-1]],
+    [[-1, 0]]
+  ],
+  S: commonKicks,
+  T: commonKicks,
+  Z: commonKicks
+}
+
+const getInitialPos =
+  (cols, rows) =>
+    tet =>
+      (tetSz =>
+        [
+          Math.floor(cols / 2) - tetSz - 1,
+          rows - tetSz
+        ]
+      )(tet === 'I' ? 2 : 1)
 
 const getInitialOffsets = R.flip(R.prop)(initialOffsets)
 
-const makeMakeTet = tetc => pos =>
-  (offsets =>
-    R.juxt(
-      R.map(
-        xl =>
-          R.apply(R.compose)([
-            R.over(R.lensIndex(0), R.add(xl[0])),
-            R.over(R.lensIndex(1), R.add(xl[1]))
-          ])
-      )(offsets)
-    )(pos)
-  )(getInitialOffsets(tetc))
-
-const create = R.compose(
-  R.fromPairs,
-  R.map(tetc => [tetc, makeMakeTet(tetc)]),
-  R.split('')
-)('IJLOSTZ')
+const makeTet =
+  tetc =>
+    (
+      tbl =>
+        R.defaultTo(
+          [],
+          R.prop(tetc, tbl)
+        )
+    )(
+      R.compose(
+        R.fromPairs,
+        R.map(tetc => [tetc, getInitialOffsets(tetc)])
+      )(tetset)
+    )
 
 const palette = {
   primary: {
@@ -70,4 +105,4 @@ const palette = {
   }
 }
 
-export { create, palette }
+export { getInitialPos, kicks, makeTet, palette, tetset }

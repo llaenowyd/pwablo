@@ -1,22 +1,22 @@
 import * as R from 'ramda'
 
-import { getNextPiece, rand } from '../Random'
+import { getNextTet } from '../Random'
 
 import tickThunk from './tickThunk'
 
 const makeRandomFillThunk = () => (dispatch, getState) =>
   (({bag, size}) =>
       (cells => {
-        function gnp(result, bag) {
+        function gnt(result, bag) {
           if (result.length === cells) return Promise.resolve(result)
 
-          return getNextPiece(bag).then(
-            ([np, nb]) => gnp(R.append(np, result), nb)
+          return getNextTet(bag).then(
+            ([np, nb]) => gnt(R.append(np, result), nb)
           )
         }
 
-        return gnp([], bag).then(
-          R.splitEvery(size[0])
+        return gnt([], bag).then(
+          R.splitEvery(size[1])
         ).then(
           bucket => {
             dispatch({
@@ -25,7 +25,7 @@ const makeRandomFillThunk = () => (dispatch, getState) =>
             })
           }
         )
-      })(size[0]*size[1])
+      })(R.apply(R.multiply)(size))
   )(
     R.prop('game', getState())
   )
@@ -73,12 +73,28 @@ const makeStopTickThunk = () =>
   }
 
 export default {
-  doTestPattern: () => (dispatch, getState) =>
+  newGame: () => (dispatch, getState) =>
+    R.pipeWith(
+      R.andThen,
+      [
+        () => makeStopTickThunk()(dispatch, getState),
+        () => dispatch({type: 'reset', payload: {}}),
+        () => makeStartTickThunk('game')(dispatch, getState)
+      ]
+    )(),
+  reset: () => (dispatch, getState) =>
     makeStopTickThunk()(dispatch, getState).then(
-      () => makeRandomFillThunk()(dispatch, getState)
-    ).then(
-      () => makeStartTickThunk('testPattern')(dispatch, getState)
+      () => dispatch({type: 'reset', payload: {}})
     ),
   startTick: makeStartTickThunk,
-  stopTick: makeStopTickThunk
+  stopTick: makeStopTickThunk,
+  testPattern: () => (dispatch, getState) =>
+    R.pipeWith(
+      R.andThen,
+      [
+        () => makeStopTickThunk()(dispatch, getState),
+        () => makeRandomFillThunk()(dispatch, getState),
+        () => makeStartTickThunk('testPattern')(dispatch, getState)
+      ]
+    )()
 }

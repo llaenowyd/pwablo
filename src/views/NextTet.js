@@ -10,10 +10,8 @@ import { useSelector } from 'react-redux'
 
 import * as R from 'ramda'
 
-import * as Tets from '../tets'
-
 const styles = StyleSheet.create({
-  nextPiece: {
+  nextTet: {
     position: 'relative',
     backgroundColor: 'lightblue'
   },
@@ -39,17 +37,18 @@ const styles = StyleSheet.create({
 })
 
 export default props => {
-  const nextPieceKind = useSelector(R.path(['game', 'nextPiece']))
+  const nextTetKind = useSelector(R.path(['game', 'nextTet']))
 
-  const nextPiece = Tets.create(nextPieceKind)([0,0])
-  const nextPieceColor = nextPiece.color
+  //const nextTet = makeTet(nextTetKind)()
+  const nextTet = 'I'
+  const nextTetColor = '#000000'
 
   const indexes = [0,1,2,3]
 
   return (
-    <View style={R.mergeLeft(R.defaultTo({}, props.style), styles.nextPiece)}>
-      <Text>{`Next piece: ${nextPieceKind}`}</Text>
-      <Text>{JSON.stringify(nextPiece.blocks)}</Text>
+    <View style={R.mergeLeft(R.defaultTo({}, props.style), styles.nextTet)}>
+      <Text>{`Next piece: ${nextTetKind}`}</Text>
+      <Text>{JSON.stringify(nextTet.blocks)}</Text>
       <View style={styles.littleGrid}>
         {
           R.map(
@@ -60,8 +59,8 @@ export default props => {
                     j => (
                       <View style={
                         R.mergeLeft(
-                          R.includes([j,3-i], nextPiece.blocks)
-                            ? {backgroundColor: nextPieceColor}
+                          R.includes([j,3-i], nextTet.blocks)
+                            ? {backgroundColor: nextTetColor}
                             : {},
                           styles.cell
                         )} key={`${i},${j}`}

@@ -42,26 +42,32 @@ public class Rng extends ReactContextBaseJavaModule {
     public void rand(int n, Promise promise) {
         if (generator == null) {
             promise.reject("Sha1", initializationDiagnostic);
+            return;
         }
         if (n < 1) {
             promise.reject("Sha1", "bad input during 'rand'");
+            return;
         }
-        else {
-            byte[] bytes = new byte[n * Short.BYTES];
 
-            generator.nextBytes(bytes);
+        byte[] bytes = new byte[n * Short.BYTES];
 
-            WritableArray result = new WritableNativeArray();
+        generator.nextBytes(bytes);
 
-            for (int i = 0; i < n; i++) {
-                result.pushDouble(
-                    Double.valueOf(
+        WritableArray result = new WritableNativeArray();
+
+        for (int i = 0; i < n; i++) {
+            double d =
+                Double.valueOf(
                         ByteBuffer.wrap(bytes, i * Short.BYTES, Short.BYTES).getShort() - min
-                    ) / drange
-                );
+                ) / drange;
+
+            if (d >= 1.0) {
+                promise.reject("Sha1", "generate error")
             }
 
-            promise.resolve(result);
+            result.pushDouble(d);
         }
+
+        promise.resolve(result);
     }
 }

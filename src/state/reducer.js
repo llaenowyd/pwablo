@@ -1,31 +1,209 @@
-
-
 import { Alert } from 'react-native'
 
 import * as R from 'ramda'
 
-import { getNextPiece } from '../Random'
-import { getRandomFill } from '../bucket'
+import { getInitialPos, makeTet } from '../tets'
 
-import { getInitialState } from './initialState'
+import { getInitialState, initialActiTet } from './initialState'
+import { drawActiTet, leftRot, riteRot, left, rite, up, down, fall } from './matrixReducers'
+import { tryCatcher } from './common'
+
+const resetReducer =
+  state =>
+    (
+      ([cols, rows]) =>
+        R.mergeLeft(
+          R.pick(['clock', 'style'], state),
+          getInitialState(rows, cols)
+        )
+    )(
+      R.path(['game', 'size'], state)
+    )
+
+const inputReducer =
+  tryCatcher('inputReducer')(
+    key =>
+      R.chain(
+        R.set(R.lensProp('input')),
+        R.compose(
+          R.append(key),
+          R.prop('input')
+        )
+      )
+  )
+
+const settle =
+  R.set(
+    R.lensPath(['game', 'actiTet']),
+    initialActiTet
+  )
+
+const fallOrSettle =
+  R.compose(
+    ([state, fell]) => fell ? state : settle(state),
+    fall
+  )
+
+// speed=level-1
+// at speed=0, clockRate=8 ticks per clock
+// at speed=1, clockRate-1=7 ticks per clock
+// at speed=7, clockRate-7=1 tick per clock
+// speedLimit=clockRate-1
+const clockTickReducer =
+  R.compose(
+    R.chain(
+      ([clockRate, gameLevel]) =>
+        R.over(
+          R.lensPath(['game', 'clock']),
+          R.ifElse(
+            R.lt(0),
+            R.add(-1),
+            R.always(clockRate - gameLevel - 1)
+          )
+        ),
+      R.juxt([
+        R.path(['clock', 'rate']),
+        R.path(['game', 'level'])
+      ])
+    ),
+    R.when(
+      R.path(['game', 'actiTet', 'dropping']),
+      fallOrSettle
+    )
+  )
 
 export const reducer =
   (
     matchAction =>
       R.cond([
         [
-          matchAction('newBag'),
-          (state, action) =>
-            (newBucket =>
-              R.set(R.lensPath(['game', 'bucket']), newBucket, state)
-            )(action.payload)
+          matchAction('setTick'),
+          (state, {payload: tick}) => R.over(R.lensProp('tick'), R.always(tick))(state)
         ],
         [
-          matchAction('nextPiece'),
-          R.over(
-            R.lensPath(['game', 'nextPiece']),
-            getNextPiece
+          matchAction('clockTick'),
+          clockTickReducer
+        ],
+        [
+          matchAction('fall'),
+          fallOrSettle
+        ],
+        [
+          matchAction('setNextTet'),
+          (state, {payload: [nextTet, bag]}) =>
+            R.compose(
+              R.set(
+                R.lensPath(['game', 'nextTet']),
+                nextTet
+              ),
+              R.set(
+                R.lensPath(['game', 'bag']),
+                bag
+              )
+            )(state)
+        ],
+        [
+          matchAction('useNextTet'),
+          tryCatcher('useNextTet')(
+            R.compose(
+              R.chain(
+                R.set(R.lensPath(['game', 'actiTet', 'points'])),
+                R.compose(
+                  makeTet,
+                  R.path(['game', 'actiTet', 'kind'])
+                )
+              ),
+              state =>
+                (getInitPos =>
+                  R.over(
+                    R.lensPath(['game', 'actiTet']),
+                    R.chain(
+                      R.set(R.lensProp('pos')),
+                      R.compose(
+                        getInitPos,
+                        R.prop('kind')
+                      )
+                    )
+                  )(state)
+                )(
+                  R.compose(
+                    ([cols, rows]) => getInitialPos(cols, rows),
+                    R.path(['game', 'size'])
+                  )(state)
+                ),
+              R.chain(
+                R.set(R.lensPath(['game', 'actiTet', 'kind'])),
+                R.view(R.lensPath(['game', 'nextTet']))
+              )
+            )
           )
+        ],
+        [
+          matchAction('clearInput'),
+          R.set(R.lensProp('input'), [])
+        ],
+        [
+          matchAction('inpLR'),
+          inputReducer('L')
+        ],
+        [
+          matchAction('inpRR'),
+          inputReducer('R')
+        ],
+        [
+          matchAction('inpNextTet'),
+          inputReducer('N')
+        ],
+        [
+          matchAction('inpL'),
+          inputReducer('<')
+        ],
+        [
+          matchAction('inpR'),
+          inputReducer('>')
+        ],
+        [
+          matchAction('inpU'),
+          inputReducer('^')
+        ],
+        [
+          matchAction('inpD'),
+          inputReducer('v')
+        ],
+        [
+          matchAction('leftRot'),
+          leftRot
+        ],
+        [
+          matchAction('riteRot'),
+          riteRot
+        ],
+        [
+          matchAction('left'),
+          left
+        ],
+        [
+          matchAction('rite'),
+          rite
+        ],
+        [
+          matchAction('up'),
+          up
+        ],
+        [
+          matchAction('down'),
+          R.set(
+            R.lensPath(['game', 'actiTet', 'dropping']),
+            true
+          )
+        ],
+        [
+          matchAction('drawActiTet'),
+          drawActiTet
+        ],
+        [
+          matchAction('reset'),
+          resetReducer
         ],
         [
           matchAction('setBucket'),
@@ -37,56 +215,21 @@ export const reducer =
             )
         ],
         [
-          matchAction('setTick'),
-          (state, {payload: tick}) => R.over(R.lensProp('tick'), R.always(tick))(state)
-        ],
-        [
           matchAction('toggleMatrixStyle'),
           R.over(
-            R.lensPath(['style', 'matrix']),
-            R.ifElse(
-              R.equals(1),
-              R.always(0),
-              R.add(1)
+            R.lensPath(['style']),
+            R.chain(
+              nextMatrixStyle => R.assoc('matrix', nextMatrixStyle),
+              R.compose(
+                R.ifElse(
+                  R.equals(1),
+                  R.always(0),
+                  R.add(1)
+                ),
+                R.prop('matrix')
+              )
             )
           )
-        ],
-        [
-          matchAction('startTimer'),
-          (state, { payload: t0 }) =>
-            R.over(
-              R.lensProp('timer'),
-              R.always({t0, t1: null})
-            )(state)
-        ],
-        [
-          matchAction('stopTimer'),
-          (state, { payload: t1 }) =>
-            R.compose(
-              R.chain(
-                diagnostic =>
-                  R.over(R.lensProp('diagnostic'), R.always(diagnostic)),
-                R.compose(
-                  ({t0, t1}) => R.any(R.isNil)([t0, t1])
-                    ? '???'
-                    : `${t1 - t0}ms`,
-                  R.prop('timer')
-                )
-              ),
-              R.over(
-                R.lensPath(['timer', 't1']),
-                R.always(t1)
-              )
-            )(state)
-        ],
-        [
-          matchAction('reset'),
-          state =>
-            (([rows, cols]) =>
-              getInitialState(rows, cols)
-            )(
-              R.path(['game', 'size'], state)
-            )
         ],
         [ R.T,
           (state, action) => {

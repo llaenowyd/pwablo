@@ -31,24 +31,25 @@ const styles = StyleSheet.create({
   game: {
     height: '80%',
     margin: 10,
-    backgroundColor: 'lightblue'
+    backgroundColor: 'aliceblue'
   }
 })
 
 const Debug = () => {
-  // const [x, setX] = useState(0)
-  //
-  // useEffect(() => {
-  //     rand1().then(
-  //       setX
-  //     )
-  //   },
-  //   []
-  // )
-  const diagnostic = useSelector(R.path(['tick', 'skewDiagnostic']))
+  const tickIdle = useSelector(R.path(['tick', 'idle']))
+  const tickMode = useSelector(R.path(['tick', 'mode']))
+  const skewDiagnostic = useSelector(R.path(['tick', 'skewDiagnostic']))
+  const gameClock = useSelector(R.path(['game', 'clock']))
+
+  const diagnostic =
+    ((sd, cd) => `${sd}${cd}`
+    )(
+      R.defaultTo('', skewDiagnostic),
+      tickIdle || tickMode !== 'game' ? '' : ` ${gameClock}`
+    )
 
   return (
-    <Text style={styles.debug}>{diagnostic ?? ''}</Text>
+    <Text style={styles.debug}>{diagnostic}</Text>
   )
 }
 

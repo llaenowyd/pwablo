@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 
 import {
-  Alert,
+  ImageBackground,
   StyleSheet,
   Text,
   View
@@ -12,53 +12,35 @@ import { useSelector } from 'react-redux'
 import * as R from 'ramda'
 
 import makeRange from '../fun/makeRange'
-import { palette } from '../tets'
+import renameKeys from '../fun/renameKeys'
+import { palette, tetset } from '../tets'
 
-const styles = StyleSheet.create({
-  view: {
-    position: 'relative',
-    backgroundColor: 'lightgrey'
-  },
-  matrix: {
-    display: 'flex',
-    flex: 1
-  },
-  row: {
-    display: 'flex',
-    flexDirection: 'row',
-    flex: 1
-  },
-  cell: {
-    flexGrow: 1,
-    borderStyle: 'solid',
-    borderWidth: 4,
-    borderRadius: 4,
-  },
-  emptyCell: {
-    flexGrow: 1,
-    borderStyle: 'solid',
-    borderWidth: 4,
-    borderRadius: 4,
-    borderColor: 'lightgrey'
-, },
-  text: {
-    fontFamily: 'VT323-Regular',
-    fontWeight: '900',
-    textAlign: 'center',
-    paddingTop: 3
-  }
-})
+import { savior } from '../Images'
 
-const blockStyles = StyleSheet.create(
+const rawCommonBlockStyle = {
+  flexGrow: 1,
+  borderStyle: 'solid',
+  borderWidth: 4,
+  borderRadius: 4,
+  opacity: 0.5
+}
+
+const rawAnnoBlockStyle = {
+  fontFamily: 'VT323-Regular',
+  fontWeight: '900',
+  textAlign: 'center',
+  paddingTop: 3
+}
+
+const rawBlockStyles =
   R.compose(
-    R.assoc(0, styles.emptyCell),
     R.fromPairs,
     R.map(
       tet =>
         [
           tet,
           R.compose(
-            R.mergeLeft(styles.cell),
+            R.mergeLeft(rawCommonBlockStyle),
             R.applySpec({
               backgroundColor: R.path(['primary', tet]),
               color: R.path(['complement', tet]),
@@ -70,72 +52,117 @@ const blockStyles = StyleSheet.create(
           )(palette)
         ]
     )
-  )(['I','J','L','O','S','T','Z'])
-)
-const getAnnotatedStyles = R.once(
-  () =>
-    R.map(
-      R.mergeLeft(styles.text),
-      blockStyles
-    )
-)
+  )(tetset)
 
-const Cell = ({i, j}) => {
+const rawEmptyBlockStyle =
+  R.mergeLeft(
+    rawCommonBlockStyle,
+    {
+      borderColor: 'rgba(255, 255, 255, 0)',
+      opacity: 0.3
+    }
+  )
+
+const rawAnnoBlockStyles =
+  R.compose(
+    renameKeys(
+      R.compose(
+        R.fromPairs,
+        R.map(
+          tet => [tet, R.concat('a', tet)]
+        )
+      )(tetset)
+    ),
+    R.map(
+      R.mergeLeft(rawAnnoBlockStyle)
+    )
+  )(rawBlockStyles)
+
+const rawEmptyAnnoBlockStyle =
+  R.mergeLeft(
+    R.mergeRight(
+      rawAnnoBlockStyle,
+      {
+        color: 'darkgrey'
+      }
+    ),
+    rawEmptyBlockStyle
+  )
+
+const styles = StyleSheet.create({
+  view: {
+    position: 'relative',
+    display: 'flex',
+    flex: 1
+  },
+  background: {
+    position: 'relative',
+    display: 'flex',
+    flex: 1
+  },
+  matrix: {
+    display: 'flex',
+    flex: 1
+  },
+  row: {
+    display: 'flex',
+    flexDirection: 'row',
+    flex: 1
+  },
+  MT: rawEmptyBlockStyle,
+  aMT: rawEmptyAnnoBlockStyle,
+  ...rawBlockStyles,
+  ...rawAnnoBlockStyles
+})
+
+const Block = ({i, j}) => {
   const matrixStyle = useSelector(R.path(['style', 'matrix']))
   const tet = useSelector(R.path(['game', 'bucket', i, j]))
 
-  return R.flip(R.prop)({
-    0: (<View style={blockStyles[tet]} />),
-    1: (<Text style={getAnnotatedStyles()[tet]}>{tet}</Text>)
-  })(matrixStyle)
-}
+  const style =
+    styles[
+      R.compose(
+        R.when(
+          R.thunkify(R.equals(1))(matrixStyle),
+          R.concat('a')
+        ),
+        R.when(
+          R.equals(0),
+          R.always('MT')
+        )
+      )(tet)
+    ]
 
-const CellStyle0 = ({i, j}) => {
-  const tet = useSelector(R.path(['game', 'bucket', i, j]))
-
-  return (
-    <View style={blockStyles[tet]} />
-  )
-}
-
-const CellStyle1 = ({i, j}) => {
-  const annotatedStyles = getAnnotatedStyles()
-
-  const tet = useSelector(R.path(['game', 'bucket', i, j]))
-
-  return (
-    <Text style={annotatedStyles[tet]}>{tet}</Text>
-  )
+  return {
+    0: () => (<View style={style}/>),
+    1: () => (<Text style={style}>{tet}</Text>)
+  }[matrixStyle]()
 }
 
 const Matrix = props => {
-  const [ rows, cols ] = useSelector(R.path(['game', 'size']))
+  const [ cols, rows ] = useSelector(R.path(['game', 'size']))
 
   return (
     <View style={R.mergeLeft(R.defaultTo({}, props.style), styles.view)}>
-      {
-        R.map(
-          row => (
-            <View key={row} style={styles.row}>
-              {
-                R.map(
-                  col => (<Cell key={row*cols+col} i={col} j={row} />),
-                  makeRange(cols)
-                )
-              }
-            </View>
-          ),
-          makeRange(rows)
-        )
-      }
+      <ImageBackground source={savior} style={styles.background}>
+        {
+          R.map(
+            row => (
+              <View key={row} style={styles.row}>
+                {
+                  R.map(
+                    col => (<Block key={row*cols+col} i={col} j={row} />),
+                    makeRange(cols)
+                  )
+                }
+              </View>
+            ),
+            R.reverse(makeRange(rows))
+          )
+        }
+      </ImageBackground>
     </View>
   )
 }
-/*
-
-                          <View key={row*cols+col} style={blockStyles[tet]}>
-                            <Text style={R.mergeLeft(styles.text, blockStyles[tet])}>{tet}</Text>
-                          </View>
- */
 
 export default Matrix

@@ -1,28 +1,41 @@
 
-import { getEmptyBucket, getRandomFill } from '../bucket'
+import { getEmptyBucket } from '../bucket'
 
-export const getInitialState = (rows=20, cols=10) => ({
-  game: {
-    size: [rows, cols],
-    nextPiece: null,
-    rotation: 0,
-    bag: [],
-    bucket: getEmptyBucket(rows, cols)
-  },
-  style: {
-    matrix: 0
-  },
-  tick: {
-    mode: null,
-    idle: true,
-    next: null,
-    prevT0: null,
-    skewDiagnostic: null,
-    interval: 100
-  },
-  diagnostic: null,
-  timer: {
-    t0: null,
-    t1: null
-  }
-})
+const clockRate = 8
+
+export const initialActiTet = {
+  kind: null,
+  points: [],
+  pos: [0,0],
+  rot: 0,
+  dropping: false
+}
+
+export const getInitialState = (rows=20, cols=10) =>
+  ({
+    clock: {
+      diagnostic: null,
+      rate: clockRate
+    },
+    game: {
+      actiTet: initialActiTet,
+      bag: [],
+      bucket: getEmptyBucket(rows, cols),
+      level: 4,
+      clock: clockRate,
+      nextTet: null,
+      size: [cols, rows]
+    },
+    input: [],
+    style: {
+      matrix: 0
+    },
+    tick: {
+      idle: true,
+      interval: 80,
+      mode: null,
+      next: null,
+      prevT0: null,
+      skewDiagnostic: null
+    }
+  })

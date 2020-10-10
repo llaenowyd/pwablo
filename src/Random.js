@@ -1,8 +1,25 @@
-import { Alert, NativeModules } from 'react-native'
+import { NativeModules } from 'react-native'
 
 import * as R from 'ramda'
 
 const rand = NativeModules.Sha1.rand
+
+import { tetset } from './tets'
+
+// numbers Java sees as <1 can be =1 here
+export const safeRange =
+  R.curryN(
+    2,
+    (rangeLen, rx) =>
+      R.compose(
+        R.when(
+          R.equals(rangeLen),
+          R.subtract(1)
+        ),
+        Math.floor,
+        R.multiply(rangeLen)
+      )(rx)
+  )
 
 const rand1 =
   () =>
@@ -15,11 +32,11 @@ const scramble = a =>
   (len =>
     rand(len).then(
       rx => {
-        const result = R.map(R.identity)(a)
+        const result = R.clone(a)
 
         for (let offset = 0; offset < len-1; offset++) {
           const remaining = len - offset
-          const pick = Math.floor(rx[offset] * remaining)
+          const pick = safeRange(remaining, rx[offset])
           const tmp = result[offset+pick]
           result[offset+pick] = result[offset]
           result[offset] = tmp
@@ -35,13 +52,13 @@ const maybeReplenishBag =
     R.compose(
       R.ifElse(
         R.isEmpty,
-        () => scramble(['I','J','L','O','S','T','Z']),
+        R.thunkify(scramble)(tetset),
         bag => Promise.resolve(bag)
       ),
       R.defaultTo([])
     )(bag)
 
-export const getNextPiece =
+export const getNextTet =
   R.compose(
     R.andThen(
       R.converge(
