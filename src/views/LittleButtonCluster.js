@@ -45,27 +45,28 @@ const styles = StyleSheet.create({
   rightColumn: {
     marginLeft: 10
   },
-  stackedButton: {
+  littleButton: {
+    borderColor: '#1E261D',
     marginBottom: 5
   },
   littleButtonPressed: {
     backgroundColor: '#404055'
   },
   littleButtonUnpressed: {
-    backgroundColor: '#202010'
+    backgroundColor: '#5C7B57'
   },
   littleButtonTextPressed: {
     color: '#216317'
   },
   littleButtonTextUnpressed: {
-    color: '#216317'
+    color: '#1E261D'
   }
 })
 
 const LittleButton = props => (
   <Presser
     size="small"
-    style={styles.stackedButton}
+    style={styles.littleButton}
     stylePressed={styles.littleButtonPressed}
     styleUnpressed={styles.littleButtonUnpressed}
     textStylePressed={styles.littleButtonTextPressed}

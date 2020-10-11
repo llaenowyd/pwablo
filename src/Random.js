@@ -56,7 +56,7 @@ const maybeReplenishBag =
       R.ifElse(
         R.isEmpty,
         R.thunkify(scramble)(tetset),
-        bag => Promise.resolve(bag)
+        Promise.resolve
       ),
       R.defaultTo([])
     )(bag)
@@ -65,7 +65,7 @@ export const getNextTet =
   R.compose(
     R.andThen(
       R.converge(
-        (x, y) => [x, y],
+        R.pair,
         [
           R.head,
           R.tail

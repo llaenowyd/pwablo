@@ -9,7 +9,6 @@ import {
 
 import * as R from 'ramda'
 
-import thunks from '../state/thunks'
 import LittleButtonCluster from './LittleButtonCluster'
 import Presser from './components/Presser'
 
@@ -53,11 +52,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10
   },
+  mainButton: {
+    borderColor: '#1E261D'
+  },
   buttonPressed: {
-    backgroundColor: '#6ae65f'
+    backgroundColor: '#646476'
   },
   buttonUnpressed: {
-    backgroundColor: '#216317'
+    backgroundColor: '#5C7B57'
   },
   cornerButton: {
     marginTop: 10
@@ -68,7 +70,7 @@ const MainButton = props => {
   return (
     <Presser
       size="large"
-      style={props.style}
+      style={R.mergeLeft(styles.mainButton, props.style)}
       stylePressed={styles.buttonPressed}
       styleUnpressed={styles.buttonUnpressed}
       icon={props.icon}

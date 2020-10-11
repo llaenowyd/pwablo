@@ -16,7 +16,7 @@ const makeStyleSandwich =
   R.curryN(3,
     (innate, defaults, custom) =>
       (
-        variable => R.mergeLeft(innate, variable)
+        R.mergeLeft(innate)
       )(
         R.mergeRight(
           defaults,

@@ -18,5 +18,5 @@ export {
   rotl,
   rotr,
   savior,
-  tone,
+  tone
 }

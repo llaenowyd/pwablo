@@ -11,8 +11,8 @@ import {
   note,
   rite,
   rotl,
-  rotr, savior,
-  tone,
+  rotr,
+  tone
 } from '../../Images';
 
 const styles = StyleSheet.create({
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     flexBasis: 'auto',
     borderWidth: StyleSheet.hairlineWidth,
     borderStyle: 'solid',
-    borderColor: 'darkgreen',
+    borderColor: 'black',
     borderRadius: 5,
     padding: 4
   },
@@ -41,10 +41,10 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   textLarge: {
-    fontSize: 20,
+    fontSize: 20
   },
   textSmall: {
-    fontSize: 10,
+    fontSize: 10
   },
   imageBg: {
     display: 'flex',
@@ -61,7 +61,6 @@ const styles = StyleSheet.create({
     height: 50
   },
   iconSmall: {
-
   },
   pressed: {
   },
