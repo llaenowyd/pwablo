@@ -91,23 +91,24 @@ const rawEmptyAnnoBlockStyle =
 
 const styles = StyleSheet.create({
   view: {
-    position: 'relative',
     display: 'flex',
-    flex: 1
+    flexDirection: 'column',
+    alignItems: 'stretch',
+    justifyContent: 'space-evenly'
   },
   background: {
-    position: 'relative',
-    display: 'flex',
-    flex: 1
-  },
-  matrix: {
     display: 'flex',
     flex: 1
   },
   row: {
     display: 'flex',
     flexDirection: 'row',
-    flex: 1
+    flexGrow: 1,
+    flexShrink: 1,
+    flexBasis: 'auto',
+    alignItems: 'stretch',
+    justifyContent: 'space-evenly',
+    height: '50%',
   },
   MT: rawEmptyBlockStyle,
   aMT: rawEmptyAnnoBlockStyle,
@@ -142,8 +143,14 @@ const Block = ({i, j}) => {
 const Matrix = props => {
   const [ cols, rows ] = useSelector(R.path(['game', 'size']))
 
+  const viewStyle =
+    R.mergeLeft(
+      R.defaultTo({}, props.style),
+      styles.view
+    )
+
   return (
-    <View style={R.mergeLeft(R.defaultTo({}, props.style), styles.view)}>
+    <View style={viewStyle}>
       <ImageBackground source={savior} style={styles.background}>
         {
           R.map(

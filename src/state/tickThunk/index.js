@@ -1,7 +1,7 @@
 import * as R from 'ramda'
 
 import makeRange from '../../fun/makeRange'
-import { rand, safeRange } from '../../Random'
+import { rand, rtoo } from '../../Random'
 import { tetset } from '../../tets'
 
 import { alertOnce, tryCatcher } from '../common'
@@ -27,16 +27,16 @@ const tickTestPattern = (dispatch, getState, checkpointIsIdle) => {
               i =>
                 R.applySpec({
                   rowIndex: R.compose(
-                    safeRange(rows),
+                    rtoo(rows),
                     R.nth(3 * i)
                   ),
                   colIndex: R.compose(
-                    safeRange(cols),
+                    rtoo(cols),
                     R.nth(3 * i + 1)
                   ),
                   tet: R.compose(
                     R.flip(R.nth)(tetset),
-                    safeRange(7),
+                    rtoo(7),
                     R.nth(3 * i + 2)
                   )
                 })(rx),

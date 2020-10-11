@@ -19,19 +19,24 @@ import Game from './views/Game'
 import { rand1 } from './Random'
 
 const styles = StyleSheet.create({
-  body: {
+  container: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    height: '100%',
+    width: '100%'
+  },
+  game: {
+    position: 'relative',
+    top: 0,
+    left: 0,
     height: '100%'
   },
   debug: {
-    position: 'absolute',
+    position: 'relative',
     right: 0,
     bottom: 0,
     fontFamily: 'VT323-Regular'
-  },
-  game: {
-    height: '80%',
-    margin: 10,
-    backgroundColor: 'aliceblue'
   }
 })
 
@@ -55,10 +60,10 @@ const Debug = () => {
 
 const App = () => (
     <Provider>
+      <SafeAreaView style={{height: '100%'}}>
       <StatusBar backgroundColor="#005670" barStyle="light-content" />
-      <SafeAreaView>
-        <View style={styles.body}>
-          <Game style={styles.game} />
+        <View style={styles.container}>
+          <Game style={styles.game}/>
           <Debug />
         </View>
       </SafeAreaView>

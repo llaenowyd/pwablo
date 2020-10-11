@@ -61,8 +61,10 @@ public class Rng extends ReactContextBaseJavaModule {
                         ByteBuffer.wrap(bytes, i * Short.BYTES, Short.BYTES).getShort() - min
                 ) / drange;
 
-            if (d >= 1.0) {
-                promise.reject("Sha1", "generate error")
+
+            if (d > 0.9999) {
+                System.err.println(d);
+                d = 0.9999;
             }
 
             result.pushDouble(d);

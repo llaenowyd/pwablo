@@ -6,19 +6,22 @@ const rand = NativeModules.Sha1.rand
 
 import { tetset } from './tets'
 
-// numbers Java sees as <1 can be =1 here
-export const safeRange =
+/**
+ *  Random number TO Offset
+ */
+export const rtoo =
   R.curryN(
     2,
-    (rangeLen, rx) =>
-      R.compose(
-        R.when(
-          R.equals(rangeLen),
-          R.subtract(1)
-        ),
-        Math.floor,
-        R.multiply(rangeLen)
-      )(rx)
+    (offsetMax, rx) =>
+      R.curryN(
+        2, R.compose
+      )(
+        Math.floor
+      )(
+        R.multiply(offsetMax)
+      )(
+        rx
+      )
   )
 
 const rand1 =
@@ -36,7 +39,7 @@ const scramble = a =>
 
         for (let offset = 0; offset < len-1; offset++) {
           const remaining = len - offset
-          const pick = safeRange(remaining, rx[offset])
+          const pick = rtoo(remaining, rx[offset])
           const tmp = result[offset+pick]
           result[offset+pick] = result[offset]
           result[offset] = tmp

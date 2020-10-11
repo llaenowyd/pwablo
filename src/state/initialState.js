@@ -28,7 +28,7 @@ export const getInitialState = (rows=20, cols=10) =>
     },
     input: [],
     style: {
-      matrix: 0
+      matrix: 1
     },
     tick: {
       idle: true,
