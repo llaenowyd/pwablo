@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 
 import {
   StyleSheet,
-  View,
+  View
 } from 'react-native';
 
 import * as R from 'ramda'
@@ -38,11 +38,10 @@ const styles = StyleSheet.create({
 export default props => {
   const dispatch = useDispatch()
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     dispatch(thunks.testPattern())
     return () => dispatch(thunks.stopTick())
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const viewStyle =
     R.mergeLeft(

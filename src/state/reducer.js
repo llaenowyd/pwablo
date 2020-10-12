@@ -5,7 +5,7 @@ import * as R from 'ramda'
 import { getInitialPos, makeTet } from '../tets'
 
 import { getInitialState, initialActiTet } from './initialState'
-import { drawActiTet, leftRot, riteRot, left, rite, up, down, fall } from './matrixReducers'
+import { drawActiTet, leftRot, riteRot, left, rite, up, fall } from './matrixReducers'
 import { tryCatcher } from './common'
 
 const resetReducer =
@@ -104,38 +104,19 @@ export const reducer =
         ],
         [
           matchAction('useNextTet'),
-          tryCatcher('useNextTet')(
-            R.compose(
-              R.chain(
-                R.set(R.lensPath(['game', 'actiTet', 'points'])),
-                R.compose(
-                  makeTet,
-                  R.path(['game', 'actiTet', 'kind'])
+          R.chain(
+            ([nextTetKind, [cols, rows]]) =>
+              R.set(
+                R.lensPath(['game', 'actiTet']),
+                R.mergeLeft(
+                  makeTet(cols, rows)(nextTetKind),
+                  initialActiTet
                 )
               ),
-              state =>
-                (getInitPos =>
-                  R.over(
-                    R.lensPath(['game', 'actiTet']),
-                    R.chain(
-                      R.set(R.lensProp('pos')),
-                      R.compose(
-                        getInitPos,
-                        R.prop('kind')
-                      )
-                    )
-                  )(state)
-                )(
-                  R.compose(
-                    ([cols, rows]) => getInitialPos(cols, rows),
-                    R.path(['game', 'size'])
-                  )(state)
-                ),
-              R.chain(
-                R.set(R.lensPath(['game', 'actiTet', 'kind'])),
-                R.view(R.lensPath(['game', 'nextTet']))
-              )
-            )
+            R.juxt([
+              R.view(R.lensPath(['game', 'nextTet'])),
+              R.view(R.lensPath(['game', 'size']))
+            ])
           )
         ],
         [
