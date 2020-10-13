@@ -13,15 +13,16 @@ import thunks from '../state/thunks'
 import Matrix from './Matrix'
 import Controls from './Controls'
 
+import * as Theme from '../theme'
+
 const styles = StyleSheet.create({
   view: {
-    marginTop: 15,
     paddingBottom: 25,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'stretch',
-    backgroundColor: '#101010'
+    backgroundColor: Theme.darkCharcoal
   },
   matrix: {
     flexGrow: 1,

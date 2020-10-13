@@ -61,7 +61,6 @@ const Debug = () => {
 const App = () => (
     <Provider>
       <SafeAreaView style={{height: '100%'}}>
-      <StatusBar backgroundColor="#005670" barStyle="light-content" />
         <View style={styles.container}>
           <Game style={styles.game}/>
           <Debug />

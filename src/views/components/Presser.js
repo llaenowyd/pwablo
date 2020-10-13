@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Early GameBoy',
     fontWeight: '900',
     textAlign: 'center',
-    fontSize: 16
+    fontSize: 14
   },
   textLarge: {
     fontSize: 20

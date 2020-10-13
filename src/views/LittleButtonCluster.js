@@ -12,6 +12,10 @@ import * as R from 'ramda'
 import thunks from '../state/thunks'
 import Presser from './components/Presser'
 
+import * as Theme from '../theme'
+
+const padding = 5
+
 const styles = StyleSheet.create({
   view: {
     display: 'flex',
@@ -22,12 +26,12 @@ const styles = StyleSheet.create({
     flexGrow: 0,
     flexShrink: 1,
     flexBasis: 'auto',
-    paddingTop: 5,
-    paddingRight: 5,
-    paddingLeft: 5,
+    paddingTop: padding,
+    paddingRight: padding,
+    paddingLeft: padding,
     paddingBottom: 0,
     borderRadius: 4,
-    backgroundColor: '#202020',
+    backgroundColor: Theme.lightCharcoal,
     borderStyle: 'solid',
     borderColor: 'black',
     borderWidth: StyleSheet.hairlineWidth
@@ -37,29 +41,29 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     flexWrap: 'nowrap',
     alignItems: 'stretch',
-    justifyContent: 'space-between',
-    flexGrow: 1,
+    justifyContent: 'space-evenly',
+    flexGrow: 0.25,
     flexShrink: 1,
     flexBasis: 'auto'
   },
   rightColumn: {
-    marginLeft: 10
+    marginLeft: padding
   },
   littleButton: {
-    borderColor: '#1E261D',
-    marginBottom: 5
+    borderColor: Theme.darkOlive,
+    marginBottom: padding
   },
   littleButtonPressed: {
-    backgroundColor: '#404055'
+    backgroundColor: Theme.darkPlum
   },
   littleButtonUnpressed: {
-    backgroundColor: '#5C7B57'
+    backgroundColor: Theme.lightOlive
   },
   littleButtonTextPressed: {
-    color: '#216317'
+    color: Theme.forestGreen
   },
   littleButtonTextUnpressed: {
-    color: '#1E261D'
+    color: Theme.darkOlive
   }
 })
 

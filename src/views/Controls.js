@@ -4,13 +4,15 @@ import { useDispatch } from 'react-redux'
 
 import {
   StyleSheet,
-  View,
+  View
 } from 'react-native';
 
 import * as R from 'ramda'
 
 import LittleButtonCluster from './LittleButtonCluster'
 import Presser from './components/Presser'
+
+import * as Theme from '../theme'
 
 const styles = StyleSheet.create({
   view: {
@@ -42,24 +44,26 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     flexWrap: 'nowrap',
-    alignItems: 'stretch',
     justifyContent: 'flex-end',
-    flexGrow: 1
+    flexGrow: 1,
+    flexShrink: 1
   },
   littleCluster: {
-    marginLeft: 40,
-    marginRight: 40,
     marginTop: 10,
-    marginBottom: 10
+    marginBottom: 10,
+    alignSelf: 'center'
   },
   mainButton: {
-    borderColor: '#1E261D'
+    borderColor: Theme.darkOlive
+  },
+  downButton: {
+    alignSelf: 'stretch'
   },
   buttonPressed: {
-    backgroundColor: '#646476'
+    backgroundColor: Theme.plum
   },
   buttonUnpressed: {
-    backgroundColor: '#5C7B57'
+    backgroundColor: Theme.lightOlive
   },
   cornerButton: {
     marginTop: 10
@@ -110,6 +114,7 @@ const Controls = props => {
       <View style={styles.center}>
         <LittleButtonCluster style={styles.littleCluster} />
         <MainButton
+          style={styles.downButton}
           icon="down"
           onPress={handleDownClick}
         />
