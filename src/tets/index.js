@@ -96,15 +96,15 @@ const kickers = {
   Z: commonKickers
 }
 
+// shouldn't it be required
+const getBoundingRadius = kind => kind === 'I' ? 2 : 1
+
 const getInitialPos =
   (cols, rows) =>
-    kind =>
-      (sz =>
-        [
-          Math.floor(cols / 2) - sz - 1,
-          rows - sz
-        ]
-      )(kind === 'I' ? 2 : 1)
+    [
+      Math.floor(cols / 2) - 1,
+      rows
+    ]
 
 const getInitialOffsets = R.flip(R.prop)(blockOffsets)
 
@@ -116,53 +116,10 @@ const blockOffsetsTable =
 
 const makeTet =
   (cols, rows) =>
-    (gip =>
-      R.applySpec({
-        kind: R.identity,
-        points: R.flip(R.prop)(blockOffsetsTable),
-        pos: gip
-      })
-    )(
-      getInitialPos(cols, rows)
-    )
+    R.applySpec({
+      kind: R.identity,
+      points: R.flip(R.prop)(blockOffsetsTable),
+      pos: R.always(getInitialPos(cols, rows))
+    })
 
-const palette = {
-  primary: {
-    I: '#31C7EF',
-    J: '#5A65AD',
-    L: '#EF7921',
-    O: '#F7D308',
-    S: '#42B642',
-    T: '#AE0BF7',
-    Z: '#EF2029'
-  },
-  complement: {
-    I: '#301109',
-    J: '#ffee81',
-    L: '#0c3554',
-    O: '#030f4f',
-    S: '#30122f',
-    T: '#050d00',
-    Z: '#031211'
-  },
-  shadow: {
-    I: '#357180',
-    J: '#181e47',
-    L: '#784b26',
-    O: '#96841f',
-    S: '#3a6639',
-    T: '#611f7d',
-    Z: '#632022'
-  },
-  highlight: {
-    I: '#b2d7d9',
-    J: '#bdc7f7',
-    L: '#f0c696',
-    O: '#f2e699',
-    S: '#b4f0ac',
-    T: '#dd9ff5',
-    Z: '#ed9387'
-  }
-}
-
-export { getInitialPos, kickers, kicks, makeTet, palette, tetset }
+export { kickers, makeTet, tetset }

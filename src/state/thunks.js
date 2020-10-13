@@ -1,6 +1,6 @@
 import * as R from 'ramda'
 
-import { getNextTet } from '../Random'
+import { getRandomTetKind } from '../Random'
 
 import tickThunk from './tickThunk'
 
@@ -10,7 +10,7 @@ const makeRandomFillThunk = () => (dispatch, getState) =>
         function gnt(result, bag) {
           if (result.length === cells) return Promise.resolve(result)
 
-          return getNextTet(bag).then(
+          return getRandomTetKind(bag).then(
             ([np, nb]) => gnt(R.append(np, result), nb)
           )
         }

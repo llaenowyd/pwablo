@@ -6,6 +6,8 @@ const rand = NativeModules.Sha1.rand
 
 import { tetset } from './tets'
 
+export { rand }
+
 /**
  *  Random number TO Offset
  */
@@ -24,7 +26,7 @@ export const rtoo =
       )
   )
 
-const rand1 =
+export const rand1 =
   () =>
     R.andThen(
       R.nth(0),
@@ -61,7 +63,7 @@ const maybeReplenishBag =
       R.defaultTo([])
     )(bag)
 
-export const getNextTet =
+export const getRandomTetKind =
   R.compose(
     R.andThen(
       R.converge(
@@ -74,5 +76,3 @@ export const getNextTet =
     ),
     maybeReplenishBag
   )
-
-export { rand, rand1 }

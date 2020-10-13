@@ -40,7 +40,7 @@ export default props => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(thunks.testPattern())
+    // dispatch(thunks.testPattern())
     return () => dispatch(thunks.stopTick())
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 

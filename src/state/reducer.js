@@ -2,7 +2,7 @@ import { Alert } from 'react-native'
 
 import * as R from 'ramda'
 
-import { getInitialPos, makeTet } from '../tets'
+import { makeTet } from '../tets'
 
 import { getInitialState, initialActiTet } from './initialState'
 import { drawActiTet, leftRot, riteRot, left, rite, up, fall } from './matrixReducers'
