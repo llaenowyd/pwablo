@@ -2,7 +2,7 @@ import * as R from 'ramda'
 
 import {isOpen} from '../../bucket'
 
-import {drawTet, eraseTet} from './pokedraw'
+import {clearRows, drawTet, eraseTet} from './pokedraw'
 
 const translateAndTest =
   (axIndex, op) =>
@@ -65,5 +65,26 @@ export const fall =
       R.path(['game', 'bucket']),
       R.path(['game', 'actiTet']),
       () => translateAndTest(1, R.add(-1))
+    ])
+  )
+
+export const clearCompletedRows =
+  R.chain(
+    ([completedRows, [cols, rows]]) =>
+      R.isEmpty(completedRows)
+        ? R.identity
+        : R.compose(
+            R.set(
+              R.lensPath(['game', 'completedRows']),
+              []
+            ),
+            R.over(
+              R.lensPath(['game', 'bucket']),
+              clearRows(cols, rows, completedRows)
+            )
+          ),
+    R.juxt([
+      R.path(['game', 'completedRows']),
+      R.path(['game', 'size'])
     ])
   )

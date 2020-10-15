@@ -1,13 +1,14 @@
 import * as R from 'ramda'
 
 import { getRandomTetKind } from '../../Random'
+import { actions } from '../actions'
 import { tryCatcher } from '../common'
 
 const nextTetThunk =
   tryCatcher('nextTetThunk')(
     (dispatch, getState) =>
       R.compose(
-        R.andThen(nextTet => dispatch({type: 'setNextTet', payload: nextTet})),
+        R.andThen(nextTet => dispatch({type: actions.setNextTet, payload: nextTet})),
         getRandomTetKind,
         R.path(['game', 'bag'])
       )(getState())
@@ -16,8 +17,8 @@ const nextTetThunk =
 const takeNextTetThunk =
   tryCatcher('takeNextTetThunk')(
     (dispatch, getState) => {
-      dispatch({type: 'useNextTet'})
-      dispatch({type: 'drawActiTet'})
+      dispatch({type: actions.useNextTet})
+      dispatch({type: actions.drawActiTet})
       return nextTetThunk(dispatch, getState)
     }
   )
@@ -27,7 +28,8 @@ const handleInputThunk =
     (dispatch, getState) => {
       const {input} = getState()
 
-      const doNextTet = R.complement(R.isNil)(R.find(R.equals('N'), input))
+      // move to regular reducer
+
       const doLeftRot = R.complement(R.isNil)(R.find(R.equals('L'), input))
       const doRiteRot = R.complement(R.isNil)(R.find(R.equals('R'), input))
       const doLeft = R.complement(R.isNil)(R.find(R.equals('<'), input))
@@ -35,31 +37,27 @@ const handleInputThunk =
       const doUp = R.complement(R.isNil)(R.find(R.equals('^'), input))
       const doDown = R.complement(R.isNil)(R.find(R.equals('v'), input))
 
-      return (
-        doNextTet ?
-          takeNextTetThunk(dispatch, getState)
-          : Promise.resolve()
-        ).then(
-          () => {
-            if (doLeftRot) dispatch({type: 'leftRot'})
-            if (doRiteRot) dispatch({type: 'riteRot'})
-            if (doLeft) dispatch({type: 'left'})
-            if (doRite) dispatch({type: 'rite'})
-            if (doUp) dispatch({type: 'up'})
-            if (doDown) dispatch({type: 'down'})
-            dispatch({type: 'clearInput'})
-          }
-        )
+      if (doLeftRot) dispatch({type: actions.leftRot})
+      if (doRiteRot) dispatch({type: actions.riteRot})
+      if (doLeft) dispatch({type: actions.left})
+      if (doRite) dispatch({type: actions.rite})
+      if (doUp) dispatch({type: actions.up})
+      if (doDown) dispatch({type: actions.down})
+      dispatch({type: actions.clearInput})
     }
   )
 
 const tickGame = (dispatch, getState, checkpointIsIdle) => {
-  const {game:{actiTet:{kind:actiKind}, clock, nextTet}} = getState()
+  const {game:{actiTet:{kind:actiKind}, clock, completedRows, nextTet}} = getState()
 
   return (
     R.isNil(nextTet)
       ? nextTetThunk(dispatch, getState)
       : Promise.resolve()
+    ).then(
+      () => R.isEmpty(completedRows)
+        ? null
+        : dispatch({type: actions.clearCompletedRows})
     ).then(
       () => R.isNil(actiKind)
         ? takeNextTetThunk(dispatch, getState)
@@ -69,19 +67,14 @@ const tickGame = (dispatch, getState, checkpointIsIdle) => {
     ).then(
       () => {
         if (clock === 0) {
-          dispatch({type: 'fall'})
-          if (
-            R.compose(
-              R.isNil,
-              R.path(['game', 'actiTet', 'kind'])
-            )(getState())
-          ) {
-            return takeNextTetThunk(dispatch, getState)
-          }
+          dispatch({type: actions.fall})
+        }
+        else {
+          dispatch({type: actions.fallIfFalling})
         }
       }
     ).then(
-      () => dispatch({type: 'clockTick'})
+      () => dispatch({type: actions.clockTick})
     )
 }
 

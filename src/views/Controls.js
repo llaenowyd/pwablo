@@ -12,6 +12,7 @@ import * as R from 'ramda'
 import LittleButtonCluster from './LittleButtonCluster'
 import Presser from './components/Presser'
 
+import { actions } from '../state/actions'
 import * as Theme from '../theme'
 
 const styles = StyleSheet.create({
@@ -86,11 +87,11 @@ const MainButton = props => {
 const Controls = props => {
   const dispatch = useDispatch()
 
-  const handleLeftRotateClick = () => dispatch({type: 'inpLR'})
-  const handleRightRotateClick = () => dispatch({type: 'inpRR'})
-  const handleLeftClick = () => dispatch({type: 'inpL'})
-  const handleRightClick = () => dispatch({type: 'inpR'})
-  const handleDownClick = () => dispatch({type: 'inpD'})
+  const handleLeftRotateClick = () => dispatch({type: actions.inpLR})
+  const handleRightRotateClick = () => dispatch({type: actions.inpRR})
+  const handleLeftClick = () => dispatch({type: actions.inpL})
+  const handleRightClick = () => dispatch({type: actions.inpR})
+  const handleDownClick = () => dispatch({type: actions.inpD})
 
   const viewStyle =
     R.mergeLeft(

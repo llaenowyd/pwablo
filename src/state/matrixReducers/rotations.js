@@ -6,8 +6,6 @@ import {isOpen} from '../../bucket'
 
 import {drawTet, eraseTet} from './pokedraw'
 
-const taglog = tag => x => { console.log(tag, x); return x }
-
 const incRotos =
   [
     // ccw
@@ -74,7 +72,6 @@ const rot1 =
 // (true|false) -> tet -> maybeRotatedTet
 const rot1AndTest = (bucket, cw, tet) => {
   const rotatedTet = rot1(cw)(tet)
-  taglog('rotatedTet', rotatedTet)
 
   if (isOpen(bucket, tet)(rotatedTet)) return rotatedTet
 

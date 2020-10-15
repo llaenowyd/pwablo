@@ -4,6 +4,7 @@ import makeRange from '../../fun/makeRange'
 import { rand, rtoo } from '../../Random'
 import { tetset } from '../../tets'
 
+import { actions } from '../actions'
 import { alertOnce, tryCatcher } from '../common'
 
 import tickGame from './tickGameThunk';
@@ -58,7 +59,7 @@ const tickTestPattern = (dispatch, getState, checkpointIsIdle) => {
             )
         )(),
       makeCheckpoint(null),
-      bucket => R.isNil(bucket) ? null : dispatch({type: 'setBucket', payload: bucket})
+      bucket => R.isNil(bucket) ? null : dispatch({type: actions.setBucket, payload: bucket})
     ]
   )()
 }
@@ -128,7 +129,7 @@ function tickThunk(dispatch, getState) {
       const next = idle ? null : setTimeout(() => dispatch(tickThunk), nextInterval)
 
       dispatch({
-        type: 'setTick',
+        type: actions.setTick,
         payload: {
           mode,
           idle,

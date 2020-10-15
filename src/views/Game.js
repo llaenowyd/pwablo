@@ -9,10 +9,10 @@ import {
 
 import * as R from 'ramda'
 
-import thunks from '../state/thunks'
 import Matrix from './Matrix'
 import Controls from './Controls'
 
+import { actions } from '../state/actions'
 import * as Theme from '../theme'
 
 const styles = StyleSheet.create({
@@ -41,7 +41,7 @@ export default props => {
 
   useEffect(() => {
     // dispatch(thunks.testPattern())
-    return () => dispatch(thunks.stopTick())
+    return () => dispatch({type: actions.stopTick})
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const viewStyle =

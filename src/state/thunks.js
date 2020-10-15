@@ -2,6 +2,7 @@ import * as R from 'ramda'
 
 import { getRandomTetKind } from '../Random'
 
+import { actions } from './actions'
 import tickThunk from './tickThunk'
 
 const makeRandomFillThunk = () => (dispatch, getState) =>
@@ -20,7 +21,7 @@ const makeRandomFillThunk = () => (dispatch, getState) =>
         ).then(
           bucket => {
             dispatch({
-              type: 'setBucket',
+              type: actions.setBucket,
               payload: bucket
             })
           }
@@ -32,12 +33,10 @@ const makeRandomFillThunk = () => (dispatch, getState) =>
 
 const makeStartTickThunk = nextMode => (dispatch, getState) => {
   const {tick} = getState()
-  const {mode, next, interval} = tick
-
-  if (next) clearTimeout(next)
+  const {mode, interval} = tick
 
   dispatch({
-    type: 'setTick',
+    type: actions.setTick,
     payload: R.mergeLeft(
       {
         mode: nextMode ?? mode,
@@ -52,47 +51,24 @@ const makeStartTickThunk = nextMode => (dispatch, getState) => {
   return Promise.resolve()
 }
 
-const makeStopTickThunk = () =>
-  (dispatch, getState) => {
-    const {tick} = getState()
-    const {next} = tick
-    if (next) clearTimeout(next)
-
-    dispatch({
-      type: 'setTick',
-      payload: R.mergeLeft(
-        {
-          next: null,
-          idle: true
-        },
-        tick
-      )
-    })
-
-    return Promise.resolve()
-  }
-
 export default {
   newGame: () => (dispatch, getState) =>
     R.pipeWith(
       R.andThen,
       [
-        () => makeStopTickThunk()(dispatch, getState),
-        () => dispatch({type: 'reset', payload: {}}),
+        () => Promise.resolve(dispatch({type: actions.reset})),
         () => makeStartTickThunk('game')(dispatch, getState)
       ]
     )(),
-  reset: () => (dispatch, getState) =>
-    makeStopTickThunk()(dispatch, getState).then(
-      () => dispatch({type: 'reset', payload: {}})
-    ),
   startTick: makeStartTickThunk,
-  stopTick: makeStopTickThunk,
   testPattern: () => (dispatch, getState) =>
     R.pipeWith(
       R.andThen,
       [
-        () => makeStopTickThunk()(dispatch, getState),
+        () => {
+          dispatch({type: actions.reset})
+          return Promise.resolve()
+        },
         () => makeRandomFillThunk()(dispatch, getState),
         () => makeStartTickThunk('testPattern')(dispatch, getState)
       ]

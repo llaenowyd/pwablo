@@ -41,6 +41,26 @@ const styles = StyleSheet.create({
 
 const Matrix = props => {
   const [ cols, rows ] = useSelector(R.path(['game', 'size']))
+  const completedRows = useSelector(R.path(['game', 'completedRows']))
+
+  const getIsCompleted = row =>
+  {
+    const result =
+      (
+        R.isEmpty(completedRows)
+          ? R.F :
+          R.compose(
+            R.not,
+            R.isNil,
+            R.flip(R.find)(completedRows),
+            R.equals
+          )
+      )(
+        row
+      )
+
+    return result
+  }
 
   const viewStyle =
     R.mergeLeft(
@@ -57,7 +77,14 @@ const Matrix = props => {
               <View key={row} style={styles.row}>
                 {
                   R.map(
-                    col => (<Block key={row*cols+col} i={col} j={row} />),
+                    col => (
+                      <Block
+                        key={row * cols + col}
+                        i={col}
+                        j={row}
+                        isCompleted={getIsCompleted(row)}
+                      />
+                    ),
                     makeRange(cols)
                   )
                 }

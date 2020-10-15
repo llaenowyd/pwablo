@@ -1,7 +1,8 @@
-
+import * as R from 'ramda'
 import { getEmptyBucket } from '../bucket'
 
-const clockRate = 8
+const tickRate = 15 // ticks/s
+const baseClockRate = 12 // base ticks/clock
 
 export const initialActiTet = {
   kind: null,
@@ -15,14 +16,16 @@ export const getInitialState = (rows=20, cols=10) =>
   ({
     clock: {
       diagnostic: null,
-      rate: clockRate
+      rate: baseClockRate
     },
     game: {
       actiTet: initialActiTet,
       bag: [],
       bucket: getEmptyBucket(rows, cols),
+      clock: baseClockRate,
+      completedRows: [],
+      flash: R.repeat({timer: null, animation: null}, rows),
       level: 4,
-      clock: clockRate,
       nextTet: null,
       size: [cols, rows]
     },
@@ -32,7 +35,7 @@ export const getInitialState = (rows=20, cols=10) =>
     },
     tick: {
       idle: true,
-      interval: 80,
+      interval: Math.floor(1000 / tickRate),
       mode: null,
       next: null,
       prevT0: null,

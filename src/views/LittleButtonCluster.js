@@ -9,10 +9,11 @@ import {
 
 import * as R from 'ramda'
 
+import { actions } from '../state/actions'
 import thunks from '../state/thunks'
-import Presser from './components/Presser'
-
 import * as Theme from '../theme'
+
+import Presser from './components/Presser'
 
 const padding = 5
 
@@ -84,8 +85,12 @@ const LittleButtonCluster = props => {
   const dispatch = useDispatch()
 
   const handleTestPatternClick = () => dispatch(thunks.testPattern())
-  const handleNewGameClick = () => dispatch(thunks.newGame())
-  const handleResetClick = () => dispatch(thunks.reset())
+  const handleNewGameClick = () => {
+    dispatch(thunks.newGame())
+  }
+  const handleResetClick = () => {
+    dispatch({type: actions.reset})
+  }
 
   const handleToggleStyleClick = () => dispatch({
     type: 'toggleMatrixStyle',

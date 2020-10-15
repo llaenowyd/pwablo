@@ -45,5 +45,8 @@ export const block =
       Z: {
         primary: '#ff0000',
         complementDarken: -0.75
+      },
+      0: {
+        primary: '#ffffff'
       }
     })
