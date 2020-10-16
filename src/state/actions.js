@@ -48,6 +48,4 @@ const reverseLookup =
     R.toPairs
   )(actions)
 
-console.log(reverseLookup)
-
 export const getActionName = actionId => reverseLookup[actionId]
