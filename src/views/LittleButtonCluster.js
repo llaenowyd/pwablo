@@ -93,7 +93,7 @@ const LittleButtonCluster = props => {
   }
 
   const handleToggleStyleClick = () => dispatch({
-    type: 'toggleMatrixStyle',
+    type: actions.toggleMatrixStyle,
     payload: { }
   })
 
