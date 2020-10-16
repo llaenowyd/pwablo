@@ -1,6 +1,6 @@
 # Across 110th St.
 
-## Tetris Demo for Android
+## Tetris Demo for Android in React Native
 
 <img src="https://user-images.githubusercontent.com/41239783/95925292-6a4b5500-0d87-11eb-8dfb-cafa75cd6d17.png" alt="emulator screenshot" width="200px">
 
