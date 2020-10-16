@@ -259,11 +259,3 @@ export const reducer =
       Alert.alert('unexpected', `unknown event '${actionType}'`)
     return state
   }
-
-export const reducerX = (state, action) => {
-  const {type: actionType} = action
-
-  console.log(`*** ${actionType}`, state)
-
-  return state
-}

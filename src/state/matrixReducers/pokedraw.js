@@ -67,8 +67,6 @@ export const drawActiTet = state =>
     R.path(['game', 'actiTet'])(state)
   )
 
-const taglog = tag => x => { console.log(tag, x); return x }
-
 const getWriteRanges =
   maxWriteTo =>
     R.compose(
@@ -90,8 +88,6 @@ export const clearRows =
       const maxWriteRow = rows + 2
 
       const writeRanges = getWriteRanges(maxWriteRow)(rowsToClear)
-      taglog('rowsToClear', rowsToClear)
-      taglog('writeRanges', writeRanges)
 
       const safeGetVal = (c, r) => r < maxWriteRow ? bucket[c][r] : 0
 

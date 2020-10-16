@@ -11,7 +11,10 @@ import * as R from 'ramda'
 
 import { actions } from '../state/actions'
 import thunks from '../state/thunks'
-import * as Theme from '../theme'
+import themes from '../themes'
+
+const themeName = 'arcade'
+const {menu:menuTheme} = themes[themeName]
 
 import Presser from './components/Presser'
 
@@ -19,63 +22,53 @@ const padding = 5
 
 const styles = StyleSheet.create({
   view: {
-    display: 'flex',
     flexDirection: 'row',
-    flexWrap: 'nowrap',
     alignItems: 'stretch',
     justifyContent: 'space-between',
-    flexGrow: 0,
-    flexShrink: 1,
-    flexBasis: 'auto',
     paddingTop: padding,
     paddingRight: padding,
     paddingLeft: padding,
     paddingBottom: 0,
     borderRadius: 4,
-    backgroundColor: Theme.lightCharcoal,
+    backgroundColor: menuTheme.background,
     borderStyle: 'solid',
-    borderColor: 'black',
+    borderColor: menuTheme.borderColor,
     borderWidth: StyleSheet.hairlineWidth
   },
   column: {
-    display: 'flex',
-    flexDirection: 'column',
-    flexWrap: 'nowrap',
+    flex: 1,
     alignItems: 'stretch',
-    justifyContent: 'space-evenly',
-    flexGrow: 0.25,
-    flexShrink: 1,
-    flexBasis: 'auto'
+    justifyContent: 'space-evenly'
+  },
+  rowPad: {
+    flex: 0.1
+  },
+  columnPad: {
+    flex: 0.25
   },
   rightColumn: {
     marginLeft: padding
   },
   littleButton: {
-    borderColor: Theme.darkOlive,
-    marginBottom: padding
+    flex: 1,
+    marginBottom: padding,
+    borderColor: menuTheme.button.borderColor
   },
   littleButtonPressed: {
-    backgroundColor: Theme.darkPlum
+    backgroundColor: menuTheme.buttonActive.background,
+    color: menuTheme.buttonActive.foreground
   },
   littleButtonUnpressed: {
-    backgroundColor: Theme.lightOlive
-  },
-  littleButtonTextPressed: {
-    color: Theme.forestGreen
-  },
-  littleButtonTextUnpressed: {
-    color: Theme.darkOlive
+    backgroundColor: menuTheme.button.background,
+    color: menuTheme.button.foreground
   }
 })
 
 const LittleButton = props => (
   <Presser
-    size="small"
     style={styles.littleButton}
     stylePressed={styles.littleButtonPressed}
     styleUnpressed={styles.littleButtonUnpressed}
-    textStylePressed={styles.littleButtonTextPressed}
-    textStyleUnpressed={styles.littleButtonTextUnpressed}
     text={props.text}
     onPress={props.onPress}
   />
@@ -105,7 +98,9 @@ const LittleButtonCluster = props => {
 
   return (
     <View style={viewStyle}>
+      <View style={styles.rowPad} />
       <View style={styles.column}>
+        <View style={styles.columnPad} />
         <LittleButton
           text="grid"
           onPress={handleToggleStyleClick}
@@ -114,8 +109,10 @@ const LittleButtonCluster = props => {
           text="reset"
           onPress={handleResetClick}
         />
+        <View style={styles.columnPad} />
       </View>
       <View style={[styles.column, styles.rightColumn]}>
+        <View style={styles.columnPad} />
         <LittleButton
           text="pattern"
           onPress={handleTestPatternClick}
@@ -124,7 +121,9 @@ const LittleButtonCluster = props => {
           text="new game"
           onPress={handleNewGameClick}
         />
+        <View style={styles.columnPad} />
       </View>
+      <View style={styles.rowPad} />
     </View>
   )
 }

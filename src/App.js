@@ -1,9 +1,8 @@
 
-import React, {useEffect, useState} from 'react'
+import React from 'react'
 
 import {
   SafeAreaView,
-  StatusBar,
   StyleSheet,
   Text,
   View,
@@ -20,20 +19,13 @@ import { rand1 } from './Random'
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    height: '100%',
-    width: '100%'
+    flex: 1
   },
   game: {
-    position: 'relative',
-    top: 0,
-    left: 0,
-    height: '100%'
+    flex: 1
   },
   debug: {
-    position: 'relative',
+    position: 'absolute',
     right: 0,
     bottom: 0,
     fontFamily: 'VT323-Regular'

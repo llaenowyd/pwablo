@@ -1,29 +1,14 @@
 import React from 'react'
 
-import { ImageBackground, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Pressable, StyleSheet, Text } from 'react-native'
 
 import * as R from 'ramda'
 
-import {
-  down,
-  info,
-  left,
-  note,
-  rite,
-  rotl,
-  rotr,
-  tone
-} from '../../Images';
-
 const styles = StyleSheet.create({
   view: {
-    display: 'flex',
-    flexDirection: 'column',
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    flexGrow: 0,
-    flexShrink: 0,
-    flexBasis: 'auto',
     borderWidth: StyleSheet.hairlineWidth,
     borderStyle: 'solid',
     borderColor: 'black',
@@ -38,29 +23,13 @@ const styles = StyleSheet.create({
     fontFamily: 'Early GameBoy',
     fontWeight: '900',
     textAlign: 'center',
-    fontSize: 14
+    fontSize: 9
   },
   textLarge: {
     fontSize: 20
   },
   textSmall: {
-    fontSize: 10
-  },
-  imageBg: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  icon: {
-    width: 15,
-    height: 15
-  },
-  iconLarge: {
-    width: 50,
-    height: 50
-  },
-  iconSmall: {
+    fontSize: 9
   },
   pressed: {
   },
@@ -73,8 +42,6 @@ const styles = StyleSheet.create({
 })
 
 export default props => {
-  // const [propsStylePruned, propsStyleHeight] = takeomit(['height'])(props)
-
   const getViewStyle =
     pressed =>
       R.mergeLeft(
@@ -98,18 +65,6 @@ export default props => {
         )
       )
 
-  const iconImage =
-    R.flip(R.prop)({
-      down,
-      info,
-      left,
-      note,
-      rite,
-      rotl,
-      rotr,
-      tone
-    })(props.icon)
-
   const getInnerStyle =
     (([
       innerStyle,
@@ -118,8 +73,8 @@ export default props => {
       innerPressedStyle,
       innerUnpressedStyle,
       innerStyleProp,
-      innerPressedStyleProp,
-      innerUnpressedStyleProp
+      stylePropPressed,
+      stylePropUnpressed
     ]) =>
       pressed =>
         R.mergeRight(
@@ -137,47 +92,33 @@ export default props => {
               pressed ? innerPressedStyle : innerUnpressedStyle,
               R.defaultTo(
                 {},
-                pressed ? innerPressedStyleProp : innerUnpressedStyleProp
+                pressed ? stylePropPressed : stylePropUnpressed
               )
             )
           )
         )
-    )(
-      R.isNil(iconImage)
-        ? [
-          styles.text,
-          styles.textLarge,
-          styles.textSmall,
-          styles.textPressed,
-          styles.textUnpressed,
-          props.textStyle,
-          props.textStylePressed,
-          props.textStyleUnpressed
-        ] : [
-          styles.icon,
-          styles.iconLarge,
-          styles.iconSmall,
-          styles.iconPressed,
-          styles.iconUnpressed,
-          props.iconStyle,
-          props.iconStylePressed,
-          props.iconStyleUnpressed
-        ]
-    )
+    )([
+      styles.text,
+      styles.textLarge,
+      styles.textSmall,
+      styles.textPressed,
+      styles.textUnpressed,
+      props.textStyle,
+      props.stylePressed,
+      props.styleUnpressed
+    ])
 
 
   return (
     <Pressable style={({pressed}) => getViewStyle(pressed)} onPress={props.onPress}>
         {
-          ({pressed}) =>
-            iconImage
-              ? (
-                <ImageBackground source={iconImage} style={styles.imageBg}>
-                  <View style={getInnerStyle(pressed)} />
-                </ImageBackground>
-              ) : (
-                <Text style={getInnerStyle(pressed)}>{props.text}</Text>
-              )
+          ({pressed}) => {
+            const innerStyle = getInnerStyle(pressed)
+
+            return (
+              <Text style={innerStyle}>{props.text}</Text>
+            )
+          }
         }
     </Pressable>
   )

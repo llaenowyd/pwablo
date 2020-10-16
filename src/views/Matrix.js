@@ -18,10 +18,7 @@ import Block from './components/Block'
 
 const styles = StyleSheet.create({
   view: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'stretch',
-    justifyContent: 'space-evenly'
+    alignItems: 'stretch'
   },
   background: {
     display: 'flex',
@@ -43,24 +40,15 @@ const Matrix = props => {
   const [ cols, rows ] = useSelector(R.path(['game', 'size']))
   const completedRows = useSelector(R.path(['game', 'completedRows']))
 
-  const getIsCompleted = row =>
-  {
-    const result =
-      (
-        R.isEmpty(completedRows)
-          ? R.F :
-          R.compose(
-            R.not,
-            R.isNil,
-            R.flip(R.find)(completedRows),
-            R.equals
-          )
-      )(
-        row
+  const getIsCompleted =
+    R.isEmpty(completedRows)
+      ? R.F :
+      R.compose(
+        R.not,
+        R.isNil,
+        R.flip(R.find)(completedRows),
+        R.equals
       )
-
-    return result
-  }
 
   const viewStyle =
     R.mergeLeft(

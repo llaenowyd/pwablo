@@ -1,12 +1,15 @@
 import React from 'react'
-import {Animated, StyleSheet, View} from 'react-native'
+import {Animated, StyleSheet} from 'react-native'
 import {useSelector} from 'react-redux'
 import * as R from 'ramda'
 
 import renameKeys from '../../fun/renameKeys'
 import { tetset } from '../../tets'
 
-import { block as blockTheme } from '../../theme.js'
+import themes from '../../themes.js'
+
+const themeName = 'arcade'
+const {blocks:blockTheme, emptyBlock:emptyBlockTheme} = themes[themeName]
 
 const commonBlockStyle = {
   flexGrow: 1,
@@ -81,7 +84,7 @@ const emptyAnnoBlockStyle =
     R.mergeRight(
       annoBlockStyle,
       {
-        color: 'darkgrey'
+        color: emptyBlockTheme.complement
       }
     ),
     emptyBlockStyle
