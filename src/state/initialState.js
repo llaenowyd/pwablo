@@ -31,9 +31,12 @@ export const getInitialState = (rows=20, cols=10) =>
       bucket: getEmptyBucket(rows, cols),
       clock: baseClockRate,
       completedRows: [],
+      finished: false,
       flash: R.repeat({timer: null, animation: null}, rows),
-      level: 4,
+      level: 1,
       nextTet: null,
+      rowsCleared: 0,
+      rowsPerLevel: 10,
       score: null,
       size: [cols, rows]
     },

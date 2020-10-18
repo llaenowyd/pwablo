@@ -72,8 +72,6 @@ const tetlets =
 
 const Blocklet = ({tetKind}) => (<BlockView matrixStyle={0} tetKind={tetKind} isCompleted={false} />)
 
-const taglog = tag => x => { console.log(tag, x); return x }
-
 export default props => {
   const tetKind = useSelector(R.path(['game', 'nextTet']))
 

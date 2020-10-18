@@ -86,13 +86,13 @@ export const setFlash =
     ? R.identity
     : state => {
         const tickInterval = R.path(['tick', 'interval'])(state)
-        const gameLevel = R.path(['game', 'level'])(state)
+        // const gameLevel = R.path(['game', 'level'])(state)
+        //
+        // const baseClockRate = 12
+        // const clockRate = baseClockRate - gameLevel - 1
+        // const approxMsPerClock = clockRate * tickInterval
 
-        const baseClockRate = 12
-        const clockRate = baseClockRate - gameLevel - 1
-        const approxMsPerClock = clockRate * tickInterval
-
-        const makeCRT = makeCompletedRowTimer(approxMsPerClock)
+        const makeCRT = makeCompletedRowTimer(tickInterval)
 
         return R.compose(
           ...R.map(

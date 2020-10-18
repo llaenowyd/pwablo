@@ -34,11 +34,8 @@ const leftPad =
     )
 
 export default props => {
-  const score = useSelector(R.path(['game', 'score']))
-
-  if (R.isNil(score)) {
-    return (<View />)
-  }
+  let score = useSelector(R.path(['game', 'score']))
+  let level = useSelector(R.path(['game', 'level']))
 
   return (
     <Text
@@ -47,7 +44,14 @@ export default props => {
       numberOfLines={1}
       style={R.mergeLeft(R.defaultTo({}, props.style), styles.text)}
     >
-      {leftPad(' ', 10)(String(score))}
+      {
+        R.isNil(score)
+          ? 'a110 Tetris'
+          : R.concat(
+              leftPad(' ', 10)(String(score)),
+              ` Lv.${level}`
+        )
+      }
     </Text>
   )
 }

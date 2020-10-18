@@ -2,7 +2,7 @@ import { Alert } from 'react-native'
 
 import * as R from 'ramda'
 
-import { completeRows } from '../bucket'
+import { completeRows, isFinished } from '../bucket'
 import { makeTet } from '../tets'
 
 import { getActionName } from './actions'
@@ -16,7 +16,7 @@ const reinitState =
     (
       ([cols, rows]) =>
         R.mergeLeft(
-          R.pick(['clock', 'style'], state),
+          R.pick(['audio', 'clock', 'style'], state),
           getInitialState(rows, cols)
         )
     )(
@@ -52,51 +52,77 @@ const inputReducer =
       )
   )
 
-const useNextTet =
-  R.chain(
-    ([nextTetKind, [cols, rows]]) =>
+const taglog = tag => x => { console.log(tag, x); return x }
+
+const useNextTetAndMaybeFinish =
+  R.compose(
+    R.when(
+      isFinished,
       R.compose(
-        R.set(
-          R.lensPath(['game', 'nextTet']),
-          null
-        ),
-        R.set(
-          R.lensPath(['game', 'actiTet']),
-          R.mergeLeft(
-            makeTet(cols, rows)(nextTetKind),
-            initialActiTet
+        stopTickReducer,
+        R.set(R.lensPath(['game', 'finished']), true)
+      )
+    ),
+    R.chain(
+      ([nextTetKind, [cols, rows]]) =>
+        R.compose(
+          R.set(
+            R.lensPath(['game', 'nextTet']),
+            null
+          ),
+          R.set(
+            R.lensPath(['game', 'actiTet']),
+            R.mergeLeft(
+              makeTet(cols, rows)(nextTetKind),
+              initialActiTet
+            )
           )
-        )
-      ),
-    R.juxt([
-      R.view(R.lensPath(['game', 'nextTet'])),
-      R.view(R.lensPath(['game', 'size']))
-    ])
+        ),
+      R.juxt([
+        R.view(R.lensPath(['game', 'nextTet'])),
+        R.view(R.lensPath(['game', 'size']))
+      ])
+    )
   )
 
-const addPointsReducer =
+const addPointsAndMaybeLevelUp =
   R.chain(
-    R.compose(
-      ([numCompletedRows, level]) =>
-        R.over(
-          R.lensPath(['game', 'score']),
-          [
-            R.identity,
-            R.add((level+1)*40),
-            R.add((level+1)*100),
-            R.add((level+1)*300),
-            R.add((level+1)*1200)
-          ][
-            R.min(numCompletedRows, 4)
+    ([numCompletedRows, level, prevRowsCleared, rowsPerLevel]) =>
+      (nextRowsCleared =>
+        R.compose(
+          R.over(
+            R.lensPath(['game', 'level']),
+            nextRowsCleared % rowsPerLevel < prevRowsCleared % rowsPerLevel
+              ? R.add(1) : R.identity
+          ),
+          R.set(
+            R.lensPath(['game', 'rowsCleared']),
+            nextRowsCleared
+          ),
+          R.over(
+            R.lensPath(['game', 'score']),
+            [
+              R.identity,
+              R.add((level+1)*40),
+              R.add((level+1)*100),
+              R.add((level+1)*300),
+              R.add((level+1)*1200)
+            ][
+              R.min(numCompletedRows, 4)
             ]
+          )
         )
-    ),
+      )(
+        prevRowsCleared + numCompletedRows
+      ),
     R.juxt([
       R.compose(
         R.length,
         R.path(['game', 'completedRows'])
       ),
-      R.path(['game', 'level'])
+      R.path(['game', 'level']),
+      R.path(['game', 'rowsCleared']),
+      R.path(['game', 'rowsPerLevel'])
     ])
   )
 
@@ -106,8 +132,8 @@ const fallOrSettleAndUseNext =
       R.nth(1), // did fall
       R.nth(0), // just state
       R.compose(
-        useNextTet,
-        addPointsReducer,
+        useNextTetAndMaybeFinish,
+        addPointsAndMaybeLevelUp,
         R.chain(
           setFlash,
           R.path(['game', 'completedRows'])
@@ -119,7 +145,7 @@ const fallOrSettleAndUseNext =
     fall
   )
 
-// speed=level-1
+// speed=level-1 (+3 to start faster)
 // at speed=0, clockRate=8 ticks per clock
 // at speed=1, clockRate-1=7 ticks per clock
 // at speed=7, clockRate-7=1 tick per clock
@@ -133,7 +159,7 @@ const clockTickReducer =
           R.ifElse(
             R.lt(0),
             R.add(-1),
-            R.always(clockRate - gameLevel - 1)
+            R.always(R.max(1, clockRate - gameLevel - 4))
           )
         ),
       R.juxt([
@@ -199,7 +225,7 @@ export const reducerList = [
         )
       )(state)
   ),
-  checkReducer('useNextTet')(useNextTet),
+  checkReducer('useNextTet')(useNextTetAndMaybeFinish),
   checkReducer('clearInput')(
     R.set(R.lensProp('input'), [])
   ),

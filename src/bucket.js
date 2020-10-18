@@ -87,3 +87,16 @@ export const completeRows =
       R.path(['game', 'actiTet'])
     )
   )
+
+export const isFinished =
+  R.compose(
+    ([bucket, buckPoints]) => R.complement(isOpenPoints)(bucket, [], buckPoints),
+    R.juxt([
+      R.path(['game', 'bucket']),
+      R.compose(
+        R.prop('points'),
+        moveToBucket,
+        R.path(['game', 'actiTet'])
+      )
+    ])
+  )

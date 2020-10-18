@@ -12,7 +12,7 @@ import * as R from 'ramda'
 
 import makeRange from '../fun/makeRange'
 
-import { savior } from '../Images'
+import { carousel, idleBackground } from '../Images'
 
 import Block from './components/Block'
 
@@ -37,8 +37,15 @@ const styles = StyleSheet.create({
 })
 
 const Matrix = props => {
+  const tickMode = useSelector(R.path(['tick', 'mode']))
   const [ cols, rows ] = useSelector(R.path(['game', 'size']))
   const completedRows = useSelector(R.path(['game', 'completedRows']))
+  const gameLevel = useSelector(R.path(['game', 'level']))
+
+  const background =
+    tickMode !== 'game'
+      ? idleBackground
+      : carousel[(gameLevel - 1) % R.length(carousel)]
 
   const getIsCompleted =
     R.isEmpty(completedRows)
@@ -58,7 +65,7 @@ const Matrix = props => {
 
   return (
     <View style={viewStyle}>
-      <ImageBackground source={savior} style={styles.background}>
+      <ImageBackground source={background} style={styles.background}>
         {
           R.map(
             row => (
