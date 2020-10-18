@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import {
   StyleSheet,
@@ -77,6 +77,8 @@ const LittleButton = props => (
 const LittleButtonCluster = props => {
   const dispatch = useDispatch()
 
+  const musicEnabled = useSelector(R.path(['audio', 'music', 'enabled']))
+
   const handleTestPatternClick = () => dispatch(thunks.testPattern())
   const handleNewGameClick = () => {
     dispatch(thunks.newGame())
@@ -85,9 +87,13 @@ const LittleButtonCluster = props => {
     dispatch({type: actions.reset})
   }
 
-  const handleToggleStyleClick = () => dispatch({
-    type: actions.toggleMatrixStyle,
-    payload: { }
+  // const handleToggleStyleClick = () => dispatch({
+  //   type: actions.toggleMatrixStyle,
+  //   payload: { }
+  // })
+
+  const handleToggleMusicClick = () => dispatch({
+    type: actions.toggleMusic
   })
 
   const viewStyle =
@@ -96,14 +102,19 @@ const LittleButtonCluster = props => {
       styles.view
     )
 
+  // <LittleButton
+  //   text="grid"
+  //   onPress={handleToggleStyleClick}
+  // />
+
   return (
     <View style={viewStyle}>
       <View style={styles.rowPad} />
       <View style={styles.column}>
         <View style={styles.columnPad} />
         <LittleButton
-          text="grid"
-          onPress={handleToggleStyleClick}
+          text={musicEnabled?'mute':'song'}
+          onPress={handleToggleMusicClick}
         />
         <LittleButton
           text="reset"

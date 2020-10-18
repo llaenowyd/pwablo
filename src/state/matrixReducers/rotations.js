@@ -4,7 +4,7 @@ import makeRange from '../../fun/makeRange'
 import {kickers} from '../../tets'
 import {isOpen} from '../../bucket'
 
-import {drawTet, eraseTet} from './pokedraw'
+import {drawTet, eraseTet} from './draw'
 
 const incRotos =
   [

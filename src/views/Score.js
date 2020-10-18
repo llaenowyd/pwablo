@@ -21,6 +21,18 @@ const styles = StyleSheet.create({
   }
 })
 
+const leftPad =
+  (padc, len) =>
+    R.chain(
+      R.concat,
+      R.compose(
+        R.join(''),
+        R.repeat(padc),
+        R.subtract(len),
+        R.length
+      )
+    )
+
 export default props => {
   const score = useSelector(R.path(['game', 'score']))
 
@@ -35,7 +47,7 @@ export default props => {
       numberOfLines={1}
       style={R.mergeLeft(R.defaultTo({}, props.style), styles.text)}
     >
-      {`SCORE: ${score}`}
+      {leftPad(' ', 10)(String(score))}
     </Text>
   )
 }

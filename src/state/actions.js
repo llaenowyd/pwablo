@@ -26,7 +26,9 @@ const actionNames = {
   reset: 'reset',
   setBucket: 'setBucket',
   toggleMatrixStyle: 'toggleMatrixStyle',
-  setupNewGame: 'setupNewGame'
+  setupNewGame: 'setupNewGame',
+  prevSoundStopped: 'prevSoundStopped',
+  toggleMusic: 'toggleMusic'
 }
 
 export const actions =

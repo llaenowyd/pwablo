@@ -2,7 +2,7 @@ import * as R from 'ramda'
 
 import {isOpen} from '../../bucket'
 
-import {clearRows, drawTet, eraseTet} from './pokedraw'
+import {clearRows, drawTet, eraseTet} from './draw'
 
 const translateAndTest =
   (axIndex, op) =>
