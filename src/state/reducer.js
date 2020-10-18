@@ -74,6 +74,32 @@ const useNextTet =
     ])
   )
 
+const addPointsReducer =
+  R.chain(
+    R.compose(
+      ([numCompletedRows, level]) =>
+        R.over(
+          R.lensPath(['game', 'score']),
+          [
+            R.identity,
+            R.add((level+1)*40),
+            R.add((level+1)*100),
+            R.add((level+1)*300),
+            R.add((level+1)*1200)
+          ][
+            R.min(numCompletedRows, 4)
+            ]
+        )
+    ),
+    R.juxt([
+      R.compose(
+        R.length,
+        R.path(['game', 'completedRows'])
+      ),
+      R.path(['game', 'level'])
+    ])
+  )
+
 const fallOrSettleAndUseNext =
   R.compose(
     R.ifElse(
@@ -81,6 +107,7 @@ const fallOrSettleAndUseNext =
       R.nth(0), // just state
       R.compose(
         useNextTet,
+        addPointsReducer,
         R.chain(
           setFlash,
           R.path(['game', 'completedRows'])
@@ -228,6 +255,13 @@ export const reducerList = [
           R.prop('matrix')
         )
       )
+    )
+  ),
+  checkReducer('setupNewGame')(
+    R.compose(
+      R.set(R.lensPath(['game', 'score']), 0),
+      reinitState,
+      stopTickReducer
     )
   )
 ]

@@ -2,11 +2,21 @@ import { NativeModules } from 'react-native'
 
 import * as R from 'ramda'
 
-const rand = NativeModules.Sha1.rand
-
 import { tetset } from './tets'
 
-export { rand }
+let rand = NativeModules?.Sha1?.rand
+
+const setRand =
+  rng => {
+    if (R.isNil(rand)) {
+      rand = rng
+      return
+    }
+
+    throw new Error('`rand` assigned after initialization')
+  }
+
+export { rand, setRand }
 
 /**
  *  Random number TO Offset

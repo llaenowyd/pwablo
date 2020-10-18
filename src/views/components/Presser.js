@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Pressable, StyleSheet, Text } from 'react-native'
+import {Animated, Pressable, StyleSheet, Text} from 'react-native';
 
 import * as R from 'ramda'
 
@@ -116,7 +116,13 @@ export default props => {
             const innerStyle = getInnerStyle(pressed)
 
             return (
-              <Text style={innerStyle}>{props.text}</Text>
+              <Text
+                allowFontScaling={false}
+                adjustsFontSizeToFit={true}
+                style={innerStyle}
+              >
+                {props.text}
+              </Text>
             )
           }
         }

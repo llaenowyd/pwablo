@@ -25,7 +25,8 @@ const actionNames = {
   drawActiTet: 'drawActiTet',
   reset: 'reset',
   setBucket: 'setBucket',
-  toggleMatrixStyle: 'toggleMatrixStyle'
+  toggleMatrixStyle: 'toggleMatrixStyle',
+  setupNewGame: 'setupNewGame'
 }
 
 export const actions =

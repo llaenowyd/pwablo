@@ -9,6 +9,7 @@ import {
 
 import * as R from 'ramda'
 
+import ScoreAndNext from './ScoreAndNext'
 import Matrix from './Matrix'
 import Controls from './Controls'
 
@@ -24,11 +25,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: background
   },
+  scoreAndNext: {
+    flex: 1
+  },
   matrix: {
-    flex: 8
+    flex: 24
   },
   controls: {
-    flex: 2
+    flex: 6
   }
 })
 
@@ -47,6 +51,7 @@ export default props => {
 
   return (
     <View style={viewStyle}>
+      <ScoreAndNext style={styles.scoreAndNext} />
       <Matrix style={styles.matrix} />
       <Controls style={styles.controls} />
     </View>

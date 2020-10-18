@@ -5,7 +5,7 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
-  View,
+  View
 } from 'react-native'
 
 import { useSelector } from 'react-redux'
@@ -13,9 +13,12 @@ import { useSelector } from 'react-redux'
 import * as R from 'ramda'
 
 import { Provider } from './state'
+import themes from './themes'
 
 import Game from './views/Game'
-import { rand1 } from './Random'
+
+const themeName = 'arcade'
+const {debugColor} = themes[themeName]
 
 const styles = StyleSheet.create({
   container: {
@@ -28,7 +31,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
     bottom: 0,
-    fontFamily: 'VT323-Regular'
+    fontFamily: 'VT323-Regular',
+    color: debugColor
   }
 })
 

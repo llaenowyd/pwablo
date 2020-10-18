@@ -1,5 +1,7 @@
 import * as R from 'ramda'
 
+import { getFallRanges } from '../../bucket'
+
 export const drawTetKind =
   state =>
     kind =>
@@ -67,41 +69,25 @@ export const drawActiTet = state =>
     R.path(['game', 'actiTet'])(state)
   )
 
-const getWriteRanges =
-  maxWriteTo =>
-    R.compose(
-      R.chain(
-        indexes => ranges => R.transpose([indexes, ranges]),
-        R.compose(
-          R.times(R.identity),
-          R.length
-        )
-      ),
-      R.aperture(2),
-      R.append(maxWriteTo),
-      R.prepend(0)
-    )
-
 export const clearRows =
   (cols, rows, rowsToClear) =>
     bucket => {
-      const maxWriteRow = rows + 2
+      const maxRow = rows + 2
+      const sentinel = maxRow + 1
 
-      const writeRanges = getWriteRanges(maxWriteRow)(rowsToClear)
+      const fallRanges = getFallRanges(sentinel)(rowsToClear)
 
-      const safeGetVal = (c, r) => r < maxWriteRow ? bucket[c][r] : 0
+      const safeGetVal = (c, r) => r < maxRow ? bucket[c][r] : 0
 
       R.forEach(
         ([numRowsCleared, [start, end]]) => {
-          if (numRowsCleared === 0) return
-
           for (let row = start; row < end; row++) {
             for (let col = 0; col < cols; col++) {
               bucket[col][row] = safeGetVal(col, row + numRowsCleared)
             }
           }
         },
-        writeRanges
+        fallRanges
       )
 
       return bucket

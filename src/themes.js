@@ -56,8 +56,6 @@ const getTunings =
     R.flip(R.prop)(blockTunings)
   )
 
-const taglog = tag => x => { console.log(tag, x); return x }
-
 const blocks =
   R.compose(
     R.fromPairs,
@@ -86,6 +84,7 @@ const emptyBlock = {
 export default {
   oliveCharcoal: {
     background: darkCharcoal,
+    debugColor: lightCharcoal,
     controls: {
       background: darkCharcoal,
       button: {
@@ -110,11 +109,16 @@ export default {
         foreground: forestGreen
       }
     },
+    scoreAndNextTet: {
+      background: darkCharcoal,
+      foreground: lightOlive
+    },
     blocks,
     emptyBlock
   },
   arcade: {
     background: blackViolet,
+    debugColor: violet,
     controls: {
       background: blackViolet,
       button: {
@@ -139,6 +143,10 @@ export default {
         background: lightPistachio,
         foreground: darkViolet
       }
+    },
+    scoreAndNextTet: {
+      background: darkViolet,
+      foreground: lightPistachio
     },
     blocks,
     emptyBlock

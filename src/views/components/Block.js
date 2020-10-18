@@ -97,6 +97,40 @@ const styles = StyleSheet.create({
   ...annoBlockStyles
 })
 
+export const BlockView =
+  ({matrixStyle, tetKind, isCompleted, flashTimer}) => {
+    const styleKey =
+      R.compose(
+        R.when(
+          R.thunkify(R.equals(1))(matrixStyle),
+          R.concat('a')
+        ),
+        R.when(
+          R.equals(0),
+          R.always('MT')
+        )
+      )(tetKind)
+
+    const blockStyle = styles[styleKey]
+
+    const opacity = isCompleted && flashTimer ? {
+      opacity: flashTimer
+    } : {
+      opacity: 1
+    }
+
+    return {
+      0: () => (
+        <Animated.View style={[blockStyle, opacity]} />
+      ),
+      1: () => (
+        <Animated.Text allowFontScaling={false} style={[blockStyle, opacity]}>
+          {tetKind}
+        </Animated.Text>
+      )
+    }[matrixStyle]()
+  }
+
 export default ({i, j, isCompleted}) => {
   const matrixStyle = useSelector(R.path(['style', 'matrix']))
   const tetKind = useSelector(R.path(['game', 'bucket', i, j]))
@@ -104,34 +138,12 @@ export default ({i, j, isCompleted}) => {
 
   const flashTimer = flash.timer
 
-  const styleKey =
-    R.compose(
-      R.when(
-        R.thunkify(R.equals(1))(matrixStyle),
-        R.concat('a')
-      ),
-      R.when(
-        R.equals(0),
-        R.always('MT')
-      )
-    )(tetKind)
-
-  const blockStyle = styles[styleKey]
-
-  const opacity = isCompleted && flashTimer ? {
-        opacity: flashTimer
-      } : {
-        opacity: 1
-      }
-
-  return {
-    0: () => (
-      <Animated.View style={[blockStyle, opacity]} />
-    ),
-    1: () => (
-      <Animated.Text style={[blockStyle, opacity]}>
-        {tetKind}
-      </Animated.Text>
-    )
-  }[matrixStyle]()
+  return (
+    <BlockView
+      matrixStyle={matrixStyle}
+      tetKind={tetKind}
+      isCompleted={isCompleted}
+      flashTimer={flashTimer}
+    />
+  )
 }

@@ -87,3 +87,78 @@ export const completeRows =
       R.path(['game', 'actiTet'])
     )
   )
+
+export const groupCompletedRows =
+  R.compose(
+    R.map(
+      R.converge(
+        (len, min, max) => [len, [min, max]],
+        [
+          R.length,
+          R.apply(Math.min),
+          R.apply(Math.max)
+        ]
+      )
+    ),
+    R.groupWith((a, b) => b - a === 1)
+  )
+
+const makeSentinel =
+  endRow =>
+    R.compose(
+      R.set(
+        R.compose(R.lensIndex(1), R.lensIndex(1)),
+        endRow
+      ),
+      R.last
+    )
+
+export const digestCompletedGroups =
+  endRow =>
+    R.compose(
+      R.converge(
+        R.flip(R.concat),
+        [
+          R.compose(
+            R.of,
+            makeSentinel(endRow)
+          ),
+          R.compose(
+            R.map(
+              ([group, nextGroup]) =>
+                R.compose(
+                  R.set(R.lensPath([1, 1])),
+                  R.view(R.lensPath([1, 0]))
+                )(nextGroup)(group)
+            ),
+            R.aperture(2)
+          )
+        ]
+      ),
+      R.last,
+      R.reduce(
+        ([rowsCompleted, result], [groupSize, range]) =>
+          (nextRowsCompleted =>
+              [
+                nextRowsCompleted,
+                R.append(
+                  [nextRowsCompleted, range],
+                  result
+                )
+              ]
+          )(
+            rowsCompleted + groupSize
+          ),
+        [0, []])
+    )
+
+export const getFallRanges =
+  endRow =>
+    R.ifElse(
+      R.isEmpty,
+      R.always([]),
+      R.compose(
+        digestCompletedGroups(endRow),
+        groupCompletedRows
+      )
+    )

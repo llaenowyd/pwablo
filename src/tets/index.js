@@ -114,12 +114,14 @@ const blockOffsetsTable =
     R.map(kind => [kind, getInitialOffsets(kind)])
   )(tetset)
 
+const getTetPoints = R.flip(R.prop)(blockOffsetsTable)
+
 const makeTet =
   (cols, rows) =>
     R.applySpec({
       kind: R.identity,
-      points: R.flip(R.prop)(blockOffsetsTable),
+      points: getTetPoints,
       pos: R.always(getInitialPos(cols, rows))
     })
 
-export { kickers, makeTet, tetset }
+export { getTetPoints, kickers, makeTet, tetset }

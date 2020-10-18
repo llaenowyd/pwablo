@@ -56,7 +56,7 @@ export default {
     R.pipeWith(
       R.andThen,
       [
-        () => Promise.resolve(dispatch({type: actions.reset})),
+        () => Promise.resolve(dispatch({type: actions.setupNewGame})),
         () => makeStartTickThunk('game')(dispatch, getState)
       ]
     )(),
