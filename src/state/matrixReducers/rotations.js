@@ -75,15 +75,23 @@ const rot1AndTest = (bucket, cw, tet) => {
 
   if (isOpen(bucket, tet)(rotatedTet)) return rotatedTet
 
-  const kicks = kickers[tet.kind][tet.rot][cw?1:0]
+  const kicks = kickers[tet.kind][cw?1:0][tet.rot]
 
-  return R.find(
-    R.compose(
-      isOpen(bucket, tet),
-      kick => R.over(R.lensProp('pos'), kick, rotatedTet)
+  const applyKick =
+    tet => kick => R.over(R.lensProp('pos'), kick, tet)
+
+  return R.compose(
+    R.unless(
+      R.isNil,
+      applyKick(rotatedTet)
     ),
-    kicks
-  ) ?? tet
+    R.find(
+      R.compose(
+        isOpen(bucket, tet),
+        applyKick(rotatedTet)
+      )
+    )
+  )(kicks) ?? tet
 }
 
 const rotNAndTest = (bucket, n, tet) => {

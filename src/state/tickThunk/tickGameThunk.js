@@ -28,6 +28,8 @@ const handleInputThunk =
     (dispatch, getState) => {
       const {input} = getState()
 
+      if (R.length(input) === 0) return
+
       // move to regular reducer
 
       const doLeftRot = R.complement(R.isNil)(R.find(R.equals('L'), input))

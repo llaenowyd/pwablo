@@ -46,11 +46,11 @@ const makeKickers = kix => {
     (i, j) =>
       R.compose(
         R.map(
-          ([iK,jK]) => R.map(([i,j]) => [i+iK, j+jK])
+          ([iK,jK]) => ([i,j]) => [i+iK, j+jK]
         ),
         R.reject(([i,j]) => i===0 && j===0),
         R.map(
-          ([[kx0, ky0], [kx1, ky1]]) => [kx0-kx1, ky0,ky1]
+          ([[kx0, ky0], [kx1, ky1]]) => [kx0-kx1, ky0-ky1]
         ),
         R.transpose
       )(
@@ -80,8 +80,9 @@ const makeKickers = kix => {
           getNext
         ),
         makeRange(4)
-      )
-  )(getNexts)
+      ),
+    getNexts
+  )
 }
 
 const commonKickers = makeKickers(commonKicks)
