@@ -18,7 +18,6 @@ const takeNextTetThunk =
   tryCatcher('takeNextTetThunk')(
     (dispatch, getState) => {
       dispatch({type: actions.useNextTet})
-      dispatch({type: actions.drawActiTet})
       return nextTetThunk(dispatch, getState)
     }
   )

@@ -22,7 +22,6 @@ const actionNames = {
   up: 'up',
   down: 'down',
   clearCompletedRows: 'clearCompletedRows',
-  drawActiTet: 'drawActiTet',
   reset: 'reset',
   setBucket: 'setBucket',
   toggleMatrixStyle: 'toggleMatrixStyle',

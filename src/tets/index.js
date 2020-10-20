@@ -101,10 +101,10 @@ const kickers = {
 const getBoundingRadius = kind => kind === 'I' ? 2 : 1
 
 const getInitialPos =
-  (cols, rows) =>
+  (cols, rows, numCompletedRows=0) =>
     [
       Math.floor(cols / 2) - 1,
-      rows
+      rows + numCompletedRows
     ]
 
 const getInitialOffsets = R.flip(R.prop)(blockOffsets)
@@ -118,11 +118,11 @@ const blockOffsetsTable =
 const getTetPoints = R.flip(R.prop)(blockOffsetsTable)
 
 const makeTet =
-  (cols, rows) =>
+  (cols, rows, numCompletedRows=0) =>
     R.applySpec({
       kind: R.identity,
       points: getTetPoints,
-      pos: R.always(getInitialPos(cols, rows))
+      pos: R.always(getInitialPos(cols, rows, numCompletedRows))
     })
 
 export { getTetPoints, kickers, makeTet, tetset }

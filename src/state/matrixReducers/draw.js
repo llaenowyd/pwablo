@@ -51,6 +51,11 @@ export const drawActiTet = state =>
     R.path(['game', 'actiTet'])(state)
   )
 
+export const eraseActiTet = state =>
+  eraseTet(state)(
+    R.path(['game', 'actiTet'])(state)
+  )
+
 const topOffBucket =
   rowsMax =>
     R.map(
@@ -79,5 +84,5 @@ export const clearRows =
             bucket
           )
         )(
-          rows + 2
+          rows + 6
         )

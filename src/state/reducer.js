@@ -2,14 +2,16 @@ import { Alert } from 'react-native'
 
 import * as R from 'ramda'
 
-import { completeRows, isFinished } from '../bucket'
+import { canFall, completeRows } from '../bucket'
 import { makeTet } from '../tets'
 
 import { getActionName } from './actions'
 import { setFlash, stopFlash } from './animation'
 import { getInitialState, initialActiTet } from './initialState'
-import { clearCompletedRows, drawActiTet, leftRot, riteRot, left, rite, up, fall } from './matrixReducers'
+import { clearCompletedRows, drawActiTet, eraseActiTet, leftRot, riteRot, left, rite, up, fall } from './matrixReducers'
 import { tryCatcher } from './common'
+
+const taglog = tag => x => { console.log(tag, x); return x }
 
 const reinitState =
   state =>
@@ -52,37 +54,42 @@ const inputReducer =
       )
   )
 
-const taglog = tag => x => { console.log(tag, x); return x }
-
-const useNextTetAndMaybeFinish =
-  R.compose(
-    R.when(
-      isFinished,
-      R.compose(
-        stopTickReducer,
-        R.set(R.lensPath(['game', 'finished']), true)
+const setSoundEffect =
+  soundEffectName =>
+    R.over(
+      R.lensPath(['audio', 'sounds', soundEffectName]),
+      R.unless(
+        R.isNil,
+        R.add(1)
       )
-    ),
-    R.chain(
-      ([nextTetKind, [cols, rows]]) =>
-        R.compose(
-          R.set(
-            R.lensPath(['game', 'nextTet']),
-            null
-          ),
-          R.set(
-            R.lensPath(['game', 'actiTet']),
-            R.mergeLeft(
-              makeTet(cols, rows)(nextTetKind),
-              initialActiTet
-            )
-          )
-        ),
-      R.juxt([
-        R.view(R.lensPath(['game', 'nextTet'])),
-        R.view(R.lensPath(['game', 'size']))
-      ])
     )
+
+const finishGame =
+  R.compose(
+    stopTickReducer,
+    R.set(R.lensPath(['game', 'finished']), true)
+  )
+
+const useNextTet =
+  R.chain(
+    ([nextTet, [cols,rows]]) =>
+      R.compose(
+        R.set(
+          R.lensPath(['game', 'nextTet']),
+          null
+        ),
+        R.set(
+          R.lensPath(['game', 'actiTet']),
+          R.mergeLeft(
+            makeTet(cols, rows)(nextTet),
+            initialActiTet
+          )
+        )
+      ),
+    R.juxt([
+      R.path(['game', 'nextTet']),
+      R.path(['game', 'size'])
+    ])
   )
 
 const addPointsAndMaybeLevelUp =
@@ -90,10 +97,19 @@ const addPointsAndMaybeLevelUp =
     ([numCompletedRows, level, prevRowsCleared, rowsPerLevel]) =>
       (nextRowsCleared =>
         R.compose(
-          R.over(
-            R.lensPath(['game', 'level']),
-            nextRowsCleared % rowsPerLevel < prevRowsCleared % rowsPerLevel
-              ? R.add(1) : R.identity
+          R.when(
+            () => numCompletedRows === 4,
+            setSoundEffect('woow')
+          ),
+          R.when(
+            () => Math.floor(nextRowsCleared / rowsPerLevel) > Math.floor(prevRowsCleared / rowsPerLevel),
+            R.compose(
+              setSoundEffect('yayy'),
+              R.over(
+                R.lensPath(['game', 'level']),
+                R.add(1)
+              )
+            )
           ),
           R.set(
             R.lensPath(['game', 'rowsCleared']),
@@ -126,23 +142,31 @@ const addPointsAndMaybeLevelUp =
     ])
   )
 
-const fallOrSettleAndUseNext =
+const settle =
   R.compose(
     R.ifElse(
-      R.nth(1), // did fall
-      R.nth(0), // just state
-      R.compose(
-        useNextTetAndMaybeFinish,
-        addPointsAndMaybeLevelUp,
-        R.chain(
-          setFlash,
-          R.path(['game', 'completedRows'])
-        ),
-        completeRows,
-        R.nth(0)
-      )
+      canFall,
+      drawActiTet,
+      finishGame
     ),
-    fall
+    useNextTet,
+    addPointsAndMaybeLevelUp,
+    R.chain(
+      setFlash,
+      R.path(['game', 'completedRows'])
+    ),
+    completeRows
+  )
+
+const fallOrSettle =
+  R.ifElse(
+    canFall,
+    R.compose(
+      drawActiTet,
+      fall,
+      eraseActiTet
+    ),
+    settle
   )
 
 // speed=level-1 (+3 to start faster)
@@ -169,7 +193,7 @@ const clockTickReducer =
     ),
     R.when(
       R.path(['game', 'actiTet', 'dropping']),
-      fallOrSettleAndUseNext
+      fallOrSettle
     )
   )
 
@@ -204,11 +228,11 @@ export const reducerList = [
     clockTickReducer
   ),
   checkReducer('fall')(
-    fallOrSettleAndUseNext
+    fallOrSettle
   ),
   checkReducer('fallIfFalling')(
     R.chain(
-      falling => falling ? fallOrSettleAndUseNext : R.identity,
+      falling => falling ? fallOrSettle : R.identity,
       R.path(['game', 'actiTet', 'falling'])
     )
   ),
@@ -225,7 +249,7 @@ export const reducerList = [
         )
       )(state)
   ),
-  checkReducer('useNextTet')(useNextTetAndMaybeFinish),
+  checkReducer('useNextTet')(useNextTet),
   checkReducer('clearInput')(
     R.set(R.lensProp('input'), [])
   ),
@@ -248,11 +272,12 @@ export const reducerList = [
   ),
   checkReducer('clearCompletedRows')(
     R.compose(
+      drawActiTet,
       clearCompletedRows,
+      eraseActiTet,
       stopFlash
     )
   ),
-  checkReducer('drawActiTet')(drawActiTet),
   checkReducer('reset')(
     R.compose(
       reinitState,

@@ -6,72 +6,76 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import * as R from 'ramda'
 
-import { usePrevious } from './hooks/usePrevious'
-
 Sound.setCategory('Playback')
 
-const sounds = {}
+const getRnsSound =
+  (list => {
+    const listToNameAndFilenameList = R.map(name => [name, `${name}.wav`])
 
-try {
-  sounds.koro = new Sound(
-    'korobeiniki2.wav',
-    Sound.MAIN_BUNDLE,
-    (error) => {
-      if (error) console.error(error.message)
+    const filenameToRnsSound =
+      filename => new Sound(
+        filename,
+        Sound.MAIN_BUNDLE,
+        (error) => {
+          if (error) console.error(error.message)
+        }
+      )
+
+    const catalogSounds =
+      R.compose(
+        R.map(
+          R.nth(1)
+        ),
+        R.indexBy(R.nth(0)),
+        R.map(
+          R.over(
+            R.lensIndex(1),
+            filenameToRnsSound
+          )
+        ),
+        listToNameAndFilenameList
+      )
+
+    const emptySound = {
+      play: () => { },
+      setNumberOfLoops: () => { },
+      stop: () => { }
     }
-  )
-  sounds.woow = new Sound(
-    'woow.wav',
-    Sound.MAIN_BUNDLE,
-    (error) => {
-      if (error) console.error(error.message)
-    }
-  )
-  sounds.yayy = new Sound(
-    'yayy.wav',
-    Sound.MAIN_BUNDLE,
-    (error) => {
-      if (error) console.error(error.message)
-    }
-  )
-  sounds.pacman_intro = new Sound(
-    'pacman_outro.wav',
-    Sound.MAIN_BUNDLE,
-    (error) => {
-      if (error) console.error(error.message)
-    }
-  )
-  sounds.pacman_outro = new Sound(
-    'pacman_outro.wav',
-    Sound.MAIN_BUNDLE,
-    (error) => {
-      if (error) console.error(error.message)
-    }
-  )
-} catch (e) {
-  console.error(e.message)
-}
+
+    return (soundCatalog =>
+      R.compose(
+        R.defaultTo(emptySound),
+        R.flip(R.prop)(soundCatalog)
+      )
+    )(
+      catalogSounds(list)
+    )
+  })([
+    'koro',
+    'woow',
+    'yayy'
+  ])
 
 export const SoundController =
   () => {
     const dispatch = useDispatch()
-    const {music:{track,prevTrack,enabled:musicEnabled}} = useSelector(R.prop('audio'))
+
+    const music = useSelector(R.path(['audio', 'music']))
+    const sounds = useSelector(R.path(['audio', 'sounds']))
     const tickIdle = useSelector(R.path(['tick', 'idle']))
     const tickMode = useSelector(R.path(['tick', 'mode']))
-    const gameLevel = useSelector(R.path(['game', 'level']))
-    const completedRows = useSelector(R.path(['game', 'completedRows']))
+
+    const {track,prevTrack,enabled:musicEnabled} = music
+    const {woow,yayy} = sounds
 
     React.useEffect(
       () => {
-        if (musicEnabled && !tickIdle && tickMode === 'game') {
-          if (track === 'koro')
-            sounds.koro.play()
-            sounds.koro.setNumberOfLoops(-1)
-        }
-        else {
-          if (track === 'koro')
-            sounds.koro.stop()
-        }
+        if (musicEnabled && !tickIdle && tickMode === 'game')
+          (sound => {
+            sound.play()
+            sound.setNumberOfLoops(-1)
+          })(getRnsSound(track))
+        else getRnsSound(track).stop()
       },
       [musicEnabled, tickIdle, tickMode, track]
     )
@@ -79,34 +83,25 @@ export const SoundController =
     React.useEffect(
       () => {
         if (prevTrack) {
-          const sound = sounds[prevTrack]
-          if (sound) {
-            sound.stop()
-          }
+          getRnsSound(prevTrack).stop()
           dispatch({type:'prevSoundStopped'})
         }
       },
       [dispatch, prevTrack]
     )
 
-    const prevGameLevel = usePrevious(gameLevel)
     React.useEffect(
       () => {
-        if (musicEnabled && gameLevel !== prevGameLevel && gameLevel > 1) {
-          const sound = sounds.yayy
-          if (sound) sound.play()
-        }
+        if (yayy > 0) getRnsSound('yayy').play()
       },
-      [gameLevel, musicEnabled, prevGameLevel]
+      [yayy]
     )
 
     React.useEffect(
       () => {
-        if (musicEnabled && R.length(completedRows) === 4) {
-          const sound = sounds.woow
-          if (sound) sound.play()
-        }
-      }
+        if (woow > 0) getRnsSound('woow').play()
+      },
+      [woow]
     )
 
     return null

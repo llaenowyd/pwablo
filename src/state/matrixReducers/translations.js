@@ -46,28 +46,6 @@ export const up = maybeTranslate(1, R.add(1))
 
 export const down = maybeTranslate(1, R.add(-1))
 
-export const fall =
-  R.chain(
-    ([bucket, tet, tat]) => {
-      const [wasTat, tatTet] = tat(bucket, tet)
-
-      return state =>
-        wasTat ? [
-          R.compose(
-            state => drawTet(state)(tatTet),
-            R.set(R.lensPath(['game', 'actiTet']), tatTet),
-            state => eraseTet(state)(tet)
-          )(state),
-          true
-        ] : [state, false]
-    },
-    R.juxt([
-      R.path(['game', 'bucket']),
-      R.path(['game', 'actiTet']),
-      () => translateAndTest(1, R.add(-1))
-    ])
-  )
-
 export const clearCompletedRows =
   R.chain(
     ([completedRows, [cols, rows]]) =>
@@ -87,4 +65,12 @@ export const clearCompletedRows =
       R.path(['game', 'completedRows']),
       R.path(['game', 'size'])
     ])
+  )
+
+export const fall =
+  R.compose(
+    R.over(
+      R.lensPath(['game', 'actiTet', 'pos', 1]),
+      R.add(-1)
+    )
   )

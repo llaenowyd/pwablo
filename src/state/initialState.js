@@ -19,6 +19,10 @@ export const getInitialState = (rows=20, cols=10) =>
         track: 'koro',
         prevTrack: null,
         enabled: true
+      },
+      sounds: {
+        woow: 0,
+        yayy: 0
       }
     },
     clock: {
