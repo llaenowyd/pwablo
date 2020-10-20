@@ -35,14 +35,12 @@ const handleInputThunk =
       const doRiteRot = R.complement(R.isNil)(R.find(R.equals('R'), input))
       const doLeft = R.complement(R.isNil)(R.find(R.equals('<'), input))
       const doRite = R.complement(R.isNil)(R.find(R.equals('>'), input))
-      const doUp = R.complement(R.isNil)(R.find(R.equals('^'), input))
       const doDown = R.complement(R.isNil)(R.find(R.equals('v'), input))
 
       if (doLeftRot) dispatch({type: actions.leftRot})
       if (doRiteRot) dispatch({type: actions.riteRot})
       if (doLeft) dispatch({type: actions.left})
       if (doRite) dispatch({type: actions.rite})
-      if (doUp) dispatch({type: actions.up})
       if (doDown) dispatch({type: actions.down})
       dispatch({type: actions.clearInput})
     }

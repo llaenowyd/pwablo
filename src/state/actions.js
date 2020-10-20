@@ -1,5 +1,7 @@
 import * as R from 'ramda'
 
+import makeRange from '../fun/makeRange'
+
 const actionNames = {
   setTick: 'setTick',
   stopTick: 'stopTick',
@@ -13,13 +15,11 @@ const actionNames = {
   inpRR: 'inpRR',
   inpL: 'inpL',
   inpR: 'inpR',
-  inpU: 'inpU', // unused
   inpD: 'inpD',
   leftRot: 'leftRot',
   riteRot: 'riteRot',
   left: 'left',
   rite: 'rite',
-  up: 'up',
   down: 'down',
   clearCompletedRows: 'clearCompletedRows',
   reset: 'reset',
@@ -30,23 +30,25 @@ const actionNames = {
   toggleMusic: 'toggleMusic'
 }
 
+// map< actionName, actionId >
 export const actions =
   R.compose(
     R.fromPairs,
     R.chain(
       ids => keys => R.transpose([keys, ids]),
       R.compose(
-        R.times(R.identity),
+        makeRange,
         R.length
       )
     ),
     R.keys
   )(actionNames)
 
+// map< actionId, actionName >
 const reverseLookup =
   R.compose(
     R.fromPairs,
-    R.map(([k,v]) => [v,k]),
+    R.map(R.reverse),
     R.toPairs
   )(actions)
 

@@ -8,7 +8,7 @@ import { makeTet } from '../tets'
 import { getActionName } from './actions'
 import { setFlash, stopFlash } from './animation'
 import { getInitialState, initialActiTet } from './initialState'
-import { clearCompletedRows, drawActiTet, eraseActiTet, leftRot, riteRot, left, rite, up, fall } from './matrixReducers'
+import { clearCompletedRows, drawActiTet, eraseActiTet, leftRot, riteRot, left, rite, fall } from './matrixReducers'
 import { tryCatcher } from './common'
 
 const taglog = tag => x => { console.log(tag, x); return x }
@@ -257,13 +257,11 @@ export const reducerList = [
   checkReducer('inpRR')(inputReducer('R')),
   checkReducer('inpL')(inputReducer('<')),
   checkReducer('inpR')(inputReducer('>')),
-  checkReducer('inpU')(inputReducer('^')),
   checkReducer('inpD')(inputReducer('v')),
   checkReducer('leftRot')(leftRot),
   checkReducer('riteRot')(riteRot),
   checkReducer('left')(left),
   checkReducer('rite')(rite),
-  checkReducer('up')(up),
   checkReducer('down')(
     R.set(
       R.lensPath(['game', 'actiTet', 'dropping']),

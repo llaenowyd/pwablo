@@ -42,8 +42,6 @@ export const left = maybeTranslate(0, R.add(-1))
 
 export const rite = maybeTranslate(0, R.add(1))
 
-export const up = maybeTranslate(1, R.add(1))
-
 export const down = maybeTranslate(1, R.add(-1))
 
 export const clearCompletedRows =
