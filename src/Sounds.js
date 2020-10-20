@@ -1,6 +1,7 @@
 import React from 'react'
 
 import Sound from 'react-native-sound'
+import useAppState from 'react-native-appstate-hook'
 
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -58,6 +59,8 @@ const getRnsSound =
 
 export const SoundController =
   () => {
+    const { appState } = useAppState()
+
     const dispatch = useDispatch()
 
     const music = useSelector(R.path(['audio', 'music']))
@@ -70,14 +73,14 @@ export const SoundController =
 
     React.useEffect(
       () => {
-        if (musicEnabled && !tickIdle && tickMode === 'game')
+        if (musicEnabled && !tickIdle && tickMode === 'game' && appState === 'active')
           (sound => {
             sound.play()
             sound.setNumberOfLoops(-1)
           })(getRnsSound(track))
         else getRnsSound(track).stop()
       },
-      [musicEnabled, tickIdle, tickMode, track]
+      [appState, musicEnabled, tickIdle, tickMode, track]
     )
 
     React.useEffect(
