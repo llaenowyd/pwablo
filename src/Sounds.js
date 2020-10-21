@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import * as R from 'ramda'
 
+import usePrevious from './hooks/usePrevious'
+
 Sound.setCategory('Playback')
 
 const getRnsSound =
@@ -68,8 +70,10 @@ export const SoundController =
     const tickIdle = useSelector(R.path(['tick', 'idle']))
     const tickMode = useSelector(R.path(['tick', 'mode']))
 
-    const {track,prevTrack,enabled:musicEnabled} = music
+    const {track,enabled:musicEnabled} = music
     const {woow,yayy} = sounds
+
+    const prevTrack = usePrevious(track)
 
     React.useEffect(
       () => {
@@ -85,12 +89,11 @@ export const SoundController =
 
     React.useEffect(
       () => {
-        if (prevTrack) {
+        if (prevTrack && prevTrack !== track) {
           getRnsSound(prevTrack).stop()
-          dispatch({type:'prevSoundStopped'})
         }
       },
-      [dispatch, prevTrack]
+      [dispatch, prevTrack, track]
     )
 
     React.useEffect(

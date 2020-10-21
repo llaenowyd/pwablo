@@ -17,7 +17,6 @@ export const getInitialState = (rows=20, cols=10) =>
     audio: {
       music: {
         track: 'koro',
-        prevTrack: null,
         enabled: true
       },
       sounds: {

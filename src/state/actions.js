@@ -26,7 +26,6 @@ const actionNames = {
   setBucket: 'setBucket',
   toggleMatrixStyle: 'toggleMatrixStyle',
   setupNewGame: 'setupNewGame',
-  prevSoundStopped: 'prevSoundStopped',
   toggleMusic: 'toggleMusic'
 }
 
@@ -44,12 +43,13 @@ export const actions =
     R.keys
   )(actionNames)
 
-// map< actionId, actionName >
+// list< actionName >
 const reverseLookup =
   R.compose(
-    R.fromPairs,
-    R.map(R.reverse),
+    R.map(R.head),
+    R.sort(([,id1], [,id2]) => id1 - id2),
     R.toPairs
   )(actions)
 
-export const getActionName = actionId => reverseLookup[actionId]
+// actionId -> actionName
+export const getActionName = R.flip(R.nth)(reverseLookup)

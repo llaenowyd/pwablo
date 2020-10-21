@@ -313,9 +313,6 @@ export const reducerList = [
       stopTickReducer
     )
   ),
-  checkReducer('prevSoundStopped')(
-    R.set(R.lensPath(['audio', 'music', 'prevTrack']), null)
-  ),
   checkReducer('toggleMusic')(
     R.over(R.lensPath(['audio', 'music', 'enabled']), R.not)
   )
