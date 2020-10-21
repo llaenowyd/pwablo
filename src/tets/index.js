@@ -14,32 +14,36 @@ const blockOffsets = {
   Z: [[-1,1],[0,1],[0,0],[1,0]]
 }
 
-const commonKicks = [
-  [[0,0], [0,0], [0,0], [0,0], [0,0]],
-  [[0,0], [1,0], [1,-1], [0,2], [1,2]],
-  [[0,0], [0,0], [0,0], [0,0], [0,0]],
-  [[0,0], [-1,0], [-1,-1], [0,2], [-1,2]]
-]
-
-const kicks = {
-  I: [
-    [[0, 0], [-1, 0], [2, 0], [-1, 0], [2, 0]],
-    [[-1, 0], [0, 0], [0, 0], [0,1], [0,-2]],
-    [[-1,1], [1,1], [-2,1], [1, 0], [-2, 0]],
-    [[0,1], [0,1], [0,1], [0,-1], [0,2]]
-  ],
-  J: commonKicks,
-  L: commonKicks,
-  O: [
-    [[0, 0]],
-    [[0,-1]],
-    [[-1,-1]],
-    [[-1, 0]]
-  ],
-  S: commonKicks,
-  T: commonKicks,
-  Z: commonKicks
-}
+// tetKind -> kicks
+const getKicks = R.cond([
+    [
+      R.equals('I'),
+      R.always([
+          [[0, 0], [-1, 0], [2, 0], [-1, 0], [2, 0]],
+          [[-1, 0], [0, 0], [0, 0], [0,1], [0,-2]],
+          [[-1,1], [1,1], [-2,1], [1, 0], [-2, 0]],
+          [[0,1], [0,1], [0,1], [0,-1], [0,2]]
+        ])
+    ],
+    [
+      R.equals('O'),
+      R.always([
+          [[0, 0]],
+          [[0,-1]],
+          [[-1,-1]],
+          [[-1, 0]]
+        ])
+    ],
+    [
+      R.T,
+      R.always([
+          [[0,0], [0,0], [0,0], [0,0], [0,0]],
+          [[0,0], [1,0], [1,-1], [0,2], [1,2]],
+          [[0,0], [0,0], [0,0], [0,0], [0,0]],
+          [[0,0], [-1,0], [-1,-1], [0,2], [-1,2]]
+        ])
+    ]
+  ])
 
 const makeKickers = kix => {
   const subroutine =
@@ -85,20 +89,14 @@ const makeKickers = kix => {
   )
 }
 
-const commonKickers = makeKickers(commonKicks)
-
-const kickers = {
-  I: makeKickers(kicks.I),
-  J: commonKickers,
-  L: commonKickers,
-  O: makeKickers(kicks.O),
-  S: commonKickers,
-  T: commonKickers,
-  Z: commonKickers
-}
-
-// shouldn't it be required
-const getBoundingRadius = kind => kind === 'I' ? 2 : 1
+const kickers =
+  R.map(
+    R.compose(
+      R.memoizeWith(R.identity, makeKickers),
+      getKicks
+    ),
+    tetset
+  )
 
 const getInitialPos =
   (cols, rows, numCompletedRows=0) =>
