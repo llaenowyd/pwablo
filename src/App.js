@@ -60,7 +60,6 @@ const App = () => (
       <SoundController />
       <View style={styles.container}>
         <Game style={styles.game} />
-        <Debug />
       </View>
     </Provider>
   )
