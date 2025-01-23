@@ -1,7 +1,6 @@
-import { NativeModules } from 'react-native'
-
 import * as R from 'ramda'
 
+import { NativeModules } from './react-native-dummies'
 import { tetset } from './tets'
 
 let rand = NativeModules?.Sha1?.rand
@@ -68,7 +67,7 @@ const maybeReplenishBag =
       R.ifElse(
         R.isEmpty,
         R.thunkify(scramble)(tetset),
-        Promise.resolve
+        val => Promise.resolve(val)
       ),
       R.defaultTo([])
     )(bag)

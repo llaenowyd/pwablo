@@ -1,13 +1,11 @@
 import React from 'react'
 
-import Sound from 'react-native-sound'
-import useAppState from 'react-native-appstate-hook'
-
 import { useDispatch, useSelector } from 'react-redux'
 
 import * as R from 'ramda'
 
 import usePrevious from './hooks/usePrevious'
+import { Sound, useAppState } from './react-native-dummies'
 
 Sound.setCategory('Playback')
 

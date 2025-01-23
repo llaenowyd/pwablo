@@ -1,14 +1,14 @@
-const russia1 = require('./assets/images/backgrounds/russia1.jpg')
-const russia2 = require('./assets/images/backgrounds/russia2.jpg')
-const russia3 = require('./assets/images/backgrounds/russia3.jpg')
-const russia4 = require('./assets/images/backgrounds/russia4.jpg')
-const russia7 = require('./assets/images/backgrounds/russia7.jpg')
-const russia8 = require('./assets/images/backgrounds/russia8.jpg')
-const russiaa = require('./assets/images/backgrounds/russiaa.jpg')
-const russiab = require('./assets/images/backgrounds/russiab.jpg')
-const savior = require('./assets/images/backgrounds/savior.jpg')
-const savior2 = require('./assets/images/backgrounds/Savior2.jpg')
-const vorota = require('./assets/images/backgrounds/vorota.jpg')
+const russia1 = '../img/russia1.jpg'
+const russia2 = '../img/russia2.jpg'
+const russia3 = '../img/russia3.jpg'
+const russia4 = '../img/russia4.jpg'
+const russia7 = '../img/russia7.jpg'
+const russia8 = '../img/russia8.jpg'
+const russiaa = '../img/russiaa.jpg'
+const russiab = '../img/russiab.jpg'
+const savior = '../img/savior.jpg'
+const savior2 = '../img/Savior2.jpg'
+const vorota = '../img/vorota.jpg'
 
 const carousel = [
   savior,

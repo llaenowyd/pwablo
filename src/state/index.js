@@ -1,2 +1,2 @@
-export Provider from './Provider'
-
+import Provider from './Provider.jsx'
+export { Provider }

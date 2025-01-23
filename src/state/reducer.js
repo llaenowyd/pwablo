@@ -1,12 +1,11 @@
-import { Alert } from 'react-native'
+import { Alert } from '../react-native-dummies'
 
 import * as R from 'ramda'
 
 import { canFall, completeRows } from '../bucket'
 import { makeTet } from '../tets'
 
-import { getActionName } from './actions'
-import { setFlash, stopFlash } from './animation'
+//import { setFlash, stopFlash } from './animation'
 import { getInitialState, initialActiTet } from './initialState'
 import { clearCompletedRows, drawActiTet, eraseActiTet, leftRot, riteRot, left, rite, fall } from './matrixReducers'
 import { tryCatcher } from './common'
@@ -151,10 +150,10 @@ const settle =
     ),
     useNextTet,
     addPointsAndMaybeLevelUp,
-    R.chain(
-      setFlash,
-      R.path(['game', 'completedRows'])
-    ),
+    // R.chain(
+    //   setFlash,
+    //   R.path(['game', 'completedRows'])
+    // ),
     completeRows
   )
 
@@ -197,21 +196,8 @@ const clockTickReducer =
     )
   )
 
-const isDev = __DEV__
-
-const checkReducer =
-  name => redFn =>
-    isDev ?
-      (state, action) => {
-        if (getActionName(action.type) !== name) {
-          throw new Error(`${action.type} in ${name} handler`)
-        }
-        return redFn(state, action)
-      }
-      : redFn
-
-export const reducerList = [
-  checkReducer('setTick')(
+export const reducerTable = {
+  setTick:
     (state, {payload: nextTick}) =>
       R.over(
         R.lensProp('tick'),
@@ -219,24 +205,15 @@ export const reducerList = [
           if (next) clearTimeout(next)
           return (nextTick)
         }
-      )(state)
-  ),
-  checkReducer('stopTick')(
-    stopTickReducer
-  ),
-  checkReducer('clockTick')(
-    clockTickReducer
-  ),
-  checkReducer('fall')(
-    fallOrSettle
-  ),
-  checkReducer('fallIfFalling')(
-    R.chain(
+      )(state),
+  stopTick: stopTickReducer,
+  clockTick: clockTickReducer,
+  fall: fallOrSettle,
+  fallIfFalling: R.chain(
       falling => falling ? fallOrSettle : R.identity,
       R.path(['game', 'actiTet', 'falling'])
-    )
-  ),
-  checkReducer('setNextTet')(
+    ),
+  setNextTet:
     (state, {payload: [nextTet, bag]}) =>
       R.compose(
         R.set(
@@ -247,50 +224,43 @@ export const reducerList = [
           R.lensPath(['game', 'bag']),
           bag
         )
-      )(state)
-  ),
-  checkReducer('useNextTet')(useNextTet),
-  checkReducer('clearInput')(
-    R.set(R.lensProp('input'), [])
-  ),
-  checkReducer('inpLR')(inputReducer('L')),
-  checkReducer('inpRR')(inputReducer('R')),
-  checkReducer('inpL')(inputReducer('<')),
-  checkReducer('inpR')(inputReducer('>')),
-  checkReducer('inpD')(inputReducer('v')),
-  checkReducer('leftRot')(leftRot),
-  checkReducer('riteRot')(riteRot),
-  checkReducer('left')(left),
-  checkReducer('rite')(rite),
-  checkReducer('down')(
+      )(state),
+  useNextTet,
+  clearInput: R.set(R.lensProp('input'), []),
+  inpLR: inputReducer('L'),
+  inpRR: inputReducer('R'),
+  inpL:inputReducer('<'),
+  inpR:inputReducer('>'),
+  inpD:inputReducer('v'),
+  leftRot,
+  riteRot,
+  left,
+  rite,
+  down:
     R.set(
       R.lensPath(['game', 'actiTet', 'dropping']),
       true
-    )
-  ),
-  checkReducer('clearCompletedRows')(
+    ),
+  clearCompletedRows:
     R.compose(
       drawActiTet,
       clearCompletedRows,
       eraseActiTet,
-      stopFlash
-    )
-  ),
-  checkReducer('reset')(
+      // stopFlash
+    ),
+  reset:
     R.compose(
       reinitState,
       stopTickReducer
-    )
-  ),
-  checkReducer('setBucket')(
+    ),
+  setBucket:
     (state, action) =>
       R.set(
         R.lensPath(['game', 'bucket']),
         action.payload,
         state
-      )
-  ),
-  checkReducer('toggleMatrixStyle')(
+      ),
+  toggleMatrixStyle:
     R.over(
       R.lensPath(['style']),
       R.chain(
@@ -304,41 +274,24 @@ export const reducerList = [
           R.prop('matrix')
         )
       )
-    )
-  ),
-  checkReducer('setupNewGame')(
+    ),
+  setupNewGame:
     R.compose(
       R.set(R.lensPath(['game', 'score']), 0),
       reinitState,
       stopTickReducer
-    )
-  ),
-  checkReducer('toggleMusic')(
-    R.over(R.lensPath(['audio', 'music', 'enabled']), R.not)
-  )
-]
-
-const logActionTypeOrId =
-  isDev
-    ? (actionId, actionType) => {
-        console.log(`*** ${actionId === null ? actionType : getActionName(actionId)}`)
-      }
-    : () => {}
+    ),
+  toggleMusic: R.over(R.lensPath(['audio', 'music', 'enabled']), R.not),
+}
 
 export const reducer =
   (state, action) => {
     const actionType = action?.type
 
-    const actionId = Number.isFinite(actionType) ? actionType : null
+    const rf = reducerTable[actionType]
 
-    logActionTypeOrId(actionId, actionType)
-
-    if (actionId !== null) {
-      const rf = reducerList[actionId]
-
-      if (rf) {
-        return rf(state, action)
-      }
+    if (rf != null) {
+      return rf(state, action)
     }
 
     if ('@@redux/' !== R.take(8, actionType))

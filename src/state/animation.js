@@ -1,4 +1,4 @@
-import {Animated, Easing} from 'react-native';
+import {Animated, Easing} from '../react-native-dummies';
 
 import * as R from 'ramda'
 
@@ -64,14 +64,7 @@ const makeCompletedRowTimer =
                 useNativeDriver: true,
                 easing: Easing.linear
               })
-              // Animated.timing(timer, {
-              //   toValue: 100,
-              //   duration: Math.floor(1/16 * approxMsPerClock),
-              //   useNativeDriver: true,
-              //   easing: Easing.exp
-              // })
             ])
-            // , { iterations: -1 } )
 
           ani.start()
           return ani
