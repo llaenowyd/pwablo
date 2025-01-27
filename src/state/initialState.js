@@ -1,5 +1,6 @@
 import * as R from 'ramda'
 import { getEmptyBucket } from '../bucket'
+import constants from '../constants'
 
 const tickRate = 15 // ticks/s
 const baseClockRate = 12 // base ticks/clock
@@ -17,16 +18,16 @@ export const getInitialState = (rows=20, cols=10) =>
     audio: {
       music: {
         track: 'koro',
-        enabled: true
+        enabled: true,
       },
       sounds: {
         woow: 0,
-        yayy: 0
-      }
+        yayy: 0,
+      },
     },
     clock: {
       diagnostic: null,
-      rate: baseClockRate
+      rate: baseClockRate,
     },
     game: {
       actiTet: initialActiTet,
@@ -41,11 +42,11 @@ export const getInitialState = (rows=20, cols=10) =>
       rowsCleared: 0,
       rowsPerLevel: 10,
       score: null,
-      size: [cols, rows]
+      size: [cols, rows],
     },
     input: [],
     style: {
-      matrix: 0
+      matrix: constants.matrixStyle.default,
     },
     tick: {
       idle: true,
@@ -53,6 +54,6 @@ export const getInitialState = (rows=20, cols=10) =>
       mode: null,
       next: null,
       prevT0: null,
-      skewDiagnostic: null
-    }
+      skewDiagnostic: null,
+    },
   })

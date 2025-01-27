@@ -1,20 +1,18 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { useSelector } from 'react-redux'
 
-import { createUseStyles } from 'react-jss'
+import { createUseStyles, useTheme } from 'react-jss'
 
 import * as R from 'ramda'
 
+import constants from '../constants'
 import makeRange from '../fun/makeRange'
 import { View } from '../react-native-dummies'
-import { getTetPoints, tetset } from '../tets'
-import themes from '../themes'
+import { MT, getTetPoints, tetset } from '../tets'
+import { useGetBlockClassName } from './Block'
 
-import { BlockView } from './components/Block'
-
-const themeName = 'arcade'
-const {scoreAndNextTet: scoreAndNextTetTheme} = themes[themeName]
+import BlockView from './Block/BlockView'
 
 const useStyles = createUseStyles({
   view: {
@@ -22,7 +20,7 @@ const useStyles = createUseStyles({
     display: 'flex',
     flexDirection: 'column',
     padding: 2,
-    backgroundColor: scoreAndNextTetTheme.background
+    backgroundColor: R.path(['theme', 'scoreAndNextTet', 'background']),
   },
   row: {
     flex: 1,
@@ -30,12 +28,12 @@ const useStyles = createUseStyles({
     flexDirection: 'row',
   },
   blocklet: {
-    flex: 1
+    flex: 1,
   },
   void: {
     flex: 1,
     padding: 2,
-  }
+  },
 })
 
 const tetMeta = {
@@ -45,7 +43,7 @@ const tetMeta = {
   O: [[[0,1], [0,1]], [0,0]],
   S: [[[0,2], [0,1]], [1,0]],
   T: [[[0,2], [0,1]], [1,0]],
-  Z: [[[0,2], [0,1]], [1,0]]
+  Z: [[[0,2], [0,1]], [1,0]],
 }
 
 const tetlets =
@@ -74,12 +72,21 @@ const tetlets =
     )
   )(tetset)
 
-const Blocklet = ({tetKind}) => (<BlockView matrixStyle={0} tetKind={`m${tetKind}`} isCompleted={false} />)
-
 export default () => {
   const tetKind = useSelector(R.path(['game', 'nextTet']))
+  const getBlockClassName = useGetBlockClassName(constants.matrixStyle.default, true)
 
-  const styles = useStyles()
+  const mtBlockClassName = useMemo(
+    R.thunkify(getBlockClassName)(MT),
+    [getBlockClassName]
+  )
+  const blockClassName = useMemo(
+    R.thunkify(getBlockClassName)(tetKind),
+    [tetKind, getBlockClassName]
+  )
+
+  const theme = useTheme()
+  const styles = useStyles({theme})
 
   if (R.isNil(tetKind)) return (<View className={styles.void} />)
 
@@ -94,7 +101,7 @@ export default () => {
 
   const isLit = (col, row) =>
       R.ifElse(
-        R.thunkify(R.isNil)(tetKind),
+        R.thunkify(R.equals(MT))(tetKind),
         R.F,
         R.compose(
           R.not,
@@ -123,10 +130,13 @@ export default () => {
               {
                 R.map(
                   col => (
-                    <Blocklet
+                    <BlockView
                       key={row * cols + col}
-                      tetKind={isLit(col, row) ? tetKind : 0}
-                    />
+                      tetKind={isLit(col, row) ? tetKind : MT}
+                      className={isLit(col, row) ? blockClassName : mtBlockClassName}
+                      matrixStyle={constants.matrixStyle.default}
+                      isCompleted={false}
+                      mini />
                   ),
                   makeRange(cols)
                 )

@@ -3,14 +3,14 @@ import { Alert } from '../react-native-dummies'
 import * as R from 'ramda'
 
 import { canFall, completeRows } from '../bucket'
+import constants from '../constants'
 import { makeTet } from '../tets'
 
-//import { setFlash, stopFlash } from './animation'
 import { getInitialState, initialActiTet } from './initialState'
 import { clearCompletedRows, drawActiTet, eraseActiTet, leftRot, riteRot, left, rite, fall } from './matrixReducers'
 import { tryCatcher } from './common'
 
-const taglog = tag => x => { console.log(tag, x); return x }
+const taglog = tag => R.tap(x => { console.log(tag, x) })
 
 const reinitState =
   state =>
@@ -262,17 +262,15 @@ export const reducerTable = {
       ),
   toggleMatrixStyle:
     R.over(
-      R.lensPath(['style']),
-      R.chain(
-        nextMatrixStyle => R.assoc('matrix', nextMatrixStyle),
-        R.compose(
-          R.ifElse(
-            R.equals(1),
-            R.always(0),
-            R.add(1)
-          ),
-          R.prop('matrix')
-        )
+      R.lensPath(['style', 'matrix']),
+      R.compose(
+        R.flip(R.modulo)(
+          R.compose(
+            R.length,
+            R.keys
+          )(constants.matrixStyle)
+        ),
+        R.add(1)
       )
     ),
   setupNewGame:

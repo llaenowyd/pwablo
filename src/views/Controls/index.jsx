@@ -2,19 +2,16 @@ import React from 'react'
 
 import { useDispatch } from 'react-redux'
 
-import { createUseStyles } from 'react-jss'
+import { createUseStyles, useTheme } from 'react-jss'
 
 import * as R from 'ramda'
 
-import { View } from '../react-native-dummies'
-import { actions } from '../state/actions'
-import themes from '../themes'
+import { View } from '../../react-native-dummies'
+import { actions } from '../../state/actions'
 
-import LittleButtonCluster from './LittleButtonCluster'
-import MainButton from './components/MainButton'
+import LittleButtonCluster from '../LittleButtonCluster'
+import MainButton from './MainButton'
 
-const themeName = 'arcade'
-const {controls:controlsTheme} = themes[themeName]
 
 const basicJss = {
   bumper: {
@@ -32,11 +29,10 @@ const basicJss = {
 }
 
 const useStyles = createUseStyles({
-  view: {
-    flex: 6,
+  controls: {
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: controlsTheme.background,
+    backgroundColor: R.path(['theme', 'controls', 'background']),
     paddingBottom: 10
   },
   row: {
@@ -55,7 +51,7 @@ const useStyles = createUseStyles({
   rightBumper: R.mergeLeft(basicJss.bumper, basicJss.rightBumper),
 })
 
-const Controls = () => {
+export default () => {
   const dispatch = useDispatch()
 
   const handleLeftRotateClick = () => dispatch({type: actions.inpLR})
@@ -64,10 +60,11 @@ const Controls = () => {
   const handleRightClick = () => dispatch({type: actions.inpR})
   const handleDownClick = () => dispatch({type: actions.inpD})
 
-  const styles = useStyles()
+  const theme = useTheme()
+  const styles = useStyles({theme})
 
   return (
-    <View className={styles.view}>
+    <View className={styles.controls}>
       <View className={styles.row}>
         <View className={styles.leftBumper}>
           <MainButton
@@ -108,5 +105,3 @@ const Controls = () => {
     </View>
   )
 }
-
-export default Controls

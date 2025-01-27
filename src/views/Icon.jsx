@@ -16,4 +16,3 @@ export default ({name, size, color}) => (
     rotl: RotateCcw,
     rotr: RotateCw,
   }[name])
-  

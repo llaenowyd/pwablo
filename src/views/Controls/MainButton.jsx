@@ -1,22 +1,19 @@
-import React, { useState, useCallback, useRef } from 'react'
+import React, { useState, useCallback, useMemo, useRef } from 'react'
 
-import { createUseStyles } from 'react-jss'
+import { createUseStyles, useTheme } from 'react-jss'
 
 import * as R from 'ramda'
 
+import dbg from '../../dbg'
 import { View } from '../../react-native-dummies'
-import themes from '../../themes'
-import Icon from './Icon'
-
-const themeName = 'arcade'
-const {controls:controlsTheme} = themes[themeName]
+import Icon from '../Icon'
 
 const basicJss = {
   view: {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    borderColor: controlsTheme.button.borderColor,
+    borderColor: R.path(['theme', 'controls', 'button', 'borderColor']),
     borderWidth: '1px',
     borderStyle: 'solid',
     borderRadius: 5,
@@ -24,21 +21,22 @@ const basicJss = {
     justifyContent: 'center',
     padding: 4,
     cursor: 'pointer',
+    userSelect: 'none',
   },
   viewPressed: {
-    backgroundColor: controlsTheme.buttonActive.background,
+    backgroundColor: R.path(['theme', 'controls', 'buttonActive', 'background']),
   },
   viewUnpressed: {
-    backgroundColor: controlsTheme.button.background,
+    backgroundColor: R.path(['theme', 'controls', 'button', 'background']),
   },
   icon: {
     fontSize: 55,
   },
   iconPressed: {
-    color: controlsTheme.buttonActive.foreground,
+    color: R.path(['theme', 'controls', 'buttonActive', 'foreground']),
   },
   iconUnpressed: {
-    color: controlsTheme.button.foreground,
+    color: R.path(['theme', 'controls', 'button', 'foreground']),
   },
 }
 
@@ -67,9 +65,13 @@ export default props => {
     props.onPress()
     setIsPressed(false)
   }, [refIsPressed, setIsPressed, props.onPress])
-  const styles = useStyles()
+  const theme = useTheme()
+  const styles = useStyles({theme})
 
-  const iconColor = isPressed ? basicJss.iconPressed.color : basicJss.iconUnpressed.color
+  const iconColor = useMemo(
+    R.thunkify(R.path(
+      ['controls', isPressed ? 'buttonActive' : 'button', 'foreground']
+    ))(theme), [theme])
 
   return (
     <div className={isPressed ? styles.viewPressed : styles.viewUnpressed} onClick={onClick}>

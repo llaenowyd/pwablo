@@ -1,14 +1,10 @@
 import React, { useState, useRef, useCallback } from 'react'
 
-import { createUseStyles } from 'react-jss'
+import { createUseStyles, useTheme } from 'react-jss'
 
 import * as R from 'ramda'
 
 import { Text } from '../../react-native-dummies'
-import themes from '../../themes'
-
-const themeName = 'arcade'
-const {menu:menuTheme} = themes[themeName]
 
 const basicJss = {
   view: {
@@ -23,16 +19,17 @@ const basicJss = {
     paddingRight: 4,
     paddingBottom: 5,
     paddingLeft: 4,
-    borderColor: menuTheme.button.borderColor,
+    borderColor: R.path(['theme', 'menu', 'button', 'borderColor']),
     cursor: 'pointer',
+    userSelect: 'none',
   },
   viewPressed: {
-    backgroundColor: menuTheme.buttonActive.background,
-    color: menuTheme.buttonActive.foreground,
+    backgroundColor: R.path(['theme', 'menu', 'buttonActive', 'background']),
+    color: R.path(['theme', 'menu', 'buttonActive', 'foreground']),
   },
   viewUnpressed: {
-    backgroundColor: menuTheme.button.background,
-    color: menuTheme.button.foreground,
+    backgroundColor: R.path(['theme', 'menu', 'button', 'background']),
+    color: R.path(['theme', 'menu', 'button', 'foreground']),
   },
 }
 
@@ -58,7 +55,8 @@ export default props => {
     props.onPress()
     setIsPressed(false)
   }, [refIsPressed, setIsPressed, props.onPress])
-  const styles = useStyles()
+  const theme = useTheme()
+  const styles = useStyles({theme})
 
   return (
     <div className={isPressed ? styles.viewPressed : styles.viewUnpressed} onClick={onClick}>

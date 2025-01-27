@@ -1,6 +1,7 @@
 import * as R from 'ramda'
 
 import { moveToBucket } from '../../bucket'
+import { MT } from '../../tets'
 
 const drawTetKind =
   state =>
@@ -44,7 +45,7 @@ export const drawTet =
 export const eraseTet =
   state =>
     tet =>
-      drawTetKind(state)(0)(tet)
+      drawTetKind(state)(MT)(tet)
 
 export const drawActiTet = state =>
   drawTet(state)(
@@ -62,7 +63,7 @@ const topOffBucket =
       R.chain(
         R.flip(R.concat),
         R.compose(
-          R.repeat(0),
+          R.repeat(MT),
           R.subtract(rowsMax),
           R.length
         )

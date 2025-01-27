@@ -2,19 +2,15 @@ import React from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 
-import { createUseStyles } from 'react-jss'
+import { createUseStyles, useTheme } from 'react-jss'
 
 import * as R from 'ramda'
 
-import { View } from '../react-native-dummies';
-import { actions } from '../state/actions'
-import thunks from '../state/thunks'
-import themes from '../themes'
+import { View } from '../../react-native-dummies';
+import { actions } from '../../state/actions'
+import thunks from '../../state/thunks'
 
-import LittleButton from './components/LittleButton'
-
-const themeName = 'arcade'
-const {menu:menuTheme} = themes[themeName]
+import LittleButton from './LittleButton'
 
 const padding = 5
 
@@ -30,28 +26,28 @@ const useStyles = createUseStyles({
     paddingLeft: padding,
     paddingBottom: 0,
     borderRadius: 4,
-    backgroundColor: menuTheme.background,
+    backgroundColor: R.path(['theme', 'menu', 'background']),
     borderStyle: 'solid',
-    borderColor: menuTheme.borderColor,
+    borderColor: R.path(['theme', 'menu', 'borderColor']),
     borderWidth: '1px',
   },
   column: {
     flex: 1,
     alignItems: 'stretch',
-    justifyContent: 'space-evenly'
+    justifyContent: 'space-evenly',
   },
   rowPad: {
-    flex: 0.1
+    flex: 0.1,
   },
   columnPad: {
-    flex: 0.25
+    flex: 0.25,
   },
   rightColumn: {
-    marginLeft: padding
+    marginLeft: padding,
   },
 })
 
-const LittleButtonCluster = props => {
+export default props => {
   const dispatch = useDispatch()
 
   const musicEnabled = useSelector(R.path(['audio', 'music', 'enabled']))
@@ -68,7 +64,8 @@ const LittleButtonCluster = props => {
     type: actions.toggleMusic
   })
 
-  const styles = useStyles()
+  const theme = useTheme()
+  const styles = useStyles({theme})
 
   return (
     <View className={styles.view}>
@@ -101,5 +98,3 @@ const LittleButtonCluster = props => {
     </View>
   )
 }
-
-export default LittleButtonCluster

@@ -1,10 +1,11 @@
 import * as R from 'ramda'
 
 import makeRange from './fun/makeRange'
+import { MT } from './tets'
 
 export const getEmptyBucket = (rows, cols) =>
   R.map(
-    () => R.repeat(0, rows+6),
+    () => R.repeat(MT, rows+6),
     makeRange(cols)
   )
 
@@ -48,7 +49,7 @@ const isOpenPoints =
         || i >= bucket.length
         || (
           0 > R.findIndex(([ib,jb]) => ib===i && jb===j, prevPoints)
-          && R.defaultTo('', bucket[i]?.[j]) !== 0
+          && R.defaultTo('', bucket[i]?.[j]) !== MT
         )
     )(
       newPoints
@@ -64,7 +65,7 @@ const isOpenDisjoins =
           || i >= bucket.length
           || (
             0 > R.findIndex(([ib,jb]) => ib===i && jb===j, dsjs)
-            && bucket[i][j] !== 0
+            && bucket[i][j] !== MT
           )
       )
     )(
@@ -107,7 +108,7 @@ export const completeRows =
           bucket =>
             R.reject(
               R.compose(
-                R.any(R.equals(0)),
+                R.any(R.equals(MT)),
                 R.flip(R.pluck)(bucket)
               ),
               rowsToTest

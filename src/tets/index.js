@@ -4,6 +4,8 @@ import makeRange from '../fun/makeRange'
 
 const tetset = ['I','J','L','O','S','T','Z']
 
+const MT = '.'
+
 const blockOffsets = {
   I: [[-1,0],[0,0],[1,0],[2,0]],
   J: [[-1,1],[-1,0],[0,0],[1,0]],
@@ -123,4 +125,4 @@ const makeTet =
       pos: R.always(getInitialPos(cols, rows, numCompletedRows))
     })
 
-export { getTetPoints, kickers, makeTet, tetset }
+export { getTetPoints, kickers, makeTet, tetset, MT }

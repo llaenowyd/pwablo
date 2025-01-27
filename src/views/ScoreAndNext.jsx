@@ -2,33 +2,29 @@ import React from 'react'
 
 import { useSelector } from 'react-redux'
 
-import { createUseStyles } from 'react-jss'
+import { createUseStyles, useTheme } from 'react-jss'
 
 import * as R from 'ramda'
 
 import { Text, View } from '../react-native-dummies'
-import themes from '../themes'
 
 import NextTet from './NextTet'
 import Score from './Score'
 
-const themeName = 'arcade'
-const {scoreAndNextTet: scoreAndNextTetTheme} = themes[themeName]
 
 const useStyles = createUseStyles({
-  view: {
-    flex: 1,
+  scoreAndNext: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: scoreAndNextTetTheme.background,
+    backgroundColor: R.path(['theme', 'scoreAndNextTet', 'background']),
     paddingTop: 2,
-    paddingBottom: 2
+    paddingBottom: 2,
   },
   gameOver: {
     flex: 3,
-    color: scoreAndNextTetTheme.foreground,
+    color: R.path(['theme', 'scoreAndNextTet', 'foreground']),
     fontFamily: 'Early GameBoy',
     fontWeight: '900',
     fontSize: 12
@@ -44,10 +40,11 @@ const useStyles = createUseStyles({
 export default () => {
   const gameOver = useSelector(R.path(['game', 'finished']))
 
-  const styles = useStyles()
+  const theme = useTheme()
+  const styles = useStyles({theme})
 
   return (
-    <View className={styles.view}>
+    <View className={styles.scoreAndNext}>
       <View className={styles.sidePad} />
       {
         gameOver

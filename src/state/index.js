@@ -1,2 +1,2 @@
-import Provider from './Provider.jsx'
-export { Provider }
+import ReduxProvider from './Provider.jsx'
+export { ReduxProvider }

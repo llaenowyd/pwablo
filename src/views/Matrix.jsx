@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 
 import { useSelector } from 'react-redux'
 
@@ -6,17 +6,23 @@ import { createUseStyles } from 'react-jss'
 
 import * as R from 'ramda'
 
+import constants from '../constants'
+import dbg from '../dbg'
 import makeRange from '../fun/makeRange'
 import { carousel, idleBackground } from '../Images'
 import { ImageBackground, View } from '../react-native-dummies'
 
-import Block from './components/Block'
+import Block, { useGetBlockClassName } from './Block'
 
 const useStyles = createUseStyles({
-  view: {
-    flex: 24,
+  matrix: {
+    flex: 1,
+    aspectRatio: constants.aspectRatio.matrix,
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'row',
+    maxWidth: '100%',
+    maxHeight: '100%',
+    height: 'fit-content',
     alignItems: 'stretch',
   },
   background: {
@@ -38,6 +44,8 @@ const Matrix = () => {
   const [ cols, rows ] = useSelector(R.path(['game', 'size']))
   const completedRows = useSelector(R.path(['game', 'completedRows']))
   const gameLevel = useSelector(R.path(['game', 'level']))
+  const matrixStyle = useSelector(R.path(['style', 'matrix']))
+  const getBlockClassName = useGetBlockClassName(matrixStyle, false)
 
   const styles = useStyles()
 
@@ -46,18 +54,20 @@ const Matrix = () => {
       ? idleBackground
       : carousel[(gameLevel - 1) % R.length(carousel)]
 
-  const getIsCompleted =
-    R.isEmpty(completedRows)
-      ? R.F :
-      R.compose(
+  const getIsCompleted = useCallback(
+    R.ifElse(
+      R.isEmpty,
+      R.always(R.F),
+      R.always(R.compose(
         R.not,
         R.isNil,
         R.flip(R.find)(completedRows),
         R.equals
-      )
+      ))
+    )(dbg.T('completedRows')(completedRows)), [completedRows])
 
   return (
-    <View className={styles.view}>
+    <View className={styles.matrix}>
       <ImageBackground source={background} className={styles.background}>
         {
           R.map(
@@ -70,7 +80,8 @@ const Matrix = () => {
                         key={row * cols + col}
                         i={col}
                         j={row}
-                        isCompleted={getIsCompleted(row)}
+                        getBlockClassName={getBlockClassName}
+                        isCompleted={dbg.T(`isCompleted(${row}) col=${col}`)(getIsCompleted(row))}
                       />
                     ),
                     makeRange(cols)

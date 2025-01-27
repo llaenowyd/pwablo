@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <!-- Background -->
+  <rect width="64" height="64" fill="#f2f2f2" rx="8" />
+  
+  <!-- First block -->
+  <rect x="8" y="32" width="20" height="20" fill="#ff6f61" rx="4" />
+  
+  <!-- Second block -->
+  <rect x="24" y="20" width="20" height="20" fill="#ffdd57" rx="4" />
+  
+  <!-- Third block -->
+  <rect x="40" y="32" width="20" height="20" fill="#28a745" rx="4" />
+  
+  <!-- Fourth block -->
+  <rect x="24" y="44" width="20" height="20" fill="#007bff" rx="4" />
+</svg>

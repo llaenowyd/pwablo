@@ -2,23 +2,21 @@ import React from 'react'
 
 import { useSelector } from 'react-redux'
 
-import { createUseStyles } from 'react-jss'
+import { createUseStyles, useTheme } from 'react-jss'
 
 import * as R from 'ramda'
 
 import { Text } from '../react-native-dummies';
-import themes from '../themes'
 
-const themeName = 'arcade'
-const {scoreAndNextTet: scoreAndNextTetTheme} = themes[themeName]
 
 const useStyles = createUseStyles({
   text: {
     flex: 5,
-    color: scoreAndNextTetTheme.foreground,
+    color: R.path(['theme', 'scoreAndNextTet', 'foreground']),
     fontFamily: 'Early GameBoy',
     fontWeight: '900',
     fontSize: 12,
+    userSelect: 'none',
   },
 })
 
@@ -38,7 +36,8 @@ export default props => {
   let score = useSelector(R.path(['game', 'score']))
   let level = useSelector(R.path(['game', 'level']))
 
-  const styles = useStyles()
+  const theme = useTheme()
+  const styles = useStyles({theme})
 
   return (
     <Text

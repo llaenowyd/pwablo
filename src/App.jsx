@@ -2,31 +2,34 @@ import React from 'react'
 
 import { useSelector } from 'react-redux'
 
-import { createUseStyles } from 'react-jss'
+import { createUseStyles, useTheme } from 'react-jss'
 
 import * as R from 'ramda'
 
-import { Text, View } from './react-native-dummies'
+import Display from './display'
 import { SoundController } from './Sounds'
-import { Provider } from './state'
-import themes from './themes'
+import { Text, View } from './react-native-dummies'
+import { ReduxProvider } from './state'
+import { ThemeProvider } from './theme'
 import Game from './views/Game'
 
-const themeName = 'arcade'
-const {debugColor} = themes[themeName]
-
 const useStyles = createUseStyles({
-  container: {
+  app: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    flex: 1,
+    backgroundColor: 'yellow',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   debug: {
     position: 'absolute',
     right: 0,
     bottom: 0,
     fontFamily: 'VT323-Regular',
-    color: debugColor,
+    color: R.path(['theme', 'debugColor']),
   },
 })
 
@@ -36,7 +39,8 @@ const Debug = () => {
   const skewDiagnostic = useSelector(R.path(['tick', 'skewDiagnostic']))
   const gameClock = useSelector(R.path(['game', 'clock']))
 
-  styles = useStyles()
+  theme = useTheme()
+  styles = useStyles({ theme })
 
   const diagnostic = ((sd, cd) => `${sd}${cd}`)(
     R.defaultTo('', skewDiagnostic),
@@ -50,12 +54,16 @@ const App = () => {
   const styles = useStyles()
 
   return (
-    <Provider>
-      <SoundController />
-      <View className={styles.container}>
-        <Game />
-      </View>
-    </Provider>
+    <Display>
+      <ReduxProvider>
+        <ThemeProvider>
+          <SoundController />
+          <View className={styles.app}>
+            <Game />
+          </View>
+        </ThemeProvider>
+      </ReduxProvider>
+    </Display>
   )
 }
 

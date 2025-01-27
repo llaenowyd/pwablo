@@ -1,6 +1,3 @@
-import Text from './Text.jsx'
-import View from './View.jsx'
-
 export default {
   sequence: (animations) => {},
   timing: (timer, options) => {},
@@ -8,6 +5,4 @@ export default {
     constructor(value) {
     }
   },
-  Text,
-  View,
 }

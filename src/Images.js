@@ -6,8 +6,8 @@ const russia7 = '../img/russia7.jpg'
 const russia8 = '../img/russia8.jpg'
 const russiaa = '../img/russiaa.jpg'
 const russiab = '../img/russiab.jpg'
-const savior = '../img/savior.jpg'
-const savior2 = '../img/Savior2.jpg'
+const savior = '../img/savior.jpg' // 169x255 (0.663)
+const savior2 = '../img/Savior2.jpg' // 177x307 (0.577)
 const vorota = '../img/vorota.jpg'
 
 const carousel = [
