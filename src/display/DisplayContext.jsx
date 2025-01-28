@@ -29,8 +29,12 @@ export default ({children}) => {
       updateDimensions()
 
       window.addEventListener('resize', updateDimensions)
+      window.addEventListener('orientationchange', updateDimensions)
 
-      return () => window.removeEventListener('resize', updateDimensions)
+      return () => {
+        window.removeEventListener('resize', updateDimensions)
+        window.removeEventListener('orientationchange', updateDimensions)
+      }
     }, [updateDimensions])
 
   return (

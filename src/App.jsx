@@ -6,11 +6,8 @@ import { createUseStyles, useTheme } from 'react-jss'
 
 import * as R from 'ramda'
 
-import Display from './display'
 import { SoundController } from './Sounds'
 import { Text, View } from './react-native-dummies'
-import { ReduxProvider } from './state'
-import { ThemeProvider } from './theme'
 import Game from './views/Game'
 
 const useStyles = createUseStyles({
@@ -20,7 +17,7 @@ const useStyles = createUseStyles({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: 'yellow',
+    backgroundColor: R.path(['theme', 'background']),
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -51,19 +48,16 @@ const Debug = () => {
 }
 
 const App = () => {
-  const styles = useStyles()
+  const theme = useTheme()
+  const styles = useStyles({ theme })
 
   return (
-    <Display>
-      <ReduxProvider>
-        <ThemeProvider>
-          <SoundController />
-          <View className={styles.app}>
-            <Game />
-          </View>
-        </ThemeProvider>
-      </ReduxProvider>
-    </Display>
+    <>
+      <View className={styles.app}>
+        <Game />
+      </View>
+      <SoundController />
+    </>
   )
 }
 

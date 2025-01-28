@@ -32,6 +32,7 @@ const useStyles = createUseStyles({
   controls: {
     display: 'flex',
     flexDirection: 'column',
+    width: '100%',
     backgroundColor: R.path(['theme', 'controls', 'background']),
     paddingBottom: 10
   },
