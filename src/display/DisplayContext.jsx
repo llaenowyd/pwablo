@@ -1,41 +1,43 @@
 import { createContext, useState, useCallback, useEffect } from 'react'
+import * as R from 'ramda'
 
 export const DisplayContext = createContext()
 
+const addDisplayChangeListeners = onEvent => {
+  window.addEventListener('resize', onEvent)
+  window.addEventListener('orientationchange', onEvent)
+}
+
+const removeDisplayChangeListeners = onEvent => {
+  window.removeEventListener('resize', onEvent)
+  window.removeEventListener('orientationchange', onEvent)
+}
+
+const getDisplaySize = () => [
+  window.innerWidth,
+  window.innerHeight
+]
+
 export default ({children}) => {
   const [displayContext, setDisplayContext] = useState({
-    width: null,
-    height: null,
     ratio: null,
-    scale: null,
   })
 
   const updateDimensions = useCallback(
-    () => {
-      const baseWidth = 375 // Example base width for scaling (e.g., iPhone 12 width)
-      const ratio = window.innerWidth / window.innerHeight
-      const scale = window.innerWidth / baseWidth
-
-      setDisplayContext({
-        width: window.innerWidth,
-        height: window.innerHeight,
-        ratio,
-        scale,
-      })
-    }, [setDisplayContext])
+    R.compose(
+      setDisplayContext,
+      R.assoc('ratio', R.__, {}),
+      R.apply(R.divide),
+      getDisplaySize
+    ), [setDisplayContext])
 
   useEffect(
-    () => {
-      updateDimensions()
-
-      window.addEventListener('resize', updateDimensions)
-      window.addEventListener('orientationchange', updateDimensions)
-
-      return () => {
-        window.removeEventListener('resize', updateDimensions)
-        window.removeEventListener('orientationchange', updateDimensions)
-      }
-    }, [updateDimensions])
+    R.thunkify(R.compose(
+      R.thunkify(removeDisplayChangeListeners),
+      R.tap(addDisplayChangeListeners),
+      R.tap(R.call)
+    ))(updateDimensions),
+      [updateDimensions])
 
   return (
     <DisplayContext.Provider value={displayContext}>

@@ -34,8 +34,6 @@ const useStyles = createUseStyles({
   horizontalBound: {
     width: '100%',
   },
-  scoreAndNext: {
-  },
 })
 
 export default () => {
@@ -78,7 +76,7 @@ export default () => {
   }, [dispatch])
 
   return null == display.ratio ? (
-      <div>spinner</div>
+      <div style={{color: 'white'}}>spinner</div>
     ) : (
       <View className={className}>
         <ScoreAndNext />

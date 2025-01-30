@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 
 import { useSelector } from 'react-redux'
 
@@ -10,9 +10,10 @@ import constants from '../constants'
 import dbg from '../dbg'
 import makeRange from '../fun/makeRange'
 import { carousel, idleBackground } from '../Images'
-import { ImageBackground, View } from '../react-native-dummies'
+import { View } from '../react-native-dummies'
 
 import Block, { useGetBlockClassName } from './Block'
+import ImageBackground from './ImageBackground'
 
 const useStyles = createUseStyles({
   matrix: {
@@ -49,10 +50,40 @@ const Matrix = () => {
 
   const styles = useStyles()
 
-  const background =
-    tickMode !== 'game'
-      ? idleBackground
-      : carousel[(gameLevel - 1) % R.length(carousel)]
+  const background = useMemo(
+    R.thunkify(
+      R.ifElse(
+        R.compose(
+          R.equals('game'),
+          R.head
+        ),
+        R.chain(
+          R.compose(
+            findInCarousel => R.compose(
+              findInCarousel, // R.compose is not curried
+              R.nth(2)
+            ),
+            R.nth
+          ),
+          R.compose(
+            dbg.I('index'),
+            R.apply(R.modulo),
+            R.juxt([
+              R.compose(
+                R.add(-1),
+                R.nth(1)
+              ),
+              R.compose(
+                R.length,
+                R.nth(2)
+              )
+            ])
+          )
+        ),
+        R.nth(3)
+      )
+    )([tickMode, gameLevel, carousel, idleBackground]),
+      [tickMode, gameLevel, carousel, idleBackground])
 
   const getIsCompleted = useCallback(
     R.ifElse(

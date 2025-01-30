@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux'
 
 import * as R from 'ramda'
 
-import dbg from '../dbg'
 import { actions } from '../state/actions'
 
 const keyCodeActionTypeTable = R.compose(
@@ -20,7 +19,7 @@ const keyCodeActionTypeTable = R.compose(
 )([
   [['Space', 'KeyS', 'ArrowDown'], actions.inpD],
   [['KeyA', 'ArrowLeft'], actions.inpL],
-  [['KeyQ'], actions.inpLR],
+  [['KeyQ', 'ArrowUp'], actions.inpLR],
   [['KeyD', 'ArrowRight'], actions.inpR],
   [['KeyE'], actions.inpRR],
 ])
@@ -37,7 +36,6 @@ export default () => {
         R.isNotNil,
         makeDispatch(dispatch)
       ),
-      dbg.T('kat'),
       R.flip(R.prop)(keyCodeActionTypeTable),
       R.prop('code')
     ),
@@ -45,13 +43,13 @@ export default () => {
   )
 
   useEffect(
-    R.compose(
-      R.always(
-        R.thunkify(removeEventListener)('keydown', keyDownHandler)
-      ),
-      R.thunkify(addEventListener)('keydown', keyDownHandler)
-    ),
-    [keyDownHandler]
+    R.thunkify(
+      R.compose(
+        R.thunkify(R.curry(window.removeEventListener)('keydown')),
+        R.tap(R.curry(window.addEventListener)('keydown'))
+      )
+    )(keyDownHandler),
+     [keyDownHandler]
   )
 
   return null
