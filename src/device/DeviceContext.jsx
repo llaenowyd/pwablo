@@ -1,7 +1,14 @@
 import { createContext, useState, useCallback, useEffect } from 'react'
 import * as R from 'ramda'
 
-export const DisplayContext = createContext()
+const getDisplaySize = () => [
+  window.innerWidth,
+  window.innerHeight
+]
+
+const hasTouchscreen = () => 'ontouchstart' in window
+
+export const DeviceContext = createContext()
 
 const addDisplayChangeListeners = onEvent => {
   window.addEventListener('resize', onEvent)
@@ -13,35 +20,32 @@ const removeDisplayChangeListeners = onEvent => {
   window.removeEventListener('orientationchange', onEvent)
 }
 
-const getDisplaySize = () => [
-  window.innerWidth,
-  window.innerHeight
-]
-
 export default ({children}) => {
-  const [displayContext, setDisplayContext] = useState({
-    ratio: null,
+  const [deviceContext, setDeviceContext] = useState({
+    displayRatio: null,
+    hasTouchscreen: null,
   })
 
-  const updateDimensions = useCallback(
+  const update = useCallback(
     R.compose(
-      setDisplayContext,
-      R.assoc('ratio', R.__, {}),
-      R.apply(R.divide),
-      getDisplaySize
-    ), [setDisplayContext])
+      setDeviceContext,
+      R.fromPairs,
+      R.zip(['displayRatio', 'hasTouchscreen']),
+      R.over(R.lensIndex(0), R.apply(R.divide)),
+      R.juxt([getDisplaySize, hasTouchscreen])
+    ), [setDeviceContext])
 
   useEffect(
     R.thunkify(R.compose(
       R.thunkify(removeDisplayChangeListeners),
       R.tap(addDisplayChangeListeners),
       R.tap(R.call)
-    ))(updateDimensions),
-      [updateDimensions])
+    ))(update),
+      [update])
 
   return (
-    <DisplayContext.Provider value={displayContext}>
+    <DeviceContext.Provider value={deviceContext}>
       {children}
-    </DisplayContext.Provider>
+    </DeviceContext.Provider>
   )
 }

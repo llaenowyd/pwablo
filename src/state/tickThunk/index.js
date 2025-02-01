@@ -10,10 +10,10 @@ import { alertOnce, tryCatcher } from '../common'
 import tickGame from './tickGameThunk';
 
 const tickTestPattern = (dispatch, getState, checkpointIsIdle) => {
-  const { game, tick } = getState()
+  const { game } = getState()
   const { bucket, size } = game
   const [cols, rows] = size
-  const n = 20
+  const n = cols
 
   const makeCheckpoint = curtail => res => checkpointIsIdle() ? curtail : res
 

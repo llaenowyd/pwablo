@@ -8,12 +8,13 @@ import * as R from 'ramda'
 
 import constants from '../constants'
 import dbg from '../dbg'
-import { useDisplay } from '../display'
+import { useDevice } from '../device'
 import { View } from '../react-native-dummies';
 import { actions } from '../state/actions'
 
 import Controls from './Controls'
 import KeyboardControls from './KeyboardControls'
+import LittleButtonCluster from './LittleButtonCluster'
 import Matrix from './Matrix'
 import ScoreAndNext from './ScoreAndNext'
 
@@ -39,11 +40,11 @@ const useStyles = createUseStyles({
 export default () => {
   const dispatch = useDispatch()
 
+  const device = dbg.I('device')(
+    useDevice()
+  )
   const theme = useTheme()
   const styles = useStyles({theme})
-  const display = dbg.T('display')(
-    useDisplay()
-  )
 
   const className = useMemo(
     () => R.compose(
@@ -69,19 +70,19 @@ export default () => {
           R.always([styles.game, styles.horizontalBound, styles.verticalBound])
         ]
       ])
-    )(display.ratio), [display, styles])
+    )(device.displayRatio), [device, styles])
 
-  useEffect(() => {
-    return () => dispatch({type: actions.stopTick})
-  }, [dispatch])
+  useEffect(
+    () => () => { dispatch({type: actions.stopTick}) },
+    [dispatch])
 
-  return null == display.ratio ? (
+  return null == device.displayRatio ? (
       <div style={{color: 'white'}}>spinner</div>
     ) : (
       <View className={className}>
         <ScoreAndNext />
         <Matrix />
-        <Controls />
+        {device.hasTouchscreen ? <Controls /> : <LittleButtonCluster row />}
         <KeyboardControls />
       </View>
     ) 

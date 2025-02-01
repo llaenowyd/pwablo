@@ -2,6 +2,7 @@ import * as R from 'ramda'
 
 import Color from 'color'
 
+import constants from '../../constants'
 import { MT, tetset } from '../../tets'
 
 const basicJss = {
@@ -11,6 +12,7 @@ const basicJss = {
     borderWidth: '4px',
     borderRadius: '4px',
     aspectRatio: 1,
+    maxWidth: `${Math.floor(10000 / constants.cols) / 100}%`,
   },
   mini: {
     borderWidth: 2,
@@ -21,7 +23,7 @@ const basicJss = {
     fontWeight: '900',
     textAlign: 'center',
     paddingTop: 3,
-  }
+  },
 }
 
 const blockPrimaries = {
@@ -31,23 +33,23 @@ const blockPrimaries = {
   O: 'yellow',
   S: 'green',
   T: 'darkorchid',
-  Z: 'red'
+  Z: 'red',
 }
 
 const blockDefaults = {
-  complementDarken: 0.35
+  complementDarken: 0.35,
 }
 
 const blockTunings = {
   J: {
-    complementDarken: -0.55
+    complementDarken: -0.55,
   },
   T: {
-    complementDarken: -0.75
+    complementDarken: -0.75,
   },
   Z: {
-    complementDarken: -0.75
-  }
+    complementDarken: -0.75,
+  },
 }
 
 const getTunings =
@@ -90,38 +92,26 @@ const tkColors = R.compose(
     R.toPairs
   )(blockPrimaries)
 
-const commonBlockStyles = R.compose(
+const makeStyles = (maybePrefix, extendedStyles) => R.compose(
   R.fromPairs,
   R.map(
-    R.juxt([
-      R.identity,
-      R.compose(
-        R.mergeRight(basicJss.common),
-         R.flip(R.prop)(tkColors)
-      )
-    ])
+    R.compose(
+      maybePrefix ? R.over(R.lensIndex(0), R.concat(maybePrefix)) : R.identity,
+      R.over(
+        R.lensIndex(1),
+        R.compose(
+          R.mergeRight(basicJss.common),
+          extendedStyles ? R.mergeRight(extendedStyles) : R.identity,
+          R.flip(R.prop)(tkColors)
+        )
+      ),
+      R.flip(R.repeat)(2)
+    )
   )
 )([MT, ...tetset])
-
-const makeDerivativeStyles = (prefix, styles) => R.compose(
-  R.fromPairs,
-  R.map(
-    R.juxt([
-      R.concat(prefix),
-      R.compose(
-        R.mergeRight(basicJss.common),
-        R.mergeRight(styles),
-         R.flip(R.prop)(tkColors)
-      )
-    ])
-  )
-)([MT, ...tetset])
-
-const miniStyles = makeDerivativeStyles('mini', basicJss.mini)
-const annoStyles = makeDerivativeStyles('anno', basicJss.anno)
 
 export default {
-  ...commonBlockStyles,
-  ...miniStyles,
-  ...annoStyles,
+  ...makeStyles(),
+  ...makeStyles('mini', basicJss.mini),
+  ...makeStyles('anno', basicJss.anno),
 }

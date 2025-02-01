@@ -1,22 +1,20 @@
 import React from 'react'
 
-import { useDispatch, useSelector } from 'react-redux'
-
 import { createUseStyles, useTheme } from 'react-jss'
 
 import * as R from 'ramda'
 
-import { View } from '../../react-native-dummies';
-import { actions } from '../../state/actions'
-import thunks from '../../state/thunks'
+import { View } from '../../react-native-dummies'
 
-import LittleButton from './LittleButton'
+import MuteButton from './MuteButton'
+import NewGameButton from './NewGameButton'
+import PatternButton from './PatternButton'
+import ResetButton from './ResetButton'
 
 const padding = 5
 
 const useStyles = createUseStyles({
-  view: {
-    flex: 1,
+  gridView: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'stretch',
@@ -30,6 +28,19 @@ const useStyles = createUseStyles({
     borderStyle: 'solid',
     borderColor: R.path(['theme', 'menu', 'borderColor']),
     borderWidth: '1px',
+  },
+  rowView: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'stretch',
+    justifyContent: 'space-between',
+    backgroundColor: R.path(['theme', 'menu', 'background']),
+    borderStyle: 'solid',
+    borderColor: R.path(['theme', 'menu', 'borderColor']),
+    borderWidth: '1px',
+    width: '100%',
+    padding: '8px',
+    gap: '8px',
   },
   column: {
     flex: 1,
@@ -48,50 +59,29 @@ const useStyles = createUseStyles({
 })
 
 export default props => {
-  const dispatch = useDispatch()
-
-  const musicEnabled = useSelector(R.path(['audio', 'music', 'enabled']))
-
-  const handleTestPatternClick = () => dispatch(thunks.testPattern())
-  const handleNewGameClick = () => {
-    dispatch(thunks.newGame())
-  }
-  const handleResetClick = () => {
-    dispatch({type: actions.reset})
-  }
-
-  const handleToggleMusicClick = () => dispatch({
-    type: actions.toggleMusic
-  })
-
   const theme = useTheme()
-  const styles = useStyles({theme})
+  const styles = useStyles({props, theme})
 
-  return (
-    <View className={styles.view}>
+  return props.row ? (
+    <View className={styles.rowView}>
+      <MuteButton />
+      <ResetButton />
+      <PatternButton />
+      <NewGameButton />
+    </View>
+  ) : (
+    <View className={styles.gridView}>
       <View className={styles.rowPad} />
       <View className={styles.column}>
         <View className={styles.columnPad} />
-        <LittleButton
-          text={musicEnabled?'mute':'song'}
-          onPress={handleToggleMusicClick}
-        />
-        <LittleButton
-          text="reset"
-          onPress={handleResetClick}
-        />
+        <MuteButton />
+        <ResetButton />
         <View className={styles.columnPad} />
       </View>
       <View className={[styles.column, styles.rightColumn].join(' ')}>
         <View className={styles.columnPad} />
-        <LittleButton
-          text="pattern"
-          onPress={handleTestPatternClick}
-        />
-        <LittleButton
-          text="new game"
-          onPress={handleNewGameClick}
-        />
+        <PatternButton />
+        <NewGameButton />
         <View className={styles.columnPad} />
       </View>
       <View className={styles.rowPad} />

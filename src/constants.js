@@ -7,6 +7,8 @@ const logLevel = {
 }
 
 export default {
+  rows: 20,
+  cols: 10,
   aspectRatio: {
     matrix: 0.5,
     game: 0.448598,

@@ -7,7 +7,6 @@ import { createUseStyles } from 'react-jss'
 import * as R from 'ramda'
 
 import constants from '../constants'
-import dbg from '../dbg'
 import makeRange from '../fun/makeRange'
 import { carousel, idleBackground } from '../Images'
 import { View } from '../react-native-dummies'
@@ -36,7 +35,7 @@ const useStyles = createUseStyles({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'stretch',
-    justifyContent: 'space-evenly',
+    maxWidth: '100%',
   },
 })
 
@@ -66,7 +65,6 @@ const Matrix = () => {
             R.nth
           ),
           R.compose(
-            dbg.I('index'),
             R.apply(R.modulo),
             R.juxt([
               R.compose(
@@ -95,7 +93,7 @@ const Matrix = () => {
         R.flip(R.find)(completedRows),
         R.equals
       ))
-    )(dbg.T('completedRows')(completedRows)), [completedRows])
+    )(completedRows), [completedRows])
 
   return (
     <View className={styles.matrix}>
@@ -112,7 +110,7 @@ const Matrix = () => {
                         i={col}
                         j={row}
                         getBlockClassName={getBlockClassName}
-                        isCompleted={dbg.T(`isCompleted(${row}) col=${col}`)(getIsCompleted(row))}
+                        isCompleted={getIsCompleted(row)}
                       />
                     ),
                     makeRange(cols)

@@ -13,7 +13,7 @@ export const initialActiTet = {
   dropping: false
 }
 
-export const getInitialState = (rows=20, cols=10) =>
+export const getInitialState = (rows=constants.rows, cols=constants.cols) =>
   ({
     audio: {
       music: {

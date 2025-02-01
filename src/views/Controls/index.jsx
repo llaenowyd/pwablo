@@ -47,6 +47,7 @@ const useStyles = createUseStyles({
   center: {
     flex: 3,
     display: 'flex',
+    justifyContent: 'center',
   },
   leftBumper: R.mergeLeft(basicJss.bumper, basicJss.leftBumper),
   rightBumper: R.mergeLeft(basicJss.bumper, basicJss.rightBumper),
