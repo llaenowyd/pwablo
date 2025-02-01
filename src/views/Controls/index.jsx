@@ -1,17 +1,13 @@
 import React from 'react'
-
 import { useDispatch } from 'react-redux'
-
 import { createUseStyles, useTheme } from 'react-jss'
-
 import * as R from 'ramda'
 
 import { View } from '../../react-native-dummies'
 import { actions } from '../../state/actions'
+import Functions from '../Functions'
 
-import LittleButtonCluster from '../LittleButtonCluster'
-import MainButton from './MainButton'
-
+import ControlButton from './ControlButton'
 
 const basicJss = {
   bumper: {
@@ -69,39 +65,24 @@ export default () => {
     <View className={styles.controls}>
       <View className={styles.row}>
         <View className={styles.leftBumper}>
-          <MainButton
-            icon="rotr"
-            onPress={handleLeftRotateClick}
-          />
+          <ControlButton icon="rotr" onPress={handleLeftRotateClick} />
         </View>
         <View className={styles.center}>
-          <LittleButtonCluster />
+          <Functions />
         </View>
         <View className={styles.rightBumper}>
-          <MainButton
-            icon="rotl"
-            onPress={handleRightRotateClick}
-          />
+          <ControlButton icon="rotl" onPress={handleRightRotateClick} />
         </View>
       </View>
       <View className={styles.row}>
         <View className={styles.leftBumper}>
-          <MainButton
-            icon="left"
-            onPress={handleLeftClick}
-          />
+          <ControlButton icon="left" onPress={handleLeftClick} />
         </View>
         <View className={styles.center}>
-          <MainButton
-            icon="down"
-            onPress={handleDownClick}
-          />
+          <ControlButton icon="down" onPress={handleDownClick} />
         </View>
         <View className={styles.rightBumper}>
-          <MainButton
-            icon="right"
-            onPress={handleRightClick}
-          />
+          <ControlButton icon="right" onPress={handleRightClick} />
         </View>
       </View>
     </View>

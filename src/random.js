@@ -72,7 +72,7 @@ const maybeReplenishBag =
       R.defaultTo([])
     )(bag)
 
-export const getRandomTetKind =
+export const getRandomBloKind =
   R.compose(
     R.andThen(
       R.converge(

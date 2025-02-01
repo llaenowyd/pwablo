@@ -7,16 +7,16 @@ import constants from '../../constants'
 
 const basicJss = {
   common: {
-    flex: 1,
     borderStyle: 'solid',
     borderWidth: '4px',
     borderRadius: '4px',
-    aspectRatio: 1,
-    maxWidth: `${Math.floor(10000 / constants.cols) / 100}%`,
+    width: `${Math.floor(100000 / constants.cols) / 1000}%`,
   },
   mini: {
-    borderWidth: 2,
-    borderRadius: 2,
+    borderWidth: '2px',
+    borderRadius: '2px',
+    width: '8px',
+    height: '8px'
   },
   anno: {
     fontFamily: 'VT323-Regular',

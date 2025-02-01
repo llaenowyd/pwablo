@@ -13,10 +13,11 @@ import { View } from '../react-native-dummies';
 import { actions } from '../state/actions'
 
 import Controls from './Controls'
+import Functions from './Functions'
 import KeyboardControls from './KeyboardControls'
-import LittleButtonCluster from './LittleButtonCluster'
 import Matrix from './Matrix'
 import ScoreAndNext from './ScoreAndNext'
+import SoundController from './SoundController'
 
 const useStyles = createUseStyles({
   game: {
@@ -82,8 +83,9 @@ export default () => {
       <View className={className}>
         <ScoreAndNext />
         <Matrix />
-        {device.hasTouchscreen ? <Controls /> : <LittleButtonCluster row />}
+        {device.hasTouchscreen ? <Controls /> : <Functions row />}
         <KeyboardControls />
+        <SoundController />
       </View>
     ) 
 }

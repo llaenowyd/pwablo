@@ -21,3 +21,17 @@ body {
 div {
   box-sizing: border-box;
 }
+
+@font-face {
+  font-family: "Early GameBoy";
+  src: local("Early GameBoy"), url("../font/Early GameBoy.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "VT323-Regular";
+  src: local("VT323-Regular"), url("../font/VT323-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}

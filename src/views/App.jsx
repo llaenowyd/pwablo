@@ -1,14 +1,11 @@
 import React from 'react'
-
 import { useSelector } from 'react-redux'
-
 import { createUseStyles, useTheme } from 'react-jss'
-
 import * as R from 'ramda'
 
-import { SoundController } from './Sounds'
-import { Text, View } from './react-native-dummies'
-import Game from './views/Game'
+import { Text, View } from '../react-native-dummies'
+
+import Game from './Game'
 
 const useStyles = createUseStyles({
   app: {
@@ -36,8 +33,8 @@ const Debug = () => {
   const skewDiagnostic = useSelector(R.path(['tick', 'skewDiagnostic']))
   const gameClock = useSelector(R.path(['game', 'clock']))
 
-  theme = useTheme()
-  styles = useStyles({ theme })
+  const theme = useTheme()
+  const styles = useStyles({ theme })
 
   const diagnostic = ((sd, cd) => `${sd}${cd}`)(
     R.defaultTo('', skewDiagnostic),
@@ -52,12 +49,10 @@ const App = () => {
   const styles = useStyles({ theme })
 
   return (
-    <>
-      <View className={styles.app}>
-        <Game />
-      </View>
-      <SoundController />
-    </>
+    <View className={styles.app}>
+      <Game />
+      <Debug />
+    </View>
   )
 }
 

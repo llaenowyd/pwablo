@@ -2,19 +2,19 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
 import './index.css'
-import App from './App'
-import Device from './device'
+import { DeviceProvider } from './device'
 import { ReduxProvider } from './state'
 import { ThemeProvider } from './theme'
+import App from './views/App'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <Device>
+    <DeviceProvider>
       <ReduxProvider>
         <ThemeProvider>
           <App />
         </ThemeProvider>
       </ReduxProvider>
-    </Device>
+    </DeviceProvider>
   </StrictMode>
 )

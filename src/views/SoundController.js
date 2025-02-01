@@ -1,11 +1,9 @@
 import React from 'react'
-
 import { useDispatch, useSelector } from 'react-redux'
-
 import * as R from 'ramda'
 
-import usePrevious from './hooks/usePrevious'
-import { Sound, useAppState } from './react-native-dummies'
+import usePrevious from '../hooks/usePrevious'
+import { Sound, useAppState } from '../react-native-dummies'
 
 Sound.setCategory('Playback')
 
@@ -52,8 +50,7 @@ const getRnsSound =
     'yayy'
   ])
 
-export const SoundController =
-  () => {
+export default () => {
     const { appState } = useAppState()
 
     const dispatch = useDispatch()

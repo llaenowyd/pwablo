@@ -2,12 +2,12 @@ import { useDispatch } from 'react-redux'
 
 import thunks from '../../state/thunks'
 
-import LittleButton from './LittleButton'
+import FunctionButton from './FunctionButton'
 
-export default () => {
+export default ({size}) => {
   const dispatch = useDispatch()
 
   const onPress = () => dispatch(thunks.newGame())
 
-  return <LittleButton text="new game" onPress={onPress} />
+  return <FunctionButton size={size} text="new game" onPress={onPress} />
 }

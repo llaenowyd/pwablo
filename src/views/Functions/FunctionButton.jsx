@@ -23,6 +23,20 @@ const basicJss = {
     cursor: 'pointer',
     userSelect: 'none',
   },
+  text: R.compose(
+    R.mergeLeft({
+      fontFamily: 'Early GameBoy',
+      fontWeight: '900',
+      textAlign: 'center',
+    }),
+    R.objOf('fontSize'),
+    R.cond([
+      [ R.equals('L'), R.always(14) ],
+      [ R.equals('S'), R.always(9) ],
+      [ R.T, R.always(undefined) ],
+    ]),
+    R.path(['props', 'size'])
+  ),
   viewPressed: {
     backgroundColor: R.path(['theme', 'menu', 'buttonActive', 'background']),
     color: R.path(['theme', 'menu', 'buttonActive', 'foreground']),
@@ -34,12 +48,7 @@ const basicJss = {
 }
 
 const useStyles = createUseStyles({
-  text: {
-    fontFamily: 'Early GameBoy',
-    fontWeight: '900',
-    textAlign: 'center',
-    fontSize: 9,
-  },
+  text: basicJss.text,
   viewPressed: R.mergeRight(basicJss.view, basicJss.viewPressed),
   viewUnpressed: R.mergeRight(basicJss.view, basicJss.viewUnpressed),
 })
@@ -49,7 +58,7 @@ export default props => {
   const refIsPressed = useRef(isPressed)
 
   const theme = useTheme()
-  const styles = useStyles({theme})
+  const styles = useStyles({props, theme})
 
   const onClick = useCallback(R.compose(
       R.when(

@@ -2,12 +2,12 @@ import { useDispatch } from 'react-redux'
 
 import { actions } from '../../state/actions'
 
-import LittleButton from './LittleButton'
+import FunctionButton from './FunctionButton'
 
-export default () => {
+export default ({size}) => {
   const dispatch = useDispatch()
 
   const onPress = () => dispatch({ type: actions.reset })
 
-  return <LittleButton text="reset" onPress={onPress} />
+  return <FunctionButton size={size} text="reset" onPress={onPress} />
 }

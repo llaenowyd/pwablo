@@ -63,26 +63,28 @@ export default props => {
   const theme = useTheme()
   const styles = useStyles({props, theme})
 
+  const buttonSize = props.row ? 'L' : 'S'
+
   return props.row ? (
     <View className={styles.rowView}>
-      <MuteButton />
-      <ResetButton />
-      <PatternButton />
-      <NewGameButton />
+      <MuteButton size={buttonSize} />
+      <ResetButton size={buttonSize} />
+      <PatternButton size={buttonSize} />
+      <NewGameButton size={buttonSize} />
     </View>
   ) : (
     <View className={styles.gridView}>
       <View className={styles.rowPad} />
       <View className={styles.column}>
         <View className={styles.columnPad} />
-        <MuteButton />
-        <ResetButton />
+        <MuteButton size={buttonSize} />
+        <ResetButton size={buttonSize} />
         <View className={styles.columnPad} />
       </View>
       <View className={[styles.column, styles.rightColumn].join(' ')}>
         <View className={styles.columnPad} />
-        <PatternButton />
-        <NewGameButton />
+        <PatternButton size={buttonSize} />
+        <NewGameButton size={buttonSize} />
         <View className={styles.columnPad} />
       </View>
       <View className={styles.rowPad} />

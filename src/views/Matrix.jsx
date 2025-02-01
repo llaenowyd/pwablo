@@ -36,6 +36,7 @@ const useStyles = createUseStyles({
     flexDirection: 'row',
     alignItems: 'stretch',
     maxWidth: '100%',
+    height: `${Math.floor(100000 / constants.rows) / 1000}%`,
   },
 })
 

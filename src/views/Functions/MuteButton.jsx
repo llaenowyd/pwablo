@@ -3,13 +3,13 @@ import * as R from 'ramda'
 
 import { actions } from '../../state/actions'
 
-import LittleButton from './LittleButton'
+import FunctionButton from './FunctionButton'
 
-export default () => {
+export default ({size}) => {
   const dispatch = useDispatch()
   const musicEnabled = useSelector(R.path(['audio', 'music', 'enabled']))
 
   const onPress = () => dispatch({ type: actions.toggleMusic })
 
-  return <LittleButton text={musicEnabled ? 'mute' : 'song'} onPress={onPress} />
+  return <FunctionButton size={size} text={musicEnabled ? 'mute' : 'song'} onPress={onPress} />
 }

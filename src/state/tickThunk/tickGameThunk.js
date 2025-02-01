@@ -1,6 +1,6 @@
 import * as R from 'ramda'
 
-import { getRandomTetKind } from '../../random'
+import { getRandomBloKind } from '../../random'
 import { actions } from '../actions'
 import { tryCatcher } from '../common'
 
@@ -9,7 +9,7 @@ const nextTetThunk =
     (dispatch, getState) =>
       R.compose(
         R.andThen(nextTet => dispatch({type: actions.setNextTet, payload: nextTet})),
-        getRandomTetKind,
+        getRandomBloKind,
         R.path(['game', 'bag'])
       )(getState())
   )
