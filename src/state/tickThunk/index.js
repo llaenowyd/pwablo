@@ -1,8 +1,8 @@
 import * as R from 'ramda'
 
-import makeRange from '../../fun/makeRange'
-import { rand, rtoo } from '../../Random'
-import { tetset } from '../../tets'
+import { bloset } from '../../blo'
+import { rand, rtoo } from '../../random'
+import range from '../../range'
 
 import { actions } from '../actions'
 import { alertOnce, tryCatcher } from '../common'
@@ -36,12 +36,12 @@ const tickTestPattern = (dispatch, getState, checkpointIsIdle) => {
                     R.nth(3 * i + 1)
                   ),
                   tet: R.compose(
-                    R.flip(R.nth)(tetset),
+                    R.flip(R.nth)(bloset),
                     rtoo(7),
                     R.nth(3 * i + 2)
                   )
                 })(rx),
-              makeRange(n)
+              range(n)
             )
         )(),
       makeCheckpoint([]),
@@ -50,8 +50,8 @@ const tickTestPattern = (dispatch, getState, checkpointIsIdle) => {
           () =>
             R.reduce(
               (bucket, {rowIndex, colIndex, tet}) =>
-                R.over(
-                  R.lensIndex(colIndex),
+                R.adjust(
+                  colIndex,
                   R.set(R.lensIndex(rowIndex), tet)
                 )(bucket),
               bucket,

@@ -1,10 +1,10 @@
 import * as R from 'ramda'
 
-import makeRange from '../../fun/makeRange'
-import {kickers} from '../../tets'
+import {kickers} from '../../blo'
 import {isOpen} from '../../bucket'
+import range from '../../range'
 
-import {drawTet, eraseTet} from './draw'
+import {drawBlo, eraseBlo} from './draw'
 
 const incRotos =
   [
@@ -104,7 +104,7 @@ const rotNAndTest = (bucket, n, tet) => {
       return tet.rot === tet2.rot ? R.reduced(tet) : tet2
     },
     tet,
-    makeRange(Math.abs(n%4))
+    range(Math.abs(n%4))
   )
 }
 
@@ -117,9 +117,9 @@ const rotate =
             maybeRotatedTet.rot === actiTet.rot
               ? R.identity
               : R.compose(
-                  state => drawTet(state)(maybeRotatedTet),
+                  state => drawBlo(state)(maybeRotatedTet),
                   R.set(R.lensPath(['game', 'actiTet']), maybeRotatedTet),
-                  state => eraseTet(state)(actiTet)
+                  state => eraseBlo(state)(actiTet)
                 ),
           () => rotNAndTest(bucket, n, actiTet)
         ),

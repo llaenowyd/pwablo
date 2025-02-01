@@ -28,12 +28,7 @@ const getRnsSound =
           R.nth(1)
         ),
         R.indexBy(R.nth(0)),
-        R.map(
-          R.over(
-            R.lensIndex(1),
-            filenameToRnsSound
-          )
-        ),
+        R.map(R.adjust(1, filenameToRnsSound)),
         listToNameAndFilenameList
       )
 

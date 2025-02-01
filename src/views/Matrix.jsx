@@ -7,8 +7,8 @@ import { createUseStyles } from 'react-jss'
 import * as R from 'ramda'
 
 import constants from '../constants'
-import makeRange from '../fun/makeRange'
-import { carousel, idleBackground } from '../Images'
+import { carousel, idleBackground } from '../images'
+import range from '../range'
 import { View } from '../react-native-dummies'
 
 import Block, { useGetBlockClassName } from './Block'
@@ -58,8 +58,8 @@ const Matrix = () => {
         ),
         R.chain(
           R.compose(
-            findInCarousel => R.compose(
-              findInCarousel, // R.compose is not curried
+            R.curryN(2, R.compose)(
+              R.__,
               R.nth(2)
             ),
             R.nth
@@ -113,12 +113,12 @@ const Matrix = () => {
                         isCompleted={getIsCompleted(row)}
                       />
                     ),
-                    makeRange(cols)
+                    range(cols)
                   )
                 }
               </View>
             ),
-            R.reverse(makeRange(rows))
+            R.reverse(range(rows))
           )
         }
       </ImageBackground>

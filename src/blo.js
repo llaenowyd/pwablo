@@ -1,12 +1,12 @@
 import * as R from 'ramda'
 
-import makeRange from '../fun/makeRange'
+import range from './range'
 
-const tetset = ['I','J','L','O','S','T','Z']
+const bloset = ['I','J','L','O','S','T','Z']
 
 const MT = '.'
 
-const blockOffsets = {
+const offsets = {
   I: [[-1,0],[0,0],[1,0],[2,0]],
   J: [[-1,1],[-1,0],[0,0],[1,0]],
   L: [[-1,0],[0,0],[1,0],[1,1]],
@@ -16,7 +16,7 @@ const blockOffsets = {
   Z: [[-1,1],[0,1],[0,0],[1,0]]
 }
 
-// tetKind -> kicks
+// bloKind -> kicks
 const getKicks = R.cond([
     [
       R.equals('I'),
@@ -85,7 +85,7 @@ const makeKickers = kix => {
           nextI => i => subroutine(i, nextI),
           getNext
         ),
-        makeRange(4)
+        range(4)
       ),
     getNexts
   )
@@ -97,7 +97,7 @@ const kickers =
       R.memoizeWith(R.identity, makeKickers),
       getKicks
     ),
-    tetset
+    bloset
   )
 
 const getInitialPos =
@@ -107,22 +107,22 @@ const getInitialPos =
       rows + numCompletedRows
     ]
 
-const getInitialOffsets = R.flip(R.prop)(blockOffsets)
+const getInitialOffsets = R.flip(R.prop)(offsets)
 
 const blockOffsetsTable =
   R.compose(
     R.fromPairs,
     R.map(kind => [kind, getInitialOffsets(kind)])
-  )(tetset)
+  )(bloset)
 
-const getTetPoints = R.flip(R.prop)(blockOffsetsTable)
+const getBloPoints = R.flip(R.prop)(blockOffsetsTable)
 
-const makeTet =
+const makeBlo =
   (cols, rows, numCompletedRows=0) =>
     R.applySpec({
       kind: R.identity,
-      points: getTetPoints,
+      points: getBloPoints,
       pos: R.always(getInitialPos(cols, rows, numCompletedRows))
     })
 
-export { getTetPoints, kickers, makeTet, tetset, MT }
+export { getBloPoints, kickers, makeBlo, bloset, MT }

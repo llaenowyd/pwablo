@@ -1,8 +1,10 @@
 import * as R from 'ramda'
 
-import * as TestUtil from '../../util'
+import TestUtil from '../../util'
 
 import * as Draw from '../../../src/state/matrixReducers/draw'
+
+const _ = '.'
 
 const expectBucket =
   (state, cols, rows, expectedRows, unchangedRow) => {
@@ -22,7 +24,7 @@ const expectBucket =
     }
   }
 
-describe('Draw.drawTet', () => {
+describe('Draw.drawBlo', () => {
   it('basically works', () => {
     const cols = 10
     const rows = 10
@@ -33,25 +35,25 @@ describe('Draw.drawTet', () => {
       }
     }
 
-    const tet = {
+    const blo = {
       kind: 'T',
       pos: [1, 3],
       points: [[2, 1], [3, 1], [4, 1], [4, 2]]
     }
 
-    const nextState = Draw.drawTet(state)(tet)
+    const nextState = Draw.drawBlo(state)(blo)
 
-    const emptyRow = R.repeat(0, cols)
+    const emptyRow = R.repeat(_, cols)
     const expectedRows = {
-      '4': [0, 0, 0, 'T', 'T', 'T', 0, 0, 0, 0],
-      '5': [0, 0, 0, 0, 0, 'T', 0, 0, 0, 0]
+      '4': [_, _, _, 'T', 'T', 'T', _, _, _, _],
+      '5': [_, _, _, _, _, 'T', _, _, _, _]
     }
 
     expectBucket(nextState, cols, rows, expectedRows, emptyRow)
   })
 })
 
-describe('Draw.eraseTet', () => {
+describe('Draw.eraseBlo', () => {
   it('basically works', () => {
     const cols = 10
     const rows = 10
@@ -63,31 +65,31 @@ describe('Draw.eraseTet', () => {
       }
     }
 
-    const tet = {
+    const blo = {
       points: [[2, 1], [3, 1], [4, 1], [4, 2]],
       pos: [1, 3]
     }
 
-    const nextState = Draw.eraseTet(state)(tet)
+    const nextState = Draw.eraseBlo(state)(blo)
 
     const unchangedRow = R.repeat(fill, cols)
     const expectedRows = {
-      '4': ['O', 'O', 'O', 0, 0, 0, 'O', 'O', 'O', 'O'],
-      '5': ['O', 'O', 'O', 'O', 'O', 0, 'O', 'O', 'O', 'O']
+      '4': ['O', 'O', 'O', _, _, _, 'O', 'O', 'O', 'O'],
+      '5': ['O', 'O', 'O', 'O', 'O', _, 'O', 'O', 'O', 'O']
     }
 
     expectBucket(nextState, cols, rows, expectedRows, unchangedRow)
   })
 })
 
-describe('Draw.drawActiTet', () => {
+describe('Draw.drawActiBlo', () => {
   it('basically works', () => {
     const cols = 10
     const rows = 10
 
     const state = {
       game: {
-        actiTet: {
+        actiTet: { // tbd
           kind: 'T',
           pos: [1, 3],
           points: [[2, 1], [3, 1], [4, 1], [4, 2]]
@@ -96,12 +98,12 @@ describe('Draw.drawActiTet', () => {
       }
     }
 
-    const nextState = Draw.drawActiTet(state)
+    const nextState = Draw.drawActiBlo(state)
 
-    const emptyRow = R.repeat(0, cols)
+    const emptyRow = R.repeat(_, cols)
     const expectedRows = {
-      '4': [0, 0, 0, 'T', 'T', 'T', 0, 0, 0, 0],
-      '5': [0, 0, 0, 0, 0, 'T', 0, 0, 0, 0]
+      '4': [_, _, _, 'T', 'T', 'T', _, _, _, _],
+      '5': [_, _, _, _, _, 'T', _, _, _, _]
     }
 
     expectBucket(nextState, cols, rows, expectedRows, emptyRow)
@@ -117,8 +119,8 @@ describe('Draw.clearRows', () => {
       R.chain(
         R.flip(R.concat),
         R.compose(
-          R.repeat(0),
-          R.subtract(rows+6),
+          R.repeat(_),
+          R.subtract(rows + TestUtil.constants.bucketBufferSize),
           R.length
         )
       )
@@ -132,34 +134,34 @@ describe('Draw.clearRows', () => {
   })
 
   it('clears the first or last row', () => {
-    expect(Draw.clearRows(cols, rows, [0])(bucket)).toEqual(R.repeat([2,3,4,5,0,0,0,0,0,0,0], cols))
-    expect(Draw.clearRows(cols, rows, [0])(toppedBucket)).toEqual(R.repeat([2,3,4,5,0,0,0,0,0,0,0], cols))
-    expect(Draw.clearRows(cols, rows, [rows-1])(bucket)).toEqual(R.repeat([1,2,3,4,0,0,0,0,0,0,0], cols))
-    expect(Draw.clearRows(cols, rows, [rows-1])(toppedBucket)).toEqual(R.repeat([1,2,3,4,0,0,0,0,0,0,0], cols))
+    expect(Draw.clearRows(cols, rows, [0])(bucket)).toEqual(R.repeat([2,3,4,5,_,_,_,_,_,_,_], cols))
+    expect(Draw.clearRows(cols, rows, [0])(toppedBucket)).toEqual(R.repeat([2,3,4,5,_,_,_,_,_,_,_], cols))
+    expect(Draw.clearRows(cols, rows, [rows-1])(bucket)).toEqual(R.repeat([1,2,3,4,_,_,_,_,_,_,_], cols))
+    expect(Draw.clearRows(cols, rows, [rows-1])(toppedBucket)).toEqual(R.repeat([1,2,3,4,_,_,_,_,_,_,_], cols))
   })
 
   it('clears the first or last 2 rows', () => {
-    expect(Draw.clearRows(cols, rows, [0, 1])(bucket)).toEqual(R.repeat([3,4,5,0,0,0,0,0,0,0,0], cols))
-    expect(Draw.clearRows(cols, rows, [0, 1])(toppedBucket)).toEqual(R.repeat([3,4,5,0,0,0,0,0,0,0,0], cols))
-    expect(Draw.clearRows(cols, rows, [rows-2, rows-1])(bucket)).toEqual(R.repeat([1,2,3,0,0,0,0,0,0,0,0], cols))
-    expect(Draw.clearRows(cols, rows, [rows-2, rows-1])(toppedBucket)).toEqual(R.repeat([1,2,3,0,0,0,0,0,0,0,0], cols))
+    expect(Draw.clearRows(cols, rows, [0, 1])(bucket)).toEqual(R.repeat([3,4,5,_,_,_,_,_,_,_,_], cols))
+    expect(Draw.clearRows(cols, rows, [0, 1])(toppedBucket)).toEqual(R.repeat([3,4,5,_,_,_,_,_,_,_,_], cols))
+    expect(Draw.clearRows(cols, rows, [rows-2, rows-1])(bucket)).toEqual(R.repeat([1,2,3,_,_,_,_,_,_,_,_], cols))
+    expect(Draw.clearRows(cols, rows, [rows-2, rows-1])(toppedBucket)).toEqual(R.repeat([1,2,3,_,_,_,_,_,_,_,_], cols))
   })
 
   it('clears one or more rows', () => {
-    expect(Draw.clearRows(cols, rows, [2])(bucket)).toEqual(R.repeat([1,2,4,5,0,0,0,0,0,0,0], cols))
-    expect(Draw.clearRows(cols, rows, [2])(toppedBucket)).toEqual(R.repeat([1,2,4,5,0,0,0,0,0,0,0], cols))
-    expect(Draw.clearRows(cols, rows, [2,3])(bucket)).toEqual(R.repeat([1,2,5,0,0,0,0,0,0,0,0], cols))
-    expect(Draw.clearRows(cols, rows, [2,3])(toppedBucket)).toEqual(R.repeat([1,2,5,0,0,0,0,0,0,0,0], cols))
+    expect(Draw.clearRows(cols, rows, [2])(bucket)).toEqual(R.repeat([1,2,4,5,_,_,_,_,_,_,_], cols))
+    expect(Draw.clearRows(cols, rows, [2])(toppedBucket)).toEqual(R.repeat([1,2,4,5,_,_,_,_,_,_,_], cols))
+    expect(Draw.clearRows(cols, rows, [2,3])(bucket)).toEqual(R.repeat([1,2,5,_,_,_,_,_,_,_,_], cols))
+    expect(Draw.clearRows(cols, rows, [2,3])(toppedBucket)).toEqual(R.repeat([1,2,5,_,_,_,_,_,_,_,_], cols))
   })
 
   it('clears 2 separated rows', () => {
-    expect(Draw.clearRows(cols, rows, [0,rows-1])(bucket)).toEqual(R.repeat([2,3,4,0,0,0,0,0,0,0,0], cols))
-    expect(Draw.clearRows(cols, rows, [0,rows-1])(toppedBucket)).toEqual(R.repeat([2,3,4,0,0,0,0,0,0,0,0], cols))
-    expect(Draw.clearRows(cols, rows, [1,rows-1])(bucket)).toEqual(R.repeat([1,3,4,0,0,0,0,0,0,0,0], cols))
-    expect(Draw.clearRows(cols, rows, [1,rows-1])(toppedBucket)).toEqual(R.repeat([1,3,4,0,0,0,0,0,0,0,0], cols))
-    expect(Draw.clearRows(cols, rows, [0,rows-2])(bucket)).toEqual(R.repeat([2,3,5,0,0,0,0,0,0,0,0], cols))
-    expect(Draw.clearRows(cols, rows, [0,rows-2])(toppedBucket)).toEqual(R.repeat([2,3,5,0,0,0,0,0,0,0,0], cols))
-    expect(Draw.clearRows(cols, rows, [1,rows-2])(bucket)).toEqual(R.repeat([1,3,5,0,0,0,0,0,0,0,0], cols))
-    expect(Draw.clearRows(cols, rows, [1,rows-2])(toppedBucket)).toEqual(R.repeat([1,3,5,0,0,0,0,0,0,0,0], cols))
+    expect(Draw.clearRows(cols, rows, [0,rows-1])(bucket)).toEqual(R.repeat([2,3,4,_,_,_,_,_,_,_,_], cols))
+    expect(Draw.clearRows(cols, rows, [0,rows-1])(toppedBucket)).toEqual(R.repeat([2,3,4,_,_,_,_,_,_,_,_], cols))
+    expect(Draw.clearRows(cols, rows, [1,rows-1])(bucket)).toEqual(R.repeat([1,3,4,_,_,_,_,_,_,_,_], cols))
+    expect(Draw.clearRows(cols, rows, [1,rows-1])(toppedBucket)).toEqual(R.repeat([1,3,4,_,_,_,_,_,_,_,_], cols))
+    expect(Draw.clearRows(cols, rows, [0,rows-2])(bucket)).toEqual(R.repeat([2,3,5,_,_,_,_,_,_,_,_], cols))
+    expect(Draw.clearRows(cols, rows, [0,rows-2])(toppedBucket)).toEqual(R.repeat([2,3,5,_,_,_,_,_,_,_,_], cols))
+    expect(Draw.clearRows(cols, rows, [1,rows-2])(bucket)).toEqual(R.repeat([1,3,5,_,_,_,_,_,_,_,_], cols))
+    expect(Draw.clearRows(cols, rows, [1,rows-2])(toppedBucket)).toEqual(R.repeat([1,3,5,_,_,_,_,_,_,_,_], cols))
   })
 })

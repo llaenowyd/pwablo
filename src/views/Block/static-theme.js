@@ -2,8 +2,8 @@ import * as R from 'ramda'
 
 import Color from 'color'
 
+import { MT, bloset } from '../../blo'
 import constants from '../../constants'
-import { MT, tetset } from '../../tets'
 
 const basicJss = {
   common: {
@@ -67,8 +67,7 @@ const tkColors = R.compose(
     R.map(
       R.chain(
         ({complementDarken}) =>
-            R.over(
-              R.lensIndex(1),
+            R.adjust(1,
               R.compose(
                 R.applySpec({
                   backgroundColor: R.prop('primary'),
@@ -96,9 +95,8 @@ const makeStyles = (maybePrefix, extendedStyles) => R.compose(
   R.fromPairs,
   R.map(
     R.compose(
-      maybePrefix ? R.over(R.lensIndex(0), R.concat(maybePrefix)) : R.identity,
-      R.over(
-        R.lensIndex(1),
+      maybePrefix ? R.adjust(0, R.concat(maybePrefix)) : R.identity,
+      R.adjust(1,
         R.compose(
           R.mergeRight(basicJss.common),
           extendedStyles ? R.mergeRight(extendedStyles) : R.identity,
@@ -108,7 +106,7 @@ const makeStyles = (maybePrefix, extendedStyles) => R.compose(
       R.flip(R.repeat)(2)
     )
   )
-)([MT, ...tetset])
+)([MT, ...bloset])
 
 export default {
   ...makeStyles(),

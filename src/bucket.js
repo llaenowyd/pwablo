@@ -1,12 +1,13 @@
 import * as R from 'ramda'
 
-import makeRange from './fun/makeRange'
-import { MT } from './tets'
+import { MT } from './blo'
+import constants from './constants'
+import range from './range'
 
 export const getEmptyBucket = (rows, cols) =>
   R.map(
-    () => R.repeat(MT, rows+6),
-    makeRange(cols)
+    () => R.repeat(MT, rows + constants.bucketBufferSize),
+    range(cols)
   )
 
 const makeDisjoins =
@@ -27,7 +28,7 @@ const makeDisjoins =
         points => R.transpose([indexes, points]),
       ),
     R.compose(
-      makeRange,
+      range,
       R.length
     )
   )
@@ -83,14 +84,14 @@ export const moveToBucket =
   )
 
 export const isOpen =
-  (bucket, prevTet) =>
-    nextTet =>
+  (bucket, prevBlo) =>
+    nextBlo =>
       (
-        (prevBuckTet, nextBuckTet) =>
-          isOpenPoints(bucket, prevBuckTet.points, nextBuckTet.points)
+        (prevBuckBlo, nextBuckBlo) =>
+          isOpenPoints(bucket, prevBuckBlo.points, nextBuckBlo.points)
       )(
-        moveToBucket(prevTet),
-        moveToBucket(nextTet)
+        moveToBucket(prevBlo),
+        moveToBucket(nextBlo)
       )
 
 export const completeRows =

@@ -1,6 +1,6 @@
+import constants from '../src/constants'
 
-
-export const makeEmptyBucket = (cols, rows, tetKind=0) => {
+const makeEmptyBucket = (cols, rows, bloKind='.') => {
   const result = []
 
   for (let i = 0; i < cols; i++) {
@@ -8,9 +8,14 @@ export const makeEmptyBucket = (cols, rows, tetKind=0) => {
     const ri = result.length - 1
 
     for (let j = 0; j < rows; j++) {
-      result[ri].push(tetKind)
+      result[ri].push(bloKind)
     }
   }
 
   return result
+}
+
+export default {
+  constants,
+  makeEmptyBucket,
 }

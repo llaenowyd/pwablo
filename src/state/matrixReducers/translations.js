@@ -2,7 +2,7 @@ import * as R from 'ramda'
 
 import {isOpen} from '../../bucket'
 
-import {clearRows, drawTet, eraseTet} from './draw'
+import {clearRows, drawBlo, eraseBlo} from './draw'
 
 const translateAndTest =
   (axIndex, op) =>
@@ -26,9 +26,9 @@ const maybeTranslate =
 
         return wasTat
           ? R.compose(
-            state => drawTet(state)(tatTet),
+            state => drawBlo(state)(tatTet),
             R.set(R.lensPath(['game', 'actiTet']), tatTet),
-            state => eraseTet(state)(tet)
+            state => eraseBlo(state)(tet)
           ) : R.identity
       },
       R.juxt([

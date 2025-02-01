@@ -1,7 +1,8 @@
 import * as R from 'ramda'
 
+import { MT } from '../../blo'
+import constants from '../../constants'
 import { moveToBucket } from '../../bucket'
-import { MT } from '../../tets'
 
 const drawTetKind =
   state =>
@@ -35,25 +36,25 @@ const drawTetKind =
           )(tet)
         )
 
-export const drawTet =
+export const drawBlo =
     state =>
-      tet => {
-        const {kind} = tet
-        return drawTetKind(state)(kind)(tet)
+      blo => {
+        const {kind} = blo
+        return drawTetKind(state)(kind)(blo)
       }
 
-export const eraseTet =
+export const eraseBlo =
   state =>
-    tet =>
-      drawTetKind(state)(MT)(tet)
+    blo =>
+      drawTetKind(state)(MT)(blo)
 
-export const drawActiTet = state =>
-  drawTet(state)(
+export const drawActiBlo = state =>
+  drawBlo(state)(
     R.path(['game', 'actiTet'])(state)
   )
 
 export const eraseActiTet = state =>
-  eraseTet(state)(
+  eraseBlo(state)(
     R.path(['game', 'actiTet'])(state)
   )
 
@@ -85,5 +86,5 @@ export const clearRows =
             bucket
           )
         )(
-          rows + 6
+          rows + constants.bucketBufferSize
         )

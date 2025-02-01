@@ -10,10 +10,7 @@ const keyCodeActionTypeTable = R.compose(
   R.chain(
     R.compose(
       R.apply(R.xprod),
-      R.over(
-        R.lensIndex(1),
-        R.of(Array)
-      )
+      R.adjust(1, R.of(Array))
     )
   )
 )([

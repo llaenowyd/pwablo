@@ -1,6 +1,6 @@
 import * as R from 'ramda'
 
-import { getRandomTetKind } from '../../Random'
+import { getRandomTetKind } from '../../random'
 import { actions } from '../actions'
 import { tryCatcher } from '../common'
 

@@ -31,7 +31,7 @@ export default ({children}) => {
       setDeviceContext,
       R.fromPairs,
       R.zip(['displayRatio', 'hasTouchscreen']),
-      R.over(R.lensIndex(0), R.apply(R.divide)),
+      R.adjust(0, R.apply(R.divide)),
       R.juxt([getDisplaySize, hasTouchscreen])
     ), [setDeviceContext])
 

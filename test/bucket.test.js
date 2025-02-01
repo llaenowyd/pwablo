@@ -1,7 +1,6 @@
 import * as R from 'ramda'
 
-import * as TestUtil from './util'
-import { makeTet, tetset } from '../src/tets'
+import TestUtil from './util'
 
 import * as Bucket from '../src/bucket'
 

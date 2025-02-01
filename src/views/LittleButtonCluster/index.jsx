@@ -41,6 +41,7 @@ const useStyles = createUseStyles({
     width: '100%',
     padding: '8px',
     gap: '8px',
+    minHeight: '64px',
   },
   column: {
     flex: 1,

@@ -1,7 +1,7 @@
 import * as R from 'ramda'
 
+import { bloset } from './blo'
 import { NativeModules } from './react-native-dummies'
-import { tetset } from './tets'
 
 let rand = NativeModules?.Sha1?.rand
 
@@ -18,7 +18,7 @@ const setRand =
 export { rand, setRand }
 
 /**
- *  Random number TO Offset
+ *  rtoo - random to offset
  */
 export const rtoo =
   R.curryN(
@@ -66,7 +66,7 @@ const maybeReplenishBag =
     R.compose(
       R.ifElse(
         R.isEmpty,
-        R.thunkify(scramble)(tetset),
+        R.thunkify(scramble)(bloset),
         val => Promise.resolve(val)
       ),
       R.defaultTo([])

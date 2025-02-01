@@ -31,8 +31,8 @@ export default R.compose(
   R.fromPairs,
   R.map(
     R.compose(
-      R.over(R.lensIndex(0), R.head),
-      R.over(R.lensIndex(1), R.apply(makeDbg)),
+      R.adjust(0, R.head),
+      R.adjust(1, R.apply(makeDbg)),
       R.flip(R.repeat)(2)
     ))
   )([

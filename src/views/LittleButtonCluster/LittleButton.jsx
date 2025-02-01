@@ -9,6 +9,7 @@ import { Text } from '../../react-native-dummies'
 const basicJss = {
   view: {
     flex: 1,
+    display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: '1px',
@@ -46,16 +47,46 @@ const useStyles = createUseStyles({
 export default props => {
   const [isPressed, setIsPressed] = useState(false)
   const refIsPressed = useRef(isPressed)
-  const onClick = useCallback(() => {
-    if (refIsPressed.current) {
-      return
-    }
-    setIsPressed(true)
-    props.onPress()
-    setIsPressed(false)
-  }, [refIsPressed, setIsPressed, props.onPress])
+
   const theme = useTheme()
   const styles = useStyles({theme})
+
+  const onClick = useCallback(R.compose(
+      R.when(
+        R.compose(
+          R.not,
+          R.prop('current'),
+          R.head
+        ),
+        R.compose(
+          R.apply(R.compose),
+          R.map(
+            R.chain(
+              R.curryN(2, R.compose)(
+                R.__,
+                R.tail
+              ),
+              R.compose(
+                R.apply,
+                R.head
+              )
+            )
+          ),
+          R.flip(R.zip)([
+            false,
+            undefined,
+            false,
+          ]),
+          R.map(R.thunkify),
+          R.juxt([
+            R.nth(1),
+            R.nth(2),
+            R.nth(1),
+          ])
+        )
+      )
+    )([refIsPressed, setIsPressed, props.onPress]),
+      [refIsPressed, setIsPressed, props.onPress])
 
   return (
     <div className={isPressed ? styles.viewPressed : styles.viewUnpressed} onClick={onClick}>

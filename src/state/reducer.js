@@ -2,12 +2,12 @@ import { Alert } from '../react-native-dummies'
 
 import * as R from 'ramda'
 
+import { makeBlo } from '../blo'
 import { canFall, completeRows } from '../bucket'
 import constants from '../constants'
-import { makeTet } from '../tets'
 
 import { getInitialState, initialActiTet } from './initialState'
-import { clearCompletedRows, drawActiTet, eraseActiTet, leftRot, riteRot, left, rite, fall } from './matrixReducers'
+import { clearCompletedRows, drawActiBlo, eraseActiTet, leftRot, riteRot, left, rite, fall } from './matrixReducers'
 import { tryCatcher } from './common'
 
 const taglog = tag => R.tap(x => { console.log(tag, x) })
@@ -80,7 +80,7 @@ const useNextTet =
         R.set(
           R.lensPath(['game', 'actiTet']),
           R.mergeLeft(
-            makeTet(cols, rows)(nextTet),
+            makeBlo(cols, rows)(nextTet),
             initialActiTet
           )
         )
@@ -145,7 +145,7 @@ const settle =
   R.compose(
     R.ifElse(
       canFall,
-      drawActiTet,
+      drawActiBlo,
       finishGame
     ),
     useNextTet,
@@ -161,7 +161,7 @@ const fallOrSettle =
   R.ifElse(
     canFall,
     R.compose(
-      drawActiTet,
+      drawActiBlo,
       fall,
       eraseActiTet
     ),
@@ -243,7 +243,7 @@ export const reducerTable = {
     ),
   clearCompletedRows:
     R.compose(
-      drawActiTet,
+      drawActiBlo,
       clearCompletedRows,
       eraseActiTet,
       // stopFlash

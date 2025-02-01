@@ -6,10 +6,10 @@ import { createUseStyles, useTheme } from 'react-jss'
 
 import * as R from 'ramda'
 
+import { MT, getBloPoints, bloset } from '../blo'
 import constants from '../constants'
-import makeRange from '../fun/makeRange'
+import range from '../range'
 import { View } from '../react-native-dummies'
-import { MT, getTetPoints, tetset } from '../tets'
 import { useGetBlockClassName } from './Block'
 
 import BlockView from './Block/BlockView'
@@ -67,10 +67,10 @@ const tetlets =
               R.add(adj[1])
             )
           ),
-        tet => [tet, getTetPoints(tet), ...tetMeta[tet]]
+        tet => [tet, getBloPoints(tet), ...tetMeta[tet]]
       )
     )
-  )(tetset)
+  )(bloset)
 
 export default () => {
   const tetKind = useSelector(R.path(['game', 'nextTet']))
@@ -138,12 +138,12 @@ export default () => {
                       isCompleted={false}
                       mini />
                   ),
-                  makeRange(cols)
+                  range(cols)
                 )
               }
             </View>
           ),
-          R.reverse(makeRange(rows))
+          R.reverse(range(rows))
         )
       }
     </View>

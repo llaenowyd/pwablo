@@ -6,12 +6,16 @@ const logLevel = {
   trace: 1,
 }
 
+const rows = 20
+const cols = 10
+
 export default {
-  rows: 20,
-  cols: 10,
+  rows,
+  cols,
+  bucketBufferSize: 6,
   aspectRatio: {
-    matrix: 0.5,
-    game: 0.448598,
+    matrix: rows / cols,
+    game: 0.448598, // tbd
   },
   matrixStyle: {
     default: 0,
