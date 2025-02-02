@@ -1,6 +1,8 @@
 import * as R from 'ramda'
-import { getEmptyBucket } from '../bucket'
+
 import constants from '../constants'
+
+import { getEmptyBucket } from './bucket'
 
 const tickRate = 15 // ticks/s
 const baseClockRate = 12 // base ticks/clock

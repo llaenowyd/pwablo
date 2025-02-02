@@ -1,8 +1,8 @@
 import * as R from 'ramda'
 
 import {kickers} from '../../blo'
-import {isOpen} from '../../bucket'
 import range from '../../range'
+import {isOpen} from '../bucket'
 
 import {drawBlo, eraseBlo} from './draw'
 

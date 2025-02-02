@@ -2,7 +2,7 @@ import * as R from 'ramda'
 
 import TestUtil from './util'
 
-import * as Bucket from '../src/bucket'
+import * as Bucket from '../src/state/bucket'
 
 const drawPoints = (bucket, points, pos, kind) => {
   for (let i = 0; i < points.length; i++) {

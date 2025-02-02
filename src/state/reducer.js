@@ -3,14 +3,20 @@ import { Alert } from '../react-native-dummies'
 import * as R from 'ramda'
 
 import { makeBlo } from '../blo'
-import { canFall, completeRows } from '../bucket'
 import constants from '../constants'
 
-import { getInitialState, initialActiTet } from './initialState'
-import { clearCompletedRows, drawActiBlo, eraseActiTet, leftRot, riteRot, left, rite, fall } from './matrixReducers'
+import { canFall, completeRows } from './bucket'
 import { tryCatcher } from './common'
-
-const taglog = tag => R.tap(x => { console.log(tag, x) })
+import { getInitialState, initialActiTet } from './initialState'
+import {
+  clearCompletedRows,
+  drawActiBlo,
+  eraseActiTet,
+  leftRot,
+  riteRot,
+  left,
+  rite,
+  fall } from './matrixReducers'
 
 const reinitState =
   state =>

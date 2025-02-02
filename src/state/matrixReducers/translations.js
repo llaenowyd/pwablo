@@ -1,6 +1,6 @@
 import * as R from 'ramda'
 
-import {isOpen} from '../../bucket'
+import {isOpen} from '../bucket'
 
 import {clearRows, drawBlo, eraseBlo} from './draw'
 
