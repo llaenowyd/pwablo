@@ -4,12 +4,12 @@ import * as R from 'ramda'
 import constants from '../../constants'
 import { Text, View } from '../../react-native-dummies'
 
-export default ({className, tetKind, matrixStyle}) =>
+export default ({className, bloKind, matrixStyle}) =>
   R.ifElse(
     R.equals(constants.matrixStyle.annotated),
     R.always(
       <Text allowFontScaling={false} className={className}>
-        {tetKind}
+        {bloKind}
       </Text>
     ),
     R.always(<View className={className} />)

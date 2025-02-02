@@ -8,9 +8,8 @@ import * as R from 'ramda'
 
 import { Text, View } from '../react-native-dummies'
 
-import NextTet from './NextTet'
+import NextBlo from './NextBlo'
 import Score from './Score'
-
 
 const useStyles = createUseStyles({
   scoreAndNext: {
@@ -18,13 +17,13 @@ const useStyles = createUseStyles({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: R.path(['theme', 'scoreAndNextTet', 'background']),
+    backgroundColor: R.path(['theme', 'scoreAndNextBlo', 'background']),
     paddingTop: 2,
     paddingBottom: 2,
   },
   gameOver: {
     flex: 3,
-    color: R.path(['theme', 'scoreAndNextTet', 'foreground']),
+    color: R.path(['theme', 'scoreAndNextBlo', 'foreground']),
     fontFamily: 'Early GameBoy',
     fontWeight: '900',
     fontSize: 12
@@ -48,14 +47,11 @@ export default () => {
       <View className={styles.sidePad} />
       {
         gameOver
-          ? (<Text
-               allowFontScaling={false}
-               adjustsFontSizeToFit={true}
-               className={styles.gameOver}
-            >
+          ? (
+            <Text className={styles.gameOver} allowFontScaling={false} adjustsFontSizeToFit={true}>
               Game Over
-            </Text>)
-          : (<NextTet />)
+            </Text>
+          ) : <NextBlo />
       }
       <View className={styles.midPad} />
       <Score />

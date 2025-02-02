@@ -35,7 +35,7 @@ const tickTestPattern = (dispatch, getState, checkpointIsIdle) => {
                     rtoo(cols),
                     R.nth(3 * i + 1)
                   ),
-                  tet: R.compose(
+                  blo: R.compose(
                     R.flip(R.nth)(bloset),
                     rtoo(7),
                     R.nth(3 * i + 2)
@@ -49,10 +49,10 @@ const tickTestPattern = (dispatch, getState, checkpointIsIdle) => {
         tryCatcher('2')(
           () =>
             R.reduce(
-              (bucket, {rowIndex, colIndex, tet}) =>
+              (bucket, {rowIndex, colIndex, blo}) =>
                 R.adjust(
                   colIndex,
-                  R.set(R.lensIndex(rowIndex), tet)
+                  R.set(R.lensIndex(rowIndex), blo)
                 )(bucket),
               bucket,
               adjs

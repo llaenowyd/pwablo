@@ -33,7 +33,7 @@ const f1ccw = ([i,j]) => [-1*j, i]
 const flipXY = ([i,j]) => [invertNum(j), invertNum(i)]
 const reflect = ([i,j]) => [j,i]
 
-// (true|false) -> originTet -> result
+// (true|false) -> originBlo -> result
 const rot1 =
   cw =>
     ((incrot, pointOps) =>
@@ -69,41 +69,41 @@ const rot1 =
       ]
     )
 
-// (true|false) -> tet -> maybeRotatedTet
-const rot1AndTest = (bucket, cw, tet) => {
-  const rotatedTet = rot1(cw)(tet)
+// (true|false) -> blo -> maybeRotatedBlo
+const rot1AndTest = (bucket, cw, blo) => {
+  const rotatedBlo = rot1(cw)(blo)
 
-  if (isOpen(bucket, tet)(rotatedTet)) return rotatedTet
+  if (isOpen(bucket, blo)(rotatedBlo)) return rotatedBlo
 
-  const kicks = kickers[tet.kind][cw?1:0][tet.rot]
+  const kicks = kickers[blo.kind][cw?1:0][blo.rot]
 
   const applyKick =
-    tet => kick => R.over(R.lensProp('pos'), kick, tet)
+    blo => kick => R.over(R.lensProp('pos'), kick, blo)
 
   return R.compose(
     R.unless(
       R.isNil,
-      applyKick(rotatedTet)
+      applyKick(rotatedBlo)
     ),
     R.find(
       R.compose(
-        isOpen(bucket, tet),
-        applyKick(rotatedTet)
+        isOpen(bucket, blo),
+        applyKick(rotatedBlo)
       )
     )
-  )(kicks) ?? tet
+  )(kicks) ?? blo
 }
 
-const rotNAndTest = (bucket, n, tet) => {
+const rotNAndTest = (bucket, n, blo) => {
   const cw = n>0
 
   return R.reduce(
-    tet => {
-      const tet2 = rot1AndTest(bucket, cw, tet)
+    blo => {
+      const blo2 = rot1AndTest(bucket, cw, blo)
 
-      return tet.rot === tet2.rot ? R.reduced(tet) : tet2
+      return blo.rot === blo2.rot ? R.reduced(blo) : blo2
     },
-    tet,
+    blo,
     range(Math.abs(n%4))
   )
 }
@@ -111,21 +111,21 @@ const rotNAndTest = (bucket, n, tet) => {
 const rotate =
   n =>
     R.chain(
-      ([bucket, actiTet]) =>
+      ([bucket, actiBlo]) =>
         R.chain(
-          maybeRotatedTet =>
-            maybeRotatedTet.rot === actiTet.rot
+          maybeRotatedBlo =>
+            maybeRotatedBlo.rot === actiBlo.rot
               ? R.identity
               : R.compose(
-                  state => drawBlo(state)(maybeRotatedTet),
-                  R.set(R.lensPath(['game', 'actiTet']), maybeRotatedTet),
-                  state => eraseBlo(state)(actiTet)
+                  state => drawBlo(state)(maybeRotatedBlo),
+                  R.set(R.lensPath(['game', 'actiBlo']), maybeRotatedBlo),
+                  state => eraseBlo(state)(actiBlo)
                 ),
-          () => rotNAndTest(bucket, n, actiTet)
+          () => rotNAndTest(bucket, n, actiBlo)
         ),
       R.juxt([
         R.path(['game', 'bucket']),
-        R.path(['game', 'actiTet'])
+        R.path(['game', 'actiBlo'])
       ])
     )
 

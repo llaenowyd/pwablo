@@ -34,7 +34,7 @@ export const useGetBlockClassName = (matrixStyle, mini) => {
 }
 
 export default ({i, j, getBlockClassName, matrixStyle}) => {
-  const tetKind = useSelector(R.path(['game', 'bucket', i, j]))
+  const bloKind = useSelector(R.path(['game', 'bucket', i, j]))
 
-  return <BlockView className={getBlockClassName(tetKind)} tetKind={tetKind} matrixStyle={matrixStyle} />
+  return <BlockView className={getBlockClassName(bloKind)} bloKind={bloKind} matrixStyle={matrixStyle} />
 }

@@ -4,10 +4,10 @@ import { MT } from '../../blo'
 import constants from '../../constants'
 import { moveToBucket } from '../bucket'
 
-const drawTetKind =
+const drawBloKind =
   state =>
-    tetKind =>
-      tet =>
+    bloKind =>
+      blo =>
         (
           pointsByColumn =>
             R.over(
@@ -20,7 +20,7 @@ const drawTetKind =
                       R.values,
                       R.mergeRight(col),
                       R.fromPairs,
-                      R.map(row => [row, tetKind]),
+                      R.map(row => [row, bloKind]),
                       R.defaultTo([]),
                       R.flip(R.prop)(pointsByColumn)
                     )(i)
@@ -33,29 +33,29 @@ const drawTetKind =
             R.groupBy(R.nth(0)),
             R.prop('points'),
             moveToBucket
-          )(tet)
+          )(blo)
         )
 
 export const drawBlo =
     state =>
       blo => {
         const {kind} = blo
-        return drawTetKind(state)(kind)(blo)
+        return drawBloKind(state)(kind)(blo)
       }
 
 export const eraseBlo =
   state =>
     blo =>
-      drawTetKind(state)(MT)(blo)
+      drawBloKind(state)(MT)(blo)
 
 export const drawActiBlo = state =>
   drawBlo(state)(
-    R.path(['game', 'actiTet'])(state)
+    R.path(['game', 'actiBlo'])(state)
   )
 
-export const eraseActiTet = state =>
+export const eraseActiBlo = state =>
   eraseBlo(state)(
-    R.path(['game', 'actiTet'])(state)
+    R.path(['game', 'actiBlo'])(state)
   )
 
 const topOffBucket =

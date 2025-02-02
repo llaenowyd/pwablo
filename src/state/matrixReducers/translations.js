@@ -6,34 +6,34 @@ import {clearRows, drawBlo, eraseBlo} from './draw'
 
 const translateAndTest =
   (axIndex, op) =>
-    (bucket, tet) => {
-      const translatedTet =
+    (bucket, blo) => {
+      const translatedBlo =
         R.over(
           R.lensPath(['pos', axIndex]),
           op
         )(
-          tet
+          blo
         )
 
-      return isOpen(bucket, tet)(translatedTet) ? [true, translatedTet] : [false, tet]
+      return isOpen(bucket, blo)(translatedBlo) ? [true, translatedBlo] : [false, blo]
     }
 
 const maybeTranslate =
   (axIndex, op) =>
     R.chain(
-      ([bucket, tet, tat]) => {
-        const [wasTat, tatTet] = tat(bucket, tet)
+      ([bucket, blo, tat]) => {
+        const [wasTat, tatBlo] = tat(bucket, blo)
 
         return wasTat
           ? R.compose(
-            state => drawBlo(state)(tatTet),
-            R.set(R.lensPath(['game', 'actiTet']), tatTet),
-            state => eraseBlo(state)(tet)
+            state => drawBlo(state)(tatBlo),
+            R.set(R.lensPath(['game', 'actiBlo']), tatBlo),
+            state => eraseBlo(state)(blo)
           ) : R.identity
       },
       R.juxt([
         R.path(['game', 'bucket']),
-        R.path(['game', 'actiTet']),
+        R.path(['game', 'actiBlo']),
         R.thunkify(translateAndTest)(axIndex, op)
       ])
     )
@@ -68,7 +68,7 @@ export const clearCompletedRows =
 export const fall =
   R.compose(
     R.over(
-      R.lensPath(['game', 'actiTet', 'pos', 1]),
+      R.lensPath(['game', 'actiBlo', 'pos', 1]),
       R.add(-1)
     )
   )

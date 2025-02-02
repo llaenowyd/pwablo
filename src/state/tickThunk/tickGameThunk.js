@@ -4,21 +4,21 @@ import { getRandomBloKind } from '../../random'
 import { actions } from '../actions'
 import { tryCatcher } from '../common'
 
-const nextTetThunk =
-  tryCatcher('nextTetThunk')(
+const nextBloThunk =
+  tryCatcher('nextBloThunk')(
     (dispatch, getState) =>
       R.compose(
-        R.andThen(nextTet => dispatch({type: actions.setNextTet, payload: nextTet})),
+        R.andThen(nextBlo => dispatch({type: actions.setNextBlo, payload: nextBlo})),
         getRandomBloKind,
         R.path(['game', 'bag'])
       )(getState())
   )
 
-const takeNextTetThunk =
-  tryCatcher('takeNextTetThunk')(
+const takeNextBloThunk =
+  tryCatcher('takeNextBloThunk')(
     (dispatch, getState) => {
-      dispatch({type: actions.useNextTet})
-      return nextTetThunk(dispatch, getState)
+      dispatch({type: actions.useNextBlo})
+      return nextBloThunk(dispatch, getState)
     }
   )
 
@@ -47,11 +47,11 @@ const handleInputThunk =
   )
 
 const tickGame = (dispatch, getState, checkpointIsIdle) => {
-  const {game:{actiTet:{kind:actiKind}, clock, completedRows, nextTet}} = getState()
+  const {game:{actiBlo:{kind:actiKind}, clock, completedRows, nextBlo}} = getState()
 
   return (
-    R.isNil(nextTet)
-      ? nextTetThunk(dispatch, getState)
+    R.isNil(nextBlo)
+      ? nextBloThunk(dispatch, getState)
       : Promise.resolve()
     ).then(
       () => R.isEmpty(completedRows)
@@ -59,7 +59,7 @@ const tickGame = (dispatch, getState, checkpointIsIdle) => {
         : dispatch({type: actions.clearCompletedRows})
     ).then(
       () => R.isNil(actiKind)
-        ? takeNextTetThunk(dispatch, getState)
+        ? takeNextBloThunk(dispatch, getState)
         : () => null
     ).then(
       () => handleInputThunk(dispatch, getState)

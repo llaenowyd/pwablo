@@ -89,7 +89,7 @@ describe('Draw.drawActiBlo', () => {
 
     const state = {
       game: {
-        actiTet: { // tbd
+        actiBlo: {
           kind: 'T',
           pos: [1, 3],
           points: [[2, 1], [3, 1], [4, 1], [4, 2]]

@@ -12,7 +12,7 @@ import { Text } from '../react-native-dummies';
 const useStyles = createUseStyles({
   text: {
     flex: 5,
-    color: R.path(['theme', 'scoreAndNextTet', 'foreground']),
+    color: R.path(['theme', 'scoreAndNextBlo', 'foreground']),
     fontFamily: 'Early GameBoy',
     fontWeight: '900',
     fontSize: 12,

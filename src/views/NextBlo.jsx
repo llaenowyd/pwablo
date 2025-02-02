@@ -1,9 +1,6 @@
 import React, { useMemo } from 'react'
-
 import { useSelector } from 'react-redux'
-
 import { createUseStyles, useTheme } from 'react-jss'
-
 import * as R from 'ramda'
 
 import { MT, getBloPoints, bloset } from '../blo'
@@ -20,7 +17,7 @@ const useStyles = createUseStyles({
     display: 'flex',
     flexDirection: 'column',
     padding: 2,
-    backgroundColor: R.path(['theme', 'scoreAndNextTet', 'background']),
+    backgroundColor: R.path(['theme', 'scoreAndNextBlo', 'background']),
   },
   row: {
     flex: 1,
@@ -36,7 +33,7 @@ const useStyles = createUseStyles({
   },
 })
 
-const tetMeta = {
+const bloMeta = {
   I: [[[0,3], [0,2]], [1,1]],
   J: [[[0,2], [0,1]], [1,0]],
   L: [[[0,2], [0,1]], [1,0]],
@@ -46,14 +43,14 @@ const tetMeta = {
   Z: [[[0,2], [0,1]], [1,0]],
 }
 
-const tetlets =
+const blolets =
   R.compose(
     R.indexBy(R.head),
     R.map(
       R.compose(
-        ([tet, points, range, adj]) =>
+        ([blo, points, range, adj]) =>
           ((adjCol, adjRow) => [
-            tet,
+            blo,
             R.map(
               ([i, j]) => [adjCol(i), adjRow(j)],
               points
@@ -67,13 +64,13 @@ const tetlets =
               R.add(adj[1])
             )
           ),
-        tet => [tet, getBloPoints(tet), ...tetMeta[tet]]
+        blo => [blo, getBloPoints(blo), ...bloMeta[blo]]
       )
     )
   )(bloset)
 
 export default () => {
-  const tetKind = useSelector(R.path(['game', 'nextTet']))
+  const bloKind = useSelector(R.path(['game', 'nextBlo']))
   const getBlockClassName = useGetBlockClassName(constants.matrixStyle.default, true)
 
   const mtBlockClassName = useMemo(
@@ -81,27 +78,27 @@ export default () => {
     [getBlockClassName]
   )
   const blockClassName = useMemo(
-    R.thunkify(getBlockClassName)(tetKind),
-    [tetKind, getBlockClassName]
+    R.thunkify(getBlockClassName)(bloKind),
+    [bloKind, getBlockClassName]
   )
 
   const theme = useTheme()
   const styles = useStyles({theme})
 
-  if (R.isNil(tetKind)) return (<View className={styles.void} />)
+  if (R.isNil(bloKind)) return (<View className={styles.void} />)
 
-  const tetlet = tetlets[tetKind]
+  const blolet = blolets[bloKind]
 
-  const [cols, rows, tetPoints] =
+  const [cols, rows, bloPoints] =
     R.juxt([
       R.compose(R.add(1), R.defaultTo(2), R.path([2, 0, 1])),
       R.compose(R.add(1), R.defaultTo(2), R.path([2, 1, 1])),
       R.compose(R.defaultTo([]), R.nth(1))
-    ])(tetlet)
+    ])(blolet)
 
   const isLit = (col, row) =>
       R.ifElse(
-        R.thunkify(R.equals(MT))(tetKind),
+        R.thunkify(R.equals(MT))(bloKind),
         R.F,
         R.compose(
           R.not,
@@ -119,7 +116,7 @@ export default () => {
             )
           )
         )
-      )(tetPoints)
+      )(bloPoints)
 
   return (
     <View className={styles.view}>
@@ -132,7 +129,7 @@ export default () => {
                   col => (
                     <BlockView
                       key={row * cols + col}
-                      tetKind={isLit(col, row) ? tetKind : MT}
+                      bloKind={isLit(col, row) ? bloKind : MT}
                       className={isLit(col, row) ? blockClassName : mtBlockClassName}
                       matrixStyle={constants.matrixStyle.default}
                       isCompleted={false}

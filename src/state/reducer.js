@@ -7,11 +7,11 @@ import constants from '../constants'
 
 import { canFall, completeRows } from './bucket'
 import { tryCatcher } from './common'
-import { getInitialState, initialActiTet } from './initialState'
+import { getInitialState, initialActiBlo } from './initialState'
 import {
   clearCompletedRows,
   drawActiBlo,
-  eraseActiTet,
+  eraseActiBlo,
   leftRot,
   riteRot,
   left,
@@ -75,24 +75,24 @@ const finishGame =
     R.set(R.lensPath(['game', 'finished']), true)
   )
 
-const useNextTet =
+const useNextBlo =
   R.chain(
-    ([nextTet, [cols,rows]]) =>
+    ([nextBlo, [cols,rows]]) =>
       R.compose(
         R.set(
-          R.lensPath(['game', 'nextTet']),
+          R.lensPath(['game', 'nextBlo']),
           null
         ),
         R.set(
-          R.lensPath(['game', 'actiTet']),
+          R.lensPath(['game', 'actiBlo']),
           R.mergeLeft(
-            makeBlo(cols, rows)(nextTet),
-            initialActiTet
+            makeBlo(cols, rows)(nextBlo),
+            initialActiBlo
           )
         )
       ),
     R.juxt([
-      R.path(['game', 'nextTet']),
+      R.path(['game', 'nextBlo']),
       R.path(['game', 'size'])
     ])
   )
@@ -154,7 +154,7 @@ const settle =
       drawActiBlo,
       finishGame
     ),
-    useNextTet,
+    useNextBlo,
     addPointsAndMaybeLevelUp,
     // R.chain(
     //   setFlash,
@@ -169,7 +169,7 @@ const fallOrSettle =
     R.compose(
       drawActiBlo,
       fall,
-      eraseActiTet
+      eraseActiBlo
     ),
     settle
   )
@@ -197,7 +197,7 @@ const clockTickReducer =
       ])
     ),
     R.when(
-      R.path(['game', 'actiTet', 'dropping']),
+      R.path(['game', 'actiBlo', 'dropping']),
       fallOrSettle
     )
   )
@@ -217,21 +217,21 @@ export const reducerTable = {
   fall: fallOrSettle,
   fallIfFalling: R.chain(
       falling => falling ? fallOrSettle : R.identity,
-      R.path(['game', 'actiTet', 'falling'])
+      R.path(['game', 'actiBlo', 'falling'])
     ),
-  setNextTet:
-    (state, {payload: [nextTet, bag]}) =>
+  setNextBlo:
+    (state, {payload: [nextBlo, bag]}) =>
       R.compose(
         R.set(
-          R.lensPath(['game', 'nextTet']),
-          nextTet
+          R.lensPath(['game', 'nextBlo']),
+          nextBlo
         ),
         R.set(
           R.lensPath(['game', 'bag']),
           bag
         )
       )(state),
-  useNextTet,
+  useNextBlo,
   clearInput: R.set(R.lensProp('input'), []),
   inpLR: inputReducer('L'),
   inpRR: inputReducer('R'),
@@ -244,14 +244,14 @@ export const reducerTable = {
   rite,
   down:
     R.set(
-      R.lensPath(['game', 'actiTet', 'dropping']),
+      R.lensPath(['game', 'actiBlo', 'dropping']),
       true
     ),
   clearCompletedRows:
     R.compose(
       drawActiBlo,
       clearCompletedRows,
-      eraseActiTet,
+      eraseActiBlo,
       // stopFlash
     ),
   reset:

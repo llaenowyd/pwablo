@@ -85,7 +85,7 @@ const tkColors = R.compose(
                 })
               )
             ),
-        ([tetKind]) => getTunings(tetKind)
+        ([bloKind]) => getTunings(bloKind)
       )
     ),
     R.toPairs

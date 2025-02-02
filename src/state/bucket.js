@@ -124,7 +124,7 @@ export const completeRows =
       R.map(R.nth(1)),
       R.prop('points'),
       moveToBucket,
-      R.path(['game', 'actiTet'])
+      R.path(['game', 'actiBlo'])
     )
   )
 
@@ -139,7 +139,7 @@ export const canFall =
         makeDisjoins,
         R.prop('points'),
         moveToBucket,
-        R.path(['game', 'actiTet'])
+        R.path(['game', 'actiBlo'])
       )
     ])
   )

@@ -1,5 +1,3 @@
-import * as R from 'ramda'
-
 import TestUtil from './util'
 
 import * as Bucket from '../src/state/bucket'
@@ -21,7 +19,7 @@ describe('Bucket.completeRows', () => {
     const state = {
       game: {
         bucket: TestUtil.makeEmptyBucket(cols, rows),
-        actiTet: { points: [[0,0]], pos: [0,0] },
+        actiBlo: { points: [[0,0]], pos: [0,0] },
         completedRows: []
       }
     }
@@ -34,11 +32,11 @@ describe('Bucket.completeRows', () => {
       state.game.bucket[i][0] = 'T'
     }
 
-    drawPoints(state.game.bucket, state.game.actiTet.points, state.game.actiTet.pos, 'I')
+    drawPoints(state.game.bucket, state.game.actiBlo.points, state.game.actiBlo.pos, 'I')
 
     nextState = Bucket.completeRows(state)
 
-    expect(nextState.game.actiTet).toEqual(state.game.actiTet)
+    expect(nextState.game.actiBlo).toEqual(state.game.actiBlo)
     expect(nextState.game.bucket).toEqual(state.game.bucket)
     expect(nextState.game.completedRows).toEqual([0])
   })

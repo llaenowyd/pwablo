@@ -47,7 +47,7 @@ export default {
         foreground: forestGreen,
       },
     },
-    scoreAndNextTet: {
+    scoreAndNextBlo: {
       background: darkCharcoal,
       foreground: lightOlive,
     },
@@ -80,7 +80,7 @@ export default {
         foreground: darkViolet,
       },
     },
-    scoreAndNextTet: {
+    scoreAndNextBlo: {
       background: darkViolet,
       foreground: lightPistachio,
     },

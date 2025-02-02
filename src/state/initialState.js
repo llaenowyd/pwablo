@@ -7,7 +7,7 @@ import { getEmptyBucket } from './bucket'
 const tickRate = 15 // ticks/s
 const baseClockRate = 12 // base ticks/clock
 
-export const initialActiTet = {
+export const initialActiBlo = {
   kind: null,
   points: [],
   pos: [0,0],
@@ -32,7 +32,7 @@ export const getInitialState = (rows=constants.rows, cols=constants.cols) =>
       rate: baseClockRate,
     },
     game: {
-      actiTet: initialActiTet,
+      actiBlo: initialActiBlo,
       bag: [],
       bucket: getEmptyBucket(rows, cols),
       clock: baseClockRate,
@@ -40,7 +40,7 @@ export const getInitialState = (rows=constants.rows, cols=constants.cols) =>
       finished: false,
       flash: R.repeat({timer: null, animation: null}, rows),
       level: 1,
-      nextTet: null,
+      nextBlo: null,
       rowsCleared: 0,
       rowsPerLevel: 10,
       score: null,
