@@ -1,7 +1,7 @@
 import * as R from 'ramda'
 
 import { bloset } from '../../blo'
-import { rand, rtoo } from '../../random'
+import { getRand, rtoo } from '../../random'
 import range from '../../range'
 
 import { actions } from '../actions'
@@ -20,7 +20,7 @@ const tickTestPattern = (dispatch, getState, checkpointIsIdle) => {
   return R.pipeWith(
     R.andThen,
     [
-      () => rand(3 * n),
+      () => getRand()(3 * n),
       rx =>
         tryCatcher('1')(
           () =>

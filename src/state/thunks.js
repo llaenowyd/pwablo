@@ -1,6 +1,6 @@
 import * as R from 'ramda'
 
-import { getRandomBloKind } from '../random'
+import { getRandomBlokind } from '../random'
 
 import { actions } from './actions'
 import tickThunk from './tickThunk'
@@ -11,7 +11,7 @@ const makeRandomFillThunk = () => (dispatch, getState) =>
         function gnt(result, bag) {
           if (result.length === cells) return Promise.resolve(result)
 
-          return getRandomBloKind(bag).then(
+          return getRandomBlokind(bag).then(
             ([np, nb]) => gnt(R.append(np, result), nb)
           )
         }
