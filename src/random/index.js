@@ -1,5 +1,5 @@
-import getRandomBlokind from './get-random-blokind'
-import { getRand, setRand } from './rand'
+import redGetRandomBlokind from './red-get-random-blokind'
+import { getBlueRand, getRedRand, setBlueRand, setRedRand } from './rand'
 import rtoo from './rtoo'
 
-export { getRand, getRandomBlokind, rtoo, setRand }
+export { getBlueRand, getRedRand, redGetRandomBlokind, rtoo, setBlueRand, setRedRand }

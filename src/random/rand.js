@@ -1,18 +1,32 @@
 import * as R from 'ramda'
 
-const cryptoRand = null
+const blueMathRand = R.times(Math.random)
+const redMathRand = n => Promise.resolve(blueMathRand(n))
 
-let rands = {
-  math: n => Promise.resolve(R.times(Math.random, n)),
-  crypto: cryptoRand,
+const blueCryptoRand = null
+const redCryptoRand = null
+
+let blueRands = {
+  math: blueMathRand,
+  crypto: blueCryptoRand,
   override: null
 }
 
-export const setRand = rand => {
-  rands = R.set(R.lensProp('override'), rand, rands)
+let redRands = {
+  math: redMathRand,
+  crypto: redCryptoRand,
+  override: null
 }
 
-export const getRand = () => R.cond([
+export const setBlueRand = rand => {
+  blueRands = R.set(R.lensProp('override'), rand, blueRands)
+}
+
+export const setRedRand = rand => {
+  redRands = R.set(R.lensProp('override'), rand, redRands)
+}
+
+export const getBlueRand = () => R.cond([
   [
     R.compose(
       R.complement(R.isNil),
@@ -31,4 +45,25 @@ export const getRand = () => R.cond([
     R.T,
     R.prop('math'),
   ]
-])(rands)
+])(blueRands)
+
+export const getRedRand = () => R.cond([
+  [
+    R.compose(
+      R.complement(R.isNil),
+      R.prop('override')
+    ),
+    R.prop('override'),
+  ],
+  [
+    R.compose(
+      R.complement(R.isNil),
+      R.prop('crypto')
+    ),
+    R.prop('crypto'),
+  ],
+  [
+    R.T,
+    R.prop('math'),
+  ]
+])(redRands)

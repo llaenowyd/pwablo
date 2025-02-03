@@ -1,6 +1,6 @@
 import * as R from 'ramda'
 
-import { getRandomBlokind } from '../../random'
+import { redGetRandomBlokind } from '../../random'
 import { actions } from '../actions'
 import { tryCatcher } from '../common'
 
@@ -9,7 +9,7 @@ const nextBloThunk =
     (dispatch, getState) =>
       R.compose(
         R.andThen(nextBlo => dispatch({type: actions.setNextBlo, payload: nextBlo})),
-        getRandomBlokind,
+        redGetRandomBlokind,
         R.path(['game', 'bag'])
       )(getState())
   )

@@ -1,7 +1,7 @@
 import * as R from 'ramda'
 
 import { bloset } from '../../blo'
-import { getRand, rtoo } from '../../random'
+import { getRedRand, rtoo } from '../../random'
 import range from '../../range'
 
 import { actions } from '../actions'
@@ -20,30 +20,27 @@ const tickTestPattern = (dispatch, getState, checkpointIsIdle) => {
   return R.pipeWith(
     R.andThen,
     [
-      () => getRand()(3 * n),
+      () => getRedRand()(3 * n),
       rx =>
-        tryCatcher('1')(
-          () =>
-            R.map(
-              i =>
-                R.applySpec({
-                  rowIndex: R.compose(
-                    rtoo(rows),
-                    R.nth(3 * i)
-                  ),
-                  colIndex: R.compose(
-                    rtoo(cols),
-                    R.nth(3 * i + 1)
-                  ),
-                  blo: R.compose(
-                    R.flip(R.nth)(bloset),
-                    rtoo(7),
-                    R.nth(3 * i + 2)
-                  )
-                })(rx),
-              range(n)
-            )
-        )(),
+        R.map(
+          i =>
+            R.applySpec({
+              rowIndex: R.compose(
+                rtoo(rows),
+                R.nth(3 * i)
+              ),
+              colIndex: R.compose(
+                rtoo(cols),
+                R.nth(3 * i + 1)
+              ),
+              blo: R.compose(
+                R.flip(R.nth)(bloset),
+                rtoo(7),
+                R.nth(3 * i + 2)
+              )
+            })(rx),
+          range(n)
+        ),
       makeCheckpoint([]),
       adjs =>
         tryCatcher('2')(

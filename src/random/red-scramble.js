@@ -1,6 +1,6 @@
 import * as R from 'ramda'
 
-import { getRand } from './rand'
+import { getRedRand } from './rand'
 
 import rtoo from './rtoo'
 
@@ -9,7 +9,7 @@ import rtoo from './rtoo'
  */
 export default a =>
   (len =>
-    getRand()(len-1).then(
+    getRedRand()(len-1).then(
       rx => {
         const result = R.clone(a)
 
