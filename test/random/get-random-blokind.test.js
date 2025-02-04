@@ -1,13 +1,12 @@
 import * as R from 'ramda'
 
+import { numBlos } from '../../src/blo'
 import { setBlueRand, setRedRand } from '../../src/random'
 import blueGetRandomBlokind from '../../src/random/blue-get-random-blokind'
 import redGetRandomBlokind from '../../src/random/red-get-random-blokind'
 
 describe('blueGetRandomBlokind', () => {
   it('might appear to be non-random', () => {
-    const numBlos = 7
-
     const rand = jest.fn(
       () => R.repeat(0, numBlos-1)
     )

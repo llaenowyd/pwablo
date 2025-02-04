@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux'
 
-import { actions } from '../../state/actions'
+import { actions } from '../../state'
 
 import FunctionButton from './FunctionButton'
 

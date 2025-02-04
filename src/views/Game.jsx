@@ -10,7 +10,7 @@ import constants from '../constants'
 import dbg from '../dbg'
 import { useDevice } from '../device'
 import { View } from '../react-native-dummies';
-import { actions } from '../state/actions'
+import { actions } from '../state'
 
 import Controls from './Controls'
 import Functions from './Functions'

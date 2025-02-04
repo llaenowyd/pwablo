@@ -6,6 +6,8 @@ const bloset = ['I','J','L','O','S','T','Z']
 
 const MT = '.'
 
+const numBlos = R.length(bloset)
+
 const offsets = {
   I: [[-1,0],[0,0],[1,0],[2,0]],
   J: [[-1,1],[-1,0],[0,0],[1,0]],
@@ -125,4 +127,4 @@ const makeBlo =
       pos: R.always(getInitialPos(cols, rows, numCompletedRows))
     })
 
-export { getBloPoints, kickers, makeBlo, bloset, MT }
+export { bloset, getBloPoints, kickers, makeBlo, numBlos, MT }

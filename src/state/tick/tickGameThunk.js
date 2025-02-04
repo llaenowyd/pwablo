@@ -4,23 +4,17 @@ import { redGetRandomBlokind } from '../../random'
 import { actions } from '../actions'
 import { tryCatcher } from '../common'
 
-const nextBloThunk =
-  tryCatcher('nextBloThunk')(
-    (dispatch, getState) =>
-      R.compose(
-        R.andThen(nextBlo => dispatch({type: actions.setNextBlo, payload: nextBlo})),
-        redGetRandomBlokind,
-        R.path(['game', 'bag'])
-      )(getState())
-  )
+const nextBloThunk = (dispatch, getState) =>
+  R.compose(
+    R.andThen(nextBlo => dispatch({type: actions.setNextBlo, payload: nextBlo})),
+    redGetRandomBlokind,
+    R.path(['game', 'bag'])
+  )(getState())
 
-const takeNextBloThunk =
-  tryCatcher('takeNextBloThunk')(
-    (dispatch, getState) => {
-      dispatch({type: actions.useNextBlo})
-      return nextBloThunk(dispatch, getState)
-    }
-  )
+const takeNextBloThunk = (dispatch, getState) => {
+  dispatch({type: actions.useNextBlo})
+  return nextBloThunk(dispatch, getState)
+}
 
 const handleInputThunk =
   tryCatcher('handleInputThunk')(
@@ -46,7 +40,7 @@ const handleInputThunk =
     }
   )
 
-const tickGame = (dispatch, getState, checkpointIsIdle) => {
+const tickGame = (dispatch, getState) => {
   const {game:{actiBlo:{kind:actiKind}, clock, completedRows, nextBlo}} = getState()
 
   return (

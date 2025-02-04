@@ -9,13 +9,13 @@ const redCryptoRand = null
 let blueRands = {
   math: blueMathRand,
   crypto: blueCryptoRand,
-  override: null
+  override: null,
 }
 
 let redRands = {
   math: redMathRand,
   crypto: redCryptoRand,
-  override: null
+  override: null,
 }
 
 export const setBlueRand = rand => {

@@ -3,7 +3,7 @@ import * as R from 'ramda'
 import { redGetRandomBlokind } from '../random'
 
 import { actions } from './actions'
-import tickThunk from './tickThunk'
+import tickThunk from './tick'
 
 const makeRandomFillThunk = () => (dispatch, getState) =>
   (({bag, size}) =>
@@ -61,7 +61,7 @@ export default {
       ]
     )(),
   startTick: makeStartTickThunk,
-  testPattern: () => (dispatch, getState) =>
+  pattern: () => (dispatch, getState) =>
     R.pipeWith(
       R.andThen,
       [
@@ -70,7 +70,7 @@ export default {
           return Promise.resolve()
         },
         () => makeRandomFillThunk()(dispatch, getState),
-        () => makeStartTickThunk('testPattern')(dispatch, getState)
+        () => makeStartTickThunk('pattern')(dispatch, getState)
       ]
     )()
 }
