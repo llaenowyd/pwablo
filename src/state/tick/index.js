@@ -4,7 +4,7 @@ import { actions } from '../actions'
 import { alertOnce } from '../common'
 
 import redPattern from './red-pattern'
-import tickGame from './tickGameThunk'
+import redGame from './red-game'
 
 const makeNoop = mode => () => Promise.resolve(alertOnce(`unknown mode '${mode}'`))
 
@@ -24,7 +24,7 @@ function tickThunk(dispatch, getState) {
     ticker => tickerOrNoop(mode)(ticker)(dispatch, getState)
   )(
     R.flip(R.prop)({
-      'game': tickGame,
+      'game': redGame,
       'pattern': redPattern
     })(mode)
   ).then(

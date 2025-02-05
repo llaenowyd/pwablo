@@ -1,8 +1,8 @@
+import * as Draw from '~/state/matrixReducers/draw'
+
 import * as R from 'ramda'
 
 import TestUtil from '../../util'
-
-import * as Draw from '../../../src/state/matrixReducers/draw'
 
 const _ = '.'
 

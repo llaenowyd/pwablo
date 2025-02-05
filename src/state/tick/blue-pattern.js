@@ -11,7 +11,6 @@ export default (dispatch, getState) => {
   const n = cols
 
   const setNextBucket = nextBucket => dispatch({type: actions.setBucket, payload: nextBucket})
-  const zipWithApply = R.zipWith((f, x) => f(x))
 
   R.compose(
     setNextBucket,
@@ -20,28 +19,23 @@ export default (dispatch, getState) => {
         (nextBucket, [row, col, blo]) => R.adjust(col, R.set(R.lensIndex(row), blo), nextBucket)
       ), [
         R.prop('bucket'),
-        R.prop('picks'),
-      ]
-    ),
-    R.chain(
-      R.mergeLeft,
-      R.compose(
-        R.objOf('picks'),
-        R.map(
-          zipWithApply([
-            rtoo(rows),
-            rtoo(cols),
-            R.compose(
-              R.flip(R.nth)(bloset),
-              rtoo(numBlos)
-            ),
-          ]),
+        R.compose(
+          R.map(
+            R.zipWith((f, x) => f(x))([
+              rtoo(rows),
+              rtoo(cols),
+              R.compose(
+                R.flip(R.nth)(bloset),
+                rtoo(numBlos)
+              ),
+            ]),
+          ),
+          R.splitEvery(3),
+          getBlueRand(),
+          R.multiply(3),
+          R.prop('n')
         ),
-        R.splitEvery(3),
-        getBlueRand(),
-        R.multiply(3),
-        R.prop('n')
-      )
+      ]
     )
-  )({ n, bucket, rows, cols })
+  )({ n, bucket })
 }

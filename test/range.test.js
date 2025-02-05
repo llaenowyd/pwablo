@@ -1,4 +1,4 @@
-import range from '../src/range'
+import range from '~/range'
 
 describe('range', () => {
   it('has correct examples', () => {

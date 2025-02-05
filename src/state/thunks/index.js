@@ -1,35 +1,9 @@
 import * as R from 'ramda'
 
-import { redGetRandomBlokind } from '../random'
+import { actions } from '../actions'
+import tickThunk from '../tick'
 
-import { actions } from './actions'
-import tickThunk from './tick'
-
-const makeRandomFillThunk = () => (dispatch, getState) =>
-  (({bag, size}) =>
-      (cells => {
-        function gnt(result, bag) {
-          if (result.length === cells) return Promise.resolve(result)
-
-          return redGetRandomBlokind(bag).then(
-            ([np, nb]) => gnt(R.append(np, result), nb)
-          )
-        }
-
-        return gnt([], bag).then(
-          R.splitEvery(size[1])
-        ).then(
-          bucket => {
-            dispatch({
-              type: actions.setBucket,
-              payload: bucket
-            })
-          }
-        )
-      })(R.apply(R.multiply)(size))
-  )(
-    R.prop('game', getState())
-  )
+import redRandomFill from './red-random-fill'
 
 const makeStartTickThunk = nextMode => (dispatch, getState) => {
   const {tick} = getState()
@@ -69,7 +43,7 @@ export default {
           dispatch({type: actions.reset})
           return Promise.resolve()
         },
-        () => makeRandomFillThunk()(dispatch, getState),
+        () => redRandomFill(dispatch, getState),
         () => makeStartTickThunk('pattern')(dispatch, getState)
       ]
     )()

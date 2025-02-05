@@ -1,10 +1,11 @@
+import bluePattern from '~/state/tick/blue-pattern'
+import redPattern from '~/state/tick/red-pattern'
+
 import * as R from 'ramda'
 
-import { MT, numBlos } from '../../../src/blo'
-import { setBlueRand, setRedRand } from '../../../src/random'
-import { actions } from '../../../src/state'
-import bluePattern from '../../../src/state/tick/blue-pattern'
-import redPattern from '../../../src/state/tick/red-pattern'
+import { MT, numBlos } from '~/blo'
+import { setBlueRand, setRedRand } from '~/random'
+import { actions } from '~/state'
 
 describe('redPattern', () => {
   const cols = 3

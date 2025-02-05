@@ -1,6 +1,6 @@
-import TestUtil from '../util'
+import * as Bucket from '~/state/bucket'
 
-import * as Bucket from '../../src/state/bucket'
+import TestUtil from '../util'
 
 const drawPoints = (bucket, points, pos, kind) => {
   for (let i = 0; i < points.length; i++) {

@@ -2,7 +2,6 @@ import * as R from 'ramda'
 
 import { redGetRandomBlokind } from '../../random'
 import { actions } from '../actions'
-import { tryCatcher } from '../common'
 
 const nextBloThunk = (dispatch, getState) =>
   R.compose(
@@ -16,31 +15,27 @@ const takeNextBloThunk = (dispatch, getState) => {
   return nextBloThunk(dispatch, getState)
 }
 
-const handleInputThunk =
-  tryCatcher('handleInputThunk')(
-    (dispatch, getState) => {
-      const {input} = getState()
+const handleInputThunk = (dispatch, getState) => {
+  const {input} = getState()
 
-      if (R.length(input) === 0) return
+  if (R.length(input) === 0) return
 
-      // move to regular reducer
+  const doLeftRot = R.complement(R.isNil)(R.find(R.equals('L'), input))
+  const doRiteRot = R.complement(R.isNil)(R.find(R.equals('R'), input))
+  const doLeft = R.complement(R.isNil)(R.find(R.equals('<'), input))
+  const doRite = R.complement(R.isNil)(R.find(R.equals('>'), input))
+  const doDown = R.complement(R.isNil)(R.find(R.equals('v'), input))
 
-      const doLeftRot = R.complement(R.isNil)(R.find(R.equals('L'), input))
-      const doRiteRot = R.complement(R.isNil)(R.find(R.equals('R'), input))
-      const doLeft = R.complement(R.isNil)(R.find(R.equals('<'), input))
-      const doRite = R.complement(R.isNil)(R.find(R.equals('>'), input))
-      const doDown = R.complement(R.isNil)(R.find(R.equals('v'), input))
+  if (doLeftRot) dispatch({type: actions.leftRot})
+  if (doRiteRot) dispatch({type: actions.riteRot})
+  if (doLeft) dispatch({type: actions.left})
+  if (doRite) dispatch({type: actions.rite})
+  if (doDown) dispatch({type: actions.down})
 
-      if (doLeftRot) dispatch({type: actions.leftRot})
-      if (doRiteRot) dispatch({type: actions.riteRot})
-      if (doLeft) dispatch({type: actions.left})
-      if (doRite) dispatch({type: actions.rite})
-      if (doDown) dispatch({type: actions.down})
-      dispatch({type: actions.clearInput})
-    }
-  )
+  dispatch({type: actions.clearInput})
+}
 
-const tickGame = (dispatch, getState) => {
+export default (dispatch, getState) => {
   const {game:{actiBlo:{kind:actiKind}, clock, completedRows, nextBlo}} = getState()
 
   return (
@@ -70,5 +65,3 @@ const tickGame = (dispatch, getState) => {
       () => dispatch({type: actions.clockTick})
     )
 }
-
-export default tickGame
