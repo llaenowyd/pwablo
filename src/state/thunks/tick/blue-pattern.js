@@ -1,8 +1,8 @@
 import * as R from 'ramda'
 
-import { bloset, numBlos } from '../../blo'
-import { getBlueRand, rtoo } from '../../random'
-import { actions } from '../actions'
+import { bloset, numBlos } from '~/blo'
+import { getBlueRand, rtoo } from '~/random'
+import { actions } from '../../actions'
 
 export default (dispatch, getState) => {
   const { game } = getState()

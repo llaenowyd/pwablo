@@ -8,8 +8,6 @@ const getDisplaySize = () => [
 
 const hasTouchscreen = () => 'ontouchstart' in window
 
-export const DeviceContext = createContext()
-
 const addDisplayChangeListeners = onEvent => {
   window.addEventListener('resize', onEvent)
   window.addEventListener('orientationchange', onEvent)
@@ -20,6 +18,11 @@ const removeDisplayChangeListeners = onEvent => {
   window.removeEventListener('orientationchange', onEvent)
 }
 
+export const DeviceContext = createContext()
+
+/**
+ * DeviceProvider
+ */
 export default ({children}) => {
   const [deviceContext, setDeviceContext] = useState({
     displayRatio: null,

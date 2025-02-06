@@ -1,7 +1,7 @@
 import * as R from 'ramda'
 
-import { redGetRandomBlokind } from '../../random'
-import { actions } from '../actions'
+import { redGetRandomBlokind } from '~/random'
+import { actions } from '../../actions'
 
 const nextBloThunk = (dispatch, getState) =>
   R.compose(

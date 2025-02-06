@@ -1,5 +1,5 @@
-import bluePattern from '~/state/tick/blue-pattern'
-import redPattern from '~/state/tick/red-pattern'
+import bluePattern from '~/state/thunks/tick/blue-pattern'
+import redPattern from '~/state/thunks/tick/red-pattern'
 
 import * as R from 'ramda'
 

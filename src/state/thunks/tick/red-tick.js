@@ -1,7 +1,7 @@
 import * as R from 'ramda'
 
-import { actions } from '../actions'
-import { alertOnce } from '../common'
+import { actions } from '../../actions'
+import { alertOnce } from '../../common'
 
 import redPattern from './red-pattern'
 import redGame from './red-game'
@@ -13,7 +13,7 @@ const tickerOrNoop =
       ticker =>
         ticker ?? makeNoop(mode)
 
-function tickThunk(dispatch, getState) {
+function redTick(dispatch, getState) {
   const { tick } = getState()
   const { mode, idle, interval, prevT0 } = tick
 
@@ -42,7 +42,7 @@ function tickThunk(dispatch, getState) {
             : dt % interval - externalSkew
         )
 
-      const next = idle ? null : setTimeout(() => dispatch(tickThunk), nextInterval)
+      const next = idle ? null : setTimeout(() => dispatch(redTick), nextInterval)
 
       dispatch({
         type: actions.setTick,
@@ -66,4 +66,4 @@ function tickThunk(dispatch, getState) {
   )
 }
 
-export default tickThunk
+export default redTick

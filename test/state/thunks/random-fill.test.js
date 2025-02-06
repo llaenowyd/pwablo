@@ -21,7 +21,7 @@ describe('blueRandomFill', () => {
 
   const getState = jest.fn(() => state)
 
-  const rand = jest.fn(() => R.repeat(0, numRows))
+  const rand = jest.fn(() => R.repeat(0, numBlos - 1))
   setBlueRand(rand)
   
   const dispatch = jest.fn(
@@ -38,6 +38,10 @@ describe('blueRandomFill', () => {
     const expectedBucket = R.repeat(bloset, numCols)
 
     expect(state.game.bucket).toEqual(expectedBucket)
+    expect(getState).toHaveBeenCalledTimes(1)
+    expect(rand).toHaveBeenCalledTimes(numCols)
+    expect(rand).toHaveBeenCalledWith(numBlos - 1)
+    expect(dispatch).toHaveBeenCalledTimes(1)
   })
 })
 
@@ -54,7 +58,7 @@ describe('redRandomFill', () => {
 
   const getState = jest.fn(() => state)
 
-  const rand = jest.fn(() => Promise.resolve(R.repeat(0, numRows)))
+  const rand = jest.fn(() => Promise.resolve(R.repeat(0, numBlos - 1)))
   setRedRand(rand)
 
   const dispatch = jest.fn(
@@ -71,5 +75,9 @@ describe('redRandomFill', () => {
     const expectedBucket = R.repeat(bloset, numCols)
 
     expect(state.game.bucket).toEqual(expectedBucket)
+    expect(getState).toHaveBeenCalledTimes(1)
+    expect(rand).toHaveBeenCalledTimes(numCols)
+    expect(rand).toHaveBeenCalledWith(numBlos - 1)
+    expect(dispatch).toHaveBeenCalledTimes(1)
   })
 })
