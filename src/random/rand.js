@@ -3,8 +3,20 @@ import * as R from 'ramda'
 const blueMathRand = R.times(Math.random)
 const redMathRand = n => Promise.resolve(blueMathRand(n))
 
-const blueCryptoRand = null
-const redCryptoRand = null
+const uint32ToRand = R.multiply(1 / (2**32 - 1))
+
+const blueCryptoRand = (buffers => n => {
+  const buffer = buffers[n] ?? (() => buffers[n] = new Uint32Array(n))()
+
+  self.crypto.getRandomValues(buffer)
+
+  const result = []
+  for (const rx of buffer.values()) result.push(uint32ToRand(rx))
+
+  return result
+})({})
+
+const redCryptoRand = n => Promise.resolve(blueCryptoRand(n))
 
 let blueRands = {
   math: blueMathRand,
