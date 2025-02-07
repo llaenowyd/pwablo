@@ -1,3 +1,4 @@
-import startTick from './start-tick'
+import blueStartTick from './blue-start-tick'
+import redStartTick from './red-start-tick'
 
-export { startTick }
+export { blueStartTick, redStartTick }

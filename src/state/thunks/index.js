@@ -2,19 +2,29 @@ import * as R from 'ramda'
 
 import { actions } from '../actions'
 
+import blueRandomFill from './blue-random-fill'
 import redRandomFill from './red-random-fill'
-import { startTick } from './tick'
+import { blueStartTick, redStartTick } from './tick'
 
 export default {
-  newGame: () => (dispatch, getState) =>
+  blueNewGame: () => (dispatch, getState) => {
+    dispatch({type: actions.setupNewGame})
+    blueStartTick('game')(dispatch, getState)
+  },
+  bluePattern: () => (dispatch, getState) => {
+    dispatch({type: actions.reset})
+    blueRandomFill(dispatch, getState)
+    blueStartTick('pattern')(dispatch, getState)
+  },
+  redNewGame: () => (dispatch, getState) =>
     R.pipeWith(
       R.andThen,
       [
         () => Promise.resolve(dispatch({type: actions.setupNewGame})),
-        () => startTick('game')(dispatch, getState)
+        () => redStartTick('game')(dispatch, getState)
       ]
     )(),
-  pattern: () => (dispatch, getState) =>
+  redPattern: () => (dispatch, getState) =>
     R.pipeWith(
       R.andThen,
       [
@@ -23,7 +33,7 @@ export default {
           return Promise.resolve()
         },
         () => redRandomFill(dispatch, getState),
-        () => startTick('pattern')(dispatch, getState)
+        () => redStartTick('pattern')(dispatch, getState)
       ]
-    )()
+    )(),
 }

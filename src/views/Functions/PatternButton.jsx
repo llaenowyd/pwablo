@@ -7,7 +7,7 @@ import FunctionButton from './FunctionButton'
 export default ({size}) => {
   const dispatch = useDispatch()
 
-  const onPress = () => dispatch(thunks.pattern())
+  const onPress = () => dispatch(thunks.bluePattern())
 
   return <FunctionButton size={size} text="pattern" onPress={onPress} />
 }

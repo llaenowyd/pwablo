@@ -7,7 +7,7 @@ import FunctionButton from './FunctionButton'
 export default ({size}) => {
   const dispatch = useDispatch()
 
-  const onPress = () => dispatch(thunks.newGame())
+  const onPress = () => dispatch(thunks.blueNewGame())
 
   return <FunctionButton size={size} text="new game" onPress={onPress} />
 }

@@ -4,7 +4,7 @@ import { actions } from '../../actions'
 import redTick from './red-tick'
 
 /**
- * startTick: tbd unthunk
+ * redStartTick: tbd unthunk
  */
 export default maybeNextMode => (dispatch, getState) =>
   R.compose(
