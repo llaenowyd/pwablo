@@ -1,6 +1,6 @@
-import { setBlueRand, setRedRand } from '../../src/random'
-import blueScramble from '../../src/random/blue-scramble'
-import redScramble from '../../src/random/red-scramble'
+import { setBlueRand, setRedRand } from '~/random'
+import blueScramble from '~/random/blue-scramble'
+import redScramble from '~/random/red-scramble'
 
 describe('blueScramble', () => {
   it('might return the list in the original order', () => {

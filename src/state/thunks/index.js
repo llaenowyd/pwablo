@@ -1,7 +1,6 @@
 import * as R from 'ramda'
 
 import { actions } from '../actions'
-
 import blueRandomFill from './blue-random-fill'
 import redRandomFill from './red-random-fill'
 import { blueStartTick, redStartTick } from './tick'

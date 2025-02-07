@@ -3,12 +3,12 @@ import { useSelector } from 'react-redux'
 import { createUseStyles, useTheme } from 'react-jss'
 import * as R from 'ramda'
 
-import { MT, getBloPoints, bloset } from '../blo'
-import constants from '../constants'
-import range from '../range'
-import { View } from '../react-native-dummies'
-import { useGetBlockClassName } from './Block'
+import { MT, getBloPoints, bloset } from '~/blo'
+import constants from '~/constants'
+import range from '~/range'
+import { View } from '~/react-native-dummies'
 
+import { useGetBlockClassName } from './Block'
 import BlockView from './Block/BlockView'
 
 const useStyles = createUseStyles({

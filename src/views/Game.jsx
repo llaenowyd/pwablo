@@ -1,16 +1,13 @@
 import React, { useEffect, useMemo } from 'react'
-
 import { useDispatch } from 'react-redux'
-
 import { createUseStyles, useTheme } from 'react-jss'
-
 import * as R from 'ramda'
 
-import constants from '../constants'
-import dbg from '../dbg'
-import { useDevice } from '../device'
-import { View } from '../react-native-dummies';
-import { actions } from '../state'
+import constants from '~/constants'
+import dbg from '~/dbg'
+import { useDevice } from '~/device'
+import { View } from '~/react-native-dummies';
+import { actions } from '~/state'
 
 import Controls from './Controls'
 import Functions from './Functions'

@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 
 import * as R from 'ramda'
 
-import { actions } from '../state'
+import { actions } from '~/state'
 
 const keyCodeActionTypeTable = R.compose(
   R.fromPairs,

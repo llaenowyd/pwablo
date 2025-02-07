@@ -1,9 +1,10 @@
+import blueGetRandomBlokind from '~/random/blue-get-random-blokind'
+import redGetRandomBlokind from '~/random/red-get-random-blokind'
+
 import * as R from 'ramda'
 
-import { numBlos } from '../../src/blo'
-import { setBlueRand, setRedRand } from '../../src/random'
-import blueGetRandomBlokind from '../../src/random/blue-get-random-blokind'
-import redGetRandomBlokind from '../../src/random/red-get-random-blokind'
+import { numBlos } from '~/blo'
+import { setBlueRand, setRedRand } from '~/random'
 
 describe('blueGetRandomBlokind', () => {
   it('might appear to be non-random', () => {

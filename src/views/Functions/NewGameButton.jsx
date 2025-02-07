@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux'
 
-import thunks from '~/state/thunks/'
+import thunks from '~/state/thunks'
 
 import FunctionButton from './FunctionButton'
 

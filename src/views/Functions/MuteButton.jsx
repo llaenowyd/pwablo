@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import * as R from 'ramda'
 
-import { actions } from '../../state'
+import { actions } from '~/state'
 
 import FunctionButton from './FunctionButton'
 

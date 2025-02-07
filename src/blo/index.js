@@ -1,6 +1,6 @@
 import * as R from 'ramda'
 
-import range from './range'
+import range from '~/range'
 
 const bloset = ['I','J','L','O','S','T','Z']
 

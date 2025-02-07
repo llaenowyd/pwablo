@@ -2,8 +2,8 @@ import * as R from 'ramda'
 
 import Color from 'color'
 
-import { MT, bloset } from '../../blo'
-import constants from '../../constants'
+import { MT, bloset } from '~/blo'
+import constants from '~/constants'
 
 const basicJss = {
   common: {

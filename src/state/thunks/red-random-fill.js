@@ -1,6 +1,7 @@
 import * as R from 'ramda'
 
-import { redGetRandomBlokind } from '../../random'
+import { redGetRandomBlokind } from '~/random'
+
 import { actions } from '../actions'
 
 export default (dispatch, getState) =>

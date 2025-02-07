@@ -1,7 +1,6 @@
 import * as R from 'ramda'
 
 import { actions } from '../../actions'
-
 import bluePattern from './blue-pattern'
 import blueGame from './blue-game'
 

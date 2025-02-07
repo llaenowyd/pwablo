@@ -1,9 +1,9 @@
 import * as R from 'ramda'
 
-import {kickers} from '../../blo'
-import range from '../../range'
-import {isOpen} from '../bucket'
+import {kickers} from '~/blo'
+import range from '~/range'
 
+import {isOpen} from '../bucket'
 import {drawBlo, eraseBlo} from './draw'
 
 const incRotos =

@@ -1,4 +1,4 @@
-import rtoo from '../../src/random/rtoo'
+import rtoo from '~/random/rtoo'
 
 describe('rtoo', () => {
   it('has correct examples', () => {

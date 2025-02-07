@@ -1,7 +1,8 @@
 import * as R from 'ramda'
 
-import { MT } from '../../blo'
-import constants from '../../constants'
+import { MT } from '~/blo'
+import constants from '~/constants'
+
 import { moveToBucket } from '../bucket'
 
 const drawBloKind =

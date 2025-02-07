@@ -1,9 +1,9 @@
-import { Alert } from '../react-native-dummies'
-
 import * as R from 'ramda'
 
-import { makeBlo } from '../blo'
-import constants from '../constants'
+
+import { makeBlo } from '~/blo'
+import constants from '~/constants'
+import { Alert } from '~/react-native-dummies'
 
 import { canFall, completeRows } from './bucket'
 import { tryCatcher } from './common'

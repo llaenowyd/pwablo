@@ -1,15 +1,12 @@
 import React, { useCallback, useMemo } from 'react'
-
 import { useSelector } from 'react-redux'
-
 import { createUseStyles } from 'react-jss'
-
 import * as R from 'ramda'
 
-import constants from '../constants'
-import { carousel, idleBackground } from '../images'
-import range from '../range'
-import { View } from '../react-native-dummies'
+import constants from '~/constants'
+import { carousel, idleBackground } from '~/images'
+import range from '~/range'
+import { View } from '~/react-native-dummies'
 
 import Block, { useGetBlockClassName } from './Block'
 import ImageBackground from './ImageBackground'

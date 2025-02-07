@@ -2,7 +2,6 @@ import * as R from 'ramda'
 
 import { actions } from '../../actions'
 import { alertOnce } from '../../common'
-
 import redPattern from './red-pattern'
 import redGame from './red-game'
 

@@ -1,6 +1,6 @@
 import * as R from 'ramda'
 
-import { bloset } from '../blo'
+import { bloset } from '~/blo'
 
 import redScramble from './red-scramble'
 

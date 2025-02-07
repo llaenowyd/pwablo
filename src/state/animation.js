@@ -1,6 +1,6 @@
-import {Animated, Easing} from '../react-native-dummies';
-
 import * as R from 'ramda'
+
+import {Animated, Easing} from '~/react-native-dummies'
 
 // flash
 //   row -> {timer:(null|Animated.Value), animation: (null|Animated)}
