@@ -1,6 +1,6 @@
 import * as R from 'ramda'
 
-import { redGetRandomBlokind } from '~/random'
+import { redGetRandomBlokind } from '~/blo'
 
 import { actions } from '../../actions'
 

@@ -1,13 +1,13 @@
-import blueGetRandomBlokind from './blue-get-random-blokind'
-import redGetRandomBlokind from './red-get-random-blokind'
+import blueScramble from './blue-scramble'
 import { getBlueRand, getRedRand, setBlueRand, setRedRand } from './rand'
+import redScramble from './red-scramble'
 import rtoo from './rtoo'
 
 export {
-  blueGetRandomBlokind,
+  blueScramble,
   getBlueRand,
   getRedRand,
-  redGetRandomBlokind,
+  redScramble,
   rtoo,
   setBlueRand,
   setRedRand

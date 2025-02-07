@@ -1,5 +1,5 @@
-import blueGetRandomBlokind from '~/random/blue-get-random-blokind'
-import redGetRandomBlokind from '~/random/red-get-random-blokind'
+import blueGetRandomBlokind from '~/blo/blue-get-random-blokind'
+import redGetRandomBlokind from '~/blo/red-get-random-blokind'
 
 import * as R from 'ramda'
 

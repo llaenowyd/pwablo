@@ -1,8 +1,8 @@
 import * as R from 'ramda'
 
-import { bloset } from '~/blo'
+import { blueScramble } from '~/random'
 
-import blueScramble from './blue-scramble'
+import { bloset } from './bloset'
 
 const maybeReplenishBag =
   bag =>
