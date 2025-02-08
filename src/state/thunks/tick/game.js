@@ -1,6 +1,6 @@
 import * as R from 'ramda'
 
-import { blueGetRandomBlokind } from '~/blo'
+import { getRandomBlokind } from '~/blo'
 
 import { actions } from '../../actions'
 
@@ -8,7 +8,7 @@ import { actions } from '../../actions'
 const setNextBlo = (dispatch, getState) =>
   R.compose(
     nextBlo => dispatch({type: actions.setNextBlo, payload: nextBlo}),
-    blueGetRandomBlokind,
+    getRandomBlokind,
     R.path(['game', 'bag'])
   )(getState())
 
@@ -39,7 +39,7 @@ const handleInput = (dispatch, getState) => {
 }
 
 /**
- * blueGame
+ * game
  */
 export default (dispatch, getState) => {
   const dispatchTable = R.mergeLeft(

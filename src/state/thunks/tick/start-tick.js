@@ -1,10 +1,10 @@
 import * as R from 'ramda'
 
 import { actions } from '../../actions'
-import redTick from './red-tick'
+import tick from './tick'
 
 /**
- * redStartTick: tbd unthunk
+ * startTick: tbd unthunk
  */
 export default maybeNextMode => (dispatch, getState) =>
   R.compose(
@@ -24,7 +24,7 @@ export default maybeNextMode => (dispatch, getState) =>
           next: R.converge(
             setTimeout,
             [
-              R.always(R.thunkify(dispatch)(redTick)),
+              R.always(R.thunkify(dispatch)(tick)),
               R.prop('interval'),
             ]
           ),

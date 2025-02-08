@@ -1,6 +1,6 @@
 import * as R from 'ramda'
 
-import { getBlueRand } from './rand'
+import { getRand } from './rand'
 
 import rtoo from './rtoo'
 
@@ -9,7 +9,7 @@ import rtoo from './rtoo'
  */
 export default R.compose(
   ([a, len]) => {
-    const rx = getBlueRand()(len - 1)
+    const rx = getRand()(len - 1)
     const result = R.clone(a)
 
     for (let offset = 0; offset < len-1; offset++) {

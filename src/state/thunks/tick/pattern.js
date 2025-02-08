@@ -1,10 +1,13 @@
 import * as R from 'ramda'
 
 import { bloset, numBlos } from '~/blo'
-import { getBlueRand, rtoo } from '~/random'
+import { getRand, rtoo } from '~/random'
 
 import { actions } from '../../actions'
 
+/**
+ * pattern
+ */
 export default (dispatch, getState) => {
   const { game } = getState()
   const { bucket, size } = game
@@ -32,7 +35,7 @@ export default (dispatch, getState) => {
             ]),
           ),
           R.splitEvery(3),
-          getBlueRand(),
+          getRand(),
           R.multiply(3),
           R.prop('n')
         ),

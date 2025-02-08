@@ -1,16 +1,15 @@
 import * as R from 'ramda'
 
 import { actions } from '../../actions'
-import bluePattern from './blue-pattern'
-import blueGame from './blue-game'
+import pattern from './pattern'
+import game from './game'
 
 /**
- * blueTick
+ * tick
  * tbd, needs work
  */
-function blueTick(dispatch, getState) {
-  const { tick } = getState()
-  const { mode, idle, interval, prevT0 } = tick
+function tick(dispatch, getState) {
+  const { tick: { mode, idle, interval, prevT0 } } = getState()
 
   if (idle) {
     return
@@ -19,10 +18,7 @@ function blueTick(dispatch, getState) {
   const t0 = Date.now()
   const externalSkew = t0 - prevT0 - interval;
 
-  const ticker = R.flip(R.prop)({
-    'game': blueGame,
-    'pattern': bluePattern
-  })(mode)
+  const ticker = R.flip(R.prop)({ game, pattern })(mode)
 
   if (!ticker) {
     return
@@ -43,7 +39,7 @@ function blueTick(dispatch, getState) {
         : dt % interval - externalSkew
     )
 
-  const next = idle ? null : setTimeout(() => dispatch(blueTick), nextInterval)
+  const next = idle ? null : setTimeout(() => dispatch(tick), nextInterval)
 
   dispatch({
     type: actions.setTick,
@@ -58,4 +54,4 @@ function blueTick(dispatch, getState) {
   })
 }
 
-export default blueTick
+export default tick

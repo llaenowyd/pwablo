@@ -3,8 +3,7 @@ import * as R from 'ramda'
 import range from '~/range'
 
 import { bloset } from './bloset'
-import blueGetRandomBlokind from './blue-get-random-blokind'
-import redGetRandomBlokind from './red-get-random-blokind'
+import getRandomBlokind from './get-random-blokind'
 
 const MT = '.'
 
@@ -131,11 +130,10 @@ const makeBlo =
 
 export {
   bloset,
-  blueGetRandomBlokind,
   getBloPoints,
+  getRandomBlokind,
   kickers,
   makeBlo,
   numBlos,
   MT,
-  redGetRandomBlokind,
 }

@@ -1,14 +1,10 @@
-import blueScramble from './blue-scramble'
-import { getBlueRand, getRedRand, setBlueRand, setRedRand } from './rand'
-import redScramble from './red-scramble'
+import { getRand, setRand } from './rand'
 import rtoo from './rtoo'
+import scramble from './scramble'
 
 export {
-  blueScramble,
-  getBlueRand,
-  getRedRand,
-  redScramble,
+  getRand,
   rtoo,
-  setBlueRand,
-  setRedRand
+  scramble,
+  setRand,
 }

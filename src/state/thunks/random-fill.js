@@ -1,16 +1,16 @@
 import * as R from 'ramda'
 
-import { blueGetRandomBlokind } from '~/blo'
+import { getRandomBlokind } from '~/blo'
 
 import { actions } from '../actions'
 
-const blueGnb = n => {
+const gnb = n => {
   const isComplete = R.compose(R.equals(n), R.length)
 
   function rec(result, bag) {
     if (isComplete(result)) return result
 
-    const [blo, nextBag] = blueGetRandomBlokind(bag)
+    const [blo, nextBag] = getRandomBlokind(bag)
     return rec(R.append(blo, result), nextBag)
   }
 
@@ -29,7 +29,7 @@ export default (dispatch, getState) => {
         R.nth(1)
       ),
       R.compose(
-        blueGnb,
+        gnb,
         R.apply(R.multiply)
       )
     ]),

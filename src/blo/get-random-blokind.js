@@ -1,6 +1,6 @@
 import * as R from 'ramda'
 
-import { blueScramble } from '~/random'
+import { scramble } from '~/random'
 
 import { bloset } from './bloset'
 
@@ -9,7 +9,7 @@ const maybeReplenishBag =
     R.compose(
       R.ifElse(
         R.isEmpty,
-        R.thunkify(blueScramble)(bloset),
+        R.thunkify(scramble)(bloset),
         R.identity
       ),
       R.defaultTo([])
