@@ -6,10 +6,10 @@ import * as R from 'ramda'
 import constants from '~/constants'
 import { carousel, idleBackground } from '~/images'
 import range from '~/range'
-import { View } from '~/react-native-dummies'
 
 import Block, { useGetBlockClassName } from './Block'
 import ImageBackground from './ImageBackground'
+import View from './View'
 
 const useStyles = createUseStyles({
   matrix: {

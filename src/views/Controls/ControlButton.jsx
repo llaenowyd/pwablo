@@ -2,9 +2,8 @@ import React, { useState, useCallback, useMemo, useRef } from 'react'
 import { createUseStyles, useTheme } from 'react-jss'
 import * as R from 'ramda'
 
-import { View } from '~/react-native-dummies'
-
 import Icon from '../Icon'
+import View from '../View'
 
 const basicJss = {
   view: {

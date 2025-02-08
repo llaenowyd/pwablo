@@ -6,7 +6,6 @@ import * as R from 'ramda'
 import constants from '~/constants'
 import dbg from '~/dbg'
 import { useDevice } from '~/device'
-import { View } from '~/react-native-dummies';
 import { actions } from '~/state'
 
 import Controls from './Controls'
@@ -15,6 +14,7 @@ import KeyboardControls from './KeyboardControls'
 import Matrix from './Matrix'
 import ScoreAndNext from './ScoreAndNext'
 import SoundController from './SoundController'
+import View from './View'
 
 const useStyles = createUseStyles({
   game: {

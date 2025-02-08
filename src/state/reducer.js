@@ -3,10 +3,8 @@ import * as R from 'ramda'
 
 import { makeBlo } from '~/blo'
 import constants from '~/constants'
-import { Alert } from '~/react-native-dummies'
 
 import { canFall, completeRows } from './bucket'
-import { tryCatcher } from './common'
 import { getInitialState, initialActiBlo } from './initialState'
 import {
   clearCompletedRows,
@@ -48,16 +46,14 @@ const stopTickReducer =
   )
 
 const inputReducer =
-  tryCatcher('inputReducer')(
-    key =>
-      R.chain(
-        R.set(R.lensProp('input')),
-        R.compose(
-          R.append(key),
-          R.prop('input')
-        )
+  key =>
+    R.chain(
+      R.set(R.lensProp('input')),
+      R.compose(
+        R.append(key),
+        R.prop('input')
       )
-  )
+    )
 
 const setSoundEffect =
   soundEffectName =>
@@ -156,10 +152,7 @@ const settle =
     ),
     useNextBlo,
     addPointsAndMaybeLevelUp,
-    // R.chain(
-    //   setFlash,
-    //   R.path(['game', 'completedRows'])
-    // ),
+    // tbd animate set flash
     completeRows
   )
 
@@ -252,7 +245,7 @@ export const reducerTable = {
       drawActiBlo,
       clearCompletedRows,
       eraseActiBlo,
-      // stopFlash
+      // tbd animate stop flash
     ),
   reset:
     R.compose(
@@ -288,17 +281,22 @@ export const reducerTable = {
   toggleMusic: R.over(R.lensPath(['audio', 'music', 'enabled']), R.not),
 }
 
-export const reducer =
-  (state, action) => {
-    const actionType = action?.type
-
-    const rf = reducerTable[actionType]
-
-    if (rf != null) {
-      return rf(state, action)
-    }
-
-    if ('@@redux/' !== R.take(8, actionType))
-      Alert.alert('unexpected', `unknown event '${actionType}'`)
-    return state
-  }
+/**
+ * reducer
+ */
+export default R.compose(
+  R.ifElse(
+    R.both(
+      R.compose(R.isNotNil, R.nth(0)),
+      R.compose(R.isNotNil, R.nth(1))
+    ),
+    R.apply(R.call),
+    R.nth(1)
+  ),
+  R.adjust(0, R.compose(
+    R.flip(R.prop)(reducerTable),
+    R.when(R.isNotNil, R.prop('type'))
+  )),
+  R.chain(R.prepend, R.last),
+  R.pair
+)

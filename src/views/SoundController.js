@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import * as R from 'ramda'
 
 import usePrevious from '~/hooks/usePrevious'
-import { Sound, useAppState } from '~/react-native-dummies'
+import useVisibility from '~/hooks/useVisibility'
+import { Sound } from '~/react-native-dummies'
 
 Sound.setCategory('Playback')
 
@@ -51,7 +52,7 @@ const getRnsSound =
   ])
 
 export default () => {
-    const { appState } = useAppState()
+    const isVisible = useVisibility()
 
     const dispatch = useDispatch()
 
@@ -67,14 +68,14 @@ export default () => {
 
     React.useEffect(
       () => {
-        if (musicEnabled && !tickIdle && tickMode === 'game' && appState === 'active')
+        if (musicEnabled && !tickIdle && tickMode === 'game' && isVisible)
           (sound => {
             sound.play()
             sound.setNumberOfLoops(-1)
           })(getRnsSound(track))
         else getRnsSound(track).stop()
       },
-      [appState, musicEnabled, tickIdle, tickMode, track]
+      [isVisible, musicEnabled, tickIdle, tickMode, track]
     )
 
     React.useEffect(

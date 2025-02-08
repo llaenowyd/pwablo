@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { createUseStyles, useTheme } from 'react-jss'
 import * as R from 'ramda'
 
-import { Text } from '~/react-native-dummies'
+import Text from './Text'
 
 const useStyles = createUseStyles({
   text: {
@@ -36,12 +36,7 @@ export default props => {
   const styles = useStyles({theme})
 
   return (
-    <Text
-      allowFontScaling={false}
-      adjustsFontSizeToFit={true}
-      numberOfLines={1}
-      className={styles.text}
-    >
+    <Text className={styles.text}>
       {
         R.isNil(score)
           ? 'pwablo'

@@ -3,10 +3,10 @@ import { useSelector } from 'react-redux'
 import { createUseStyles, useTheme } from 'react-jss'
 import * as R from 'ramda'
 
-import { Text, View } from '~/react-native-dummies'
-
 import NextBlo from './NextBlo'
 import Score from './Score'
+import Text from './Text'
+import View from './View'
 
 const useStyles = createUseStyles({
   scoreAndNext: {
@@ -45,7 +45,7 @@ export default () => {
       {
         gameOver
           ? (
-            <Text className={styles.gameOver} allowFontScaling={false} adjustsFontSizeToFit={true}>
+            <Text className={styles.gameOver}>
               Game Over
             </Text>
           ) : <NextBlo />

@@ -2,13 +2,15 @@ import React from 'react'
 import * as R from 'ramda'
 
 import constants from '~/constants'
-import { Text, View } from '~/react-native-dummies'
+
+import Text from '../Text'
+import View from '../View'
 
 export default ({className, bloKind, matrixStyle}) =>
   R.ifElse(
     R.equals(constants.matrixStyle.annotated),
     R.always(
-      <Text allowFontScaling={false} className={className}>
+      <Text className={className}>
         {bloKind}
       </Text>
     ),

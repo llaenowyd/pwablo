@@ -2,7 +2,7 @@ import React, { useState, useRef, useCallback } from 'react'
 import { createUseStyles, useTheme } from 'react-jss'
 import * as R from 'ramda'
 
-import { Text } from '~/react-native-dummies'
+import Text from '../Text'
 
 const basicJss = {
   view: {
@@ -97,11 +97,7 @@ export default props => {
 
   return (
     <div className={isPressed ? styles.viewPressed : styles.viewUnpressed} onClick={onClick}>
-      <Text
-        allowFontScaling={false}
-        adjustsFontSizeToFit={true}
-        className={styles.text}
-      >
+      <Text className={styles.text}>
         {props.text}
       </Text>
     </div>

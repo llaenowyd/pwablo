@@ -1,29 +1,30 @@
-const russia1 = 'resources/img/russia1.jpg'
-const russia2 = 'resources/img/russia2.jpg'
-const russia3 = 'resources/img/russia3.jpg'
-const russia4 = 'resources/img/russia4.jpg'
-const russia7 = 'resources/img/russia7.jpg'
-const russia8 = 'resources/img/russia8.jpg'
-const russiaa = 'resources/img/russiaa.jpg'
-const russiab = 'resources/img/russiab.jpg'
-const savior = 'resources/img/savior.jpg' // 169x255 (0.663)
-const savior2 = 'resources/img/Savior2.jpg' // 177x307 (0.577)
-const vorota = 'resources/img/vorota.jpg'
+const birds = 'resources/img/birds.png'
+const canteen = 'resources/img/canteen.png'
+const effigies = 'resources/img/effigies.png'
+const holly = 'resources/img/holly.png'
+const horno = 'resources/img/horno.png'
+const hovenweep = 'resources/img/hovenweep.png'
+const kachina = 'resources/img/kachina.png'
+const tuzigoot = 'resources/img/tuzigoot.png'
+const unavida = 'resources/img/unavida.png'
+const unavida2 = 'resources/img/unavida2.png'
+const vases = 'resources/img/vases.png'
 
 const carousel = [
-  savior,
-  russia1,
-  russia2,
-  russia3,
-  russia4,
-  russia7,
-  russia8,
-  russiaa,
-  russiab,
-  vorota
+  unavida,
+  vases,
+  canteen,
+  unavida2,
+  effigies,
+  holly,
+  birds,
+  hovenweep,
+  horno,
+  tuzigoot,
+  kachina
 ]
 
-const idleBackground = savior2
+const idleBackground = unavida
 
 export {
   carousel,
