@@ -1,22 +1,22 @@
+import getRandomBlokind from '~/blo/get-random-blokind'
+
 import * as R from 'ramda'
 
-import { setRand } from '../../src/random'
-import getRandomBlokind from '../../src/random/get-random-blokind'
+import { numBlos } from '~/blo'
+import { setRand } from '~/random'
 
 describe('getRandomBlokind', () => {
-  it('might appear to be non-random', async () => {
-    const numBlos = 7
-
+  it('might appear to be non-random', () => {
     const rand = jest.fn(
-      () => Promise.resolve(R.repeat(0, numBlos-1))
+      () => R.repeat(0, numBlos-1)
     )
 
     setRand(rand)
 
     let state = { bag: [] }
 
-    const harness = async () => {
-      const [nextBlo, nextBag] = await getRandomBlokind(state.bag)
+    const harness = () => {
+      const [nextBlo, nextBag] = getRandomBlokind(state.bag)
       state = R.set(R.lensProp('bag'), nextBag, state)
       return nextBlo
     }
@@ -25,7 +25,7 @@ describe('getRandomBlokind', () => {
     const result = R.repeat(0, numBlos * numBags)
 
     for (let i = 0; i < numBlos * numBags; i++) {
-      result[i] = await harness()
+      result[i] = harness()
     }
 
     expect(R.count(R.equals('I'), result)).toBe(numBags)

@@ -1,5 +1,10 @@
-import getRandomBlokind from './get-random-blokind'
 import { getRand, setRand } from './rand'
 import rtoo from './rtoo'
+import scramble from './scramble'
 
-export { getRand, getRandomBlokind, rtoo, setRand }
+export {
+  getRand,
+  rtoo,
+  scramble,
+  setRand,
+}

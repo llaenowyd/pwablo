@@ -1,12 +1,9 @@
 import React from 'react'
-
 import { useSelector } from 'react-redux'
-
 import { createUseStyles, useTheme } from 'react-jss'
-
 import * as R from 'ramda'
 
-import { Text, View } from '../react-native-dummies'
+import { Text, View } from '~/react-native-dummies'
 
 import NextBlo from './NextBlo'
 import Score from './Score'

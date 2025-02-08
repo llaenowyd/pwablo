@@ -1,4 +1,4 @@
-import constants from '../src/constants'
+import constants from '~/constants'
 
 const makeEmptyBucket = (cols, rows, bloKind='.') => {
   const result = []

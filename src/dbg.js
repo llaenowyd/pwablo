@@ -27,6 +27,14 @@ const makeDbg = (dc, ll) => R.ifElse(
   ))
 )(constants.dbg?.pass)
 
+/**
+ * dbg - tapped log routines
+ *   dbg.I('breadcrumb') ->
+ *       f: f(args) returns args and logs "I breadcrum {args}"
+ *          when info level logs are configured to passthrough
+ *       R.identity
+ *          otherwise
+ */
 export default R.compose(
   R.fromPairs,
   R.map(

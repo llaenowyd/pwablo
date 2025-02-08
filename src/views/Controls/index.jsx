@@ -3,10 +3,10 @@ import { useDispatch } from 'react-redux'
 import { createUseStyles, useTheme } from 'react-jss'
 import * as R from 'ramda'
 
-import { View } from '../../react-native-dummies'
-import { actions } from '../../state/actions'
-import Functions from '../Functions'
+import { View } from '~/react-native-dummies'
+import { actions } from '~/state'
 
+import Functions from '../Functions'
 import ControlButton from './ControlButton'
 
 const basicJss = {

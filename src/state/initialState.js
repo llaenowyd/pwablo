@@ -1,6 +1,6 @@
 import * as R from 'ramda'
 
-import constants from '../constants'
+import constants from '~/constants'
 
 import { getEmptyBucket } from './bucket'
 

@@ -1,10 +1,8 @@
 import * as R from 'ramda'
 
-import { MT } from '../blo'
-import constants from '../constants'
-import range from '../range'
-
-import * as paths from './paths'
+import { MT } from '~/blo'
+import constants from '~/constants'
+import range from '~/range'
 
 export const getEmptyBucket = (rows, cols) =>
   R.map(

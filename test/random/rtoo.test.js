@@ -1,6 +1,6 @@
-import rtoo from '../../src/random/rtoo'
+import rtoo from '~/random/rtoo'
 
-describe('range', () => {
+describe('rtoo', () => {
   it('has correct examples', () => {
     /**
      *  rtoo - random to offset

@@ -1,6 +1,6 @@
 import * as R from 'ramda'
 
-import {Alert} from '../react-native-dummies'
+import {Alert} from '~/react-native-dummies'
 
 const catcher = tag => e => {
   console.error(tag, e)

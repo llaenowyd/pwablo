@@ -1,11 +1,24 @@
 import * as R from 'ramda'
 
-const cryptoRand = null
+const mathRand = R.times(Math.random)
+
+const uint32ToRand = R.multiply(1 / (2**32 - 1))
+
+const cryptoRand = (buffers => n => {
+  const buffer = buffers[n] ?? (() => buffers[n] = new Uint32Array(n))()
+
+  self.crypto.getRandomValues(buffer)
+
+  const result = []
+  for (const rx of buffer.values()) result.push(uint32ToRand(rx))
+
+  return result
+})({})
 
 let rands = {
-  math: n => Promise.resolve(R.times(Math.random, n)),
+  math: mathRand,
   crypto: cryptoRand,
-  override: null
+  override: null,
 }
 
 export const setRand = rand => {

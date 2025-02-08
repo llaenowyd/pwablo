@@ -1,10 +1,13 @@
 import * as R from 'ramda'
 
-import range from './range'
+import range from '~/range'
 
-const bloset = ['I','J','L','O','S','T','Z']
+import { bloset } from './bloset'
+import getRandomBlokind from './get-random-blokind'
 
 const MT = '.'
+
+const numBlos = R.length(bloset)
 
 const offsets = {
   I: [[-1,0],[0,0],[1,0],[2,0]],
@@ -125,4 +128,12 @@ const makeBlo =
       pos: R.always(getInitialPos(cols, rows, numCompletedRows))
     })
 
-export { getBloPoints, kickers, makeBlo, bloset, MT }
+export {
+  bloset,
+  getBloPoints,
+  getRandomBlokind,
+  kickers,
+  makeBlo,
+  numBlos,
+  MT,
+}

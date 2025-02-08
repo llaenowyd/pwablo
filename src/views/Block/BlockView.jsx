@@ -1,8 +1,8 @@
 import React from 'react'
 import * as R from 'ramda'
 
-import constants from '../../constants'
-import { Text, View } from '../../react-native-dummies'
+import constants from '~/constants'
+import { Text, View } from '~/react-native-dummies'
 
 export default ({className, bloKind, matrixStyle}) =>
   R.ifElse(

@@ -4,6 +4,9 @@ import * as R from 'ramda'
  * range
  *   range(3) -> [0, 1, 2]
  *   range(-4, 2, 2) -> [2, 0, -2]
+ * 
+ * Or instead
+ *   R.times(R.identity, 3) -> [0, 1, 2]
  */
 export default (end, start = 0, step = 1) =>
   (direction =>

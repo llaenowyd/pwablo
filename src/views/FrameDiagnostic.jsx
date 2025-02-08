@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux'
 import { createUseStyles, useTheme } from 'react-jss'
 import * as R from 'ramda'
 
-import { Text } from '../react-native-dummies'
+import { Text } from '~/react-native-dummies'
 
 const useStyles = createUseStyles({
   frameDiagnostic: {

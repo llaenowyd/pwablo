@@ -2,7 +2,7 @@ import React from 'react'
 import { createUseStyles, useTheme } from 'react-jss'
 import * as R from 'ramda'
 
-import { View } from '../react-native-dummies'
+import { View } from '~/react-native-dummies'
 
 import FrameDiagnostic from './FrameDiagnostic'
 import Game from './Game'
